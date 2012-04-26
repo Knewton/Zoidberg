@@ -4,6 +4,9 @@ from sys import exit, stdout
 from re import compile
 from nltk.data import load
 from nltk import word_tokenize
+from sympy.solvers import solve
+from sympy import Symbol, Eq
+from copy import copy
 
 # Enums
 class Operation:
@@ -11,7 +14,19 @@ class Operation:
 	SUBTRACTION="-"
 	MULTIPLICATION="*"
 	DIVISION="/"
-	ALL=["+", "-", "*", "/"]
+	ALL=["*", "/", "+", "-"]
+
+	@staticmethod
+	def do(op, t1, t2):
+		if op == "+":
+			result = t1 + t2
+		if op == "-":
+			result = t1 - t2
+		if op == "*":
+			result = t1 * t2
+		if op == "/":
+			result = t1 / t2
+		return Term(Term.VARIABLE, result)
 
 class Relation:
 	EQUIVALENCE="="
@@ -19,7 +34,6 @@ class Relation:
 
 # Representations
 class Term(object):
-	CONSTANT="const"
 	VARIABLE="var"
 	OPERATION="op"
 	FUNCTION="func"
@@ -29,35 +43,87 @@ class Term(object):
 		self.value = value
 
 	def __str__(self):
-		return "[{0}:{1}]".format(self.type, self.value)
+		return str(self.value)
 
 class Expression(object):
-	def __init__(self, terms=[]):
-		self.terms = terms
+	def __init__(self, terms=None):
+		self.terms = terms if terms is not None else []
 
 	def add(self, term):
 		self.terms.append(term)
 
+	def operations(self):
+		return list(set([o.value for o in self.terms
+									if o.type is Term.OPERATION]))
+
+	def solve(self):
+		ops = self.operations()
+		terms = copy(self.terms)
+		for op in Operation.ALL:
+			if op in ops:
+				new_terms = []
+				pending_operation = None
+				for t in terms:
+					if t.type is Term.OPERATION:
+						pending_operation = t.value
+					elif pending_operation is not None:
+						new_terms.append(Operation.do(pending_operation,
+														new_terms.pop().value,
+														t.value))
+						pending_operation = None
+					else:
+						new_terms.append(t)
+				terms = new_terms
+		if len(terms) == 1:
+			return terms[0].value
+
 	def __str__(self):
-		return "({0})".format("".join([str(t) for t in self.terms]))
+		return "{0}".format(" ".join([str(t) for t in self.terms]))
 
 class Statement(object):
 	def __init__(self):
 		self.expressions = []
 		self.relation = None
+		self.solve_vars = []
 
 	def add(self, exp):
-		self.expressions.append(exp)
+		if len(self.expressions) == 2:
+			raise Exception("Malformed statement")
+		else:
+			self.expressions.append(exp)
 
 	def relate(self, relation):
 		self.relation = relation
+
+	def solve_for(self, var):
+		self.solve_vars.append(var)
+
+	def solve(self):
+		e = self.expressions
+		if len(e) < 2:
+			raise Exception("Malformed statement")
+
+		if self.relation == Relation.EQUIVALENCE:
+			f = self.solve_vars
+			if len(f) is 0:
+				soln = solve(Eq(e[0].solve(), e[1].solve()))
+			else:
+				soln = solve(Eq(e[0].solve(), e[1].solve()), f)
+			if len(soln) == 1:
+				try:
+					return soln[0]
+				except KeyError:
+					# For object-based resposnes
+					return soln
+			else:
+				return soln
 
 	def __str__(self):
 		e = self.expressions
 		if len(e) < 2:
 			return "Malformed statement"
 		else:
-			return "{0}{{{1}}}{2}".format(e[0], self.relation, e[1])
+			return "{0} {1} {2}".format(e[0], self.relation, e[1])
 
 # Testers
 def is_number(s):
@@ -94,7 +160,7 @@ def to_relation(s):
 # Parsers
 def parse_word(word):
 	if is_number(word):
-		return Term(Term.CONSTANT, to_number(word))
+		return Term(Term.VARIABLE, to_number(word))
 
 	if is_operation(word):
 		return Term(Term.OPERATION, to_operation(word))
@@ -102,14 +168,14 @@ def parse_word(word):
 	if is_relation(word):
 		return Relation.EQUIVALENCE
 
-	return None
+	return Term(Term.VARIABLE, Symbol(word))
 
 def get_statements(sentences):
 	statements = []
+	statement = Statement()
+	expression = Expression()
 
 	for sentence in sentences:
-		statement = Statement()
-		expression = Expression()
 
 		for word in word_tokenize(sentence):
 			r = parse_word(word)
@@ -132,14 +198,15 @@ def get_statements(sentences):
 				expression.add(r)
 				continue
 
+	statement.add(expression)
+
 	if statement.relation is None:
 		# assume equality relationship
 		statement.relate(Relation.EQUIVALENCE)
-		statement.add(expression)
 
 	if len(statement.expressions) == 1:
 		# assign a variable
-		statement.add(Expression([Term(Term.VARIABLE, "x")]))
+		statement.add(Expression([Term(Term.VARIABLE, Symbol("x"))]))
 
 	statements.append(statement)
 	return statements
@@ -150,8 +217,11 @@ def solve_problem(problem):
 	sentences = tokenizer.tokenize(problem.strip())
 	statements = get_statements(sentences)
 
+	print "Problem input: {0}".format(problem)
+
 	for s in statements:
-		print str(s)
+		print "Statement: {0}".format(str(s))
+		print "Solution: {0}".format(s.solve())
 
 # Script
 def argparser():
