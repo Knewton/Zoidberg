@@ -1,0 +1,6 @@
+Dependencies:
+* SymPy
+* NLTK
+
+Usage:
+cat samples/001_* | ./zoidberg.py
