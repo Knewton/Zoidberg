@@ -5,9 +5,20 @@ from re import compile
 from nltk.data import load
 from nltk import word_tokenize
 
+# Enums
+class Operation:
+	ADDITION="+"
+	SUBTRACTION="-"
+	MULTIPLICATION="*"
+	DIVISION="/"
+	ALL=["+", "-", "*", "/"]
+
+class Relation:
+	EQUIVALENCE="="
+	ALL=["="]
+
 # Representations
-class Expression(object):
-	"""Representation of a mathematical expression"""
+class Term(object):
 	CONSTANT="const"
 	VARIABLE="var"
 	OPERATION="op"
@@ -18,18 +29,35 @@ class Expression(object):
 		self.value = value
 
 	def __str__(self):
-		return "[{0}={1}]".format(self.type, self.value)
+		return "[{0}:{1}]".format(self.type, self.value)
 
-class Proposition(object):
-	"""Representation of a mathematical proposition"""
+class Expression(object):
+	def __init__(self, terms=[]):
+		self.terms = terms
+
+	def add(self, term):
+		self.terms.append(term)
+
+	def __str__(self):
+		return "({0})".format("".join([str(t) for t in self.terms]))
+
+class Statement(object):
 	def __init__(self):
 		self.expressions = []
+		self.relation = None
 
 	def add(self, exp):
 		self.expressions.append(exp)
 
+	def relate(self, relation):
+		self.relation = relation
+
 	def __str__(self):
-		return "({0})".format("".join([str(e) for e in self.expressions]))
+		e = self.expressions
+		if len(e) < 2:
+			return "Malformed statement"
+		else:
+			return "{0}{{{1}}}{2}".format(e[0], self.relation, e[1])
 
 # Testers
 def is_number(s):
@@ -39,52 +67,91 @@ def is_number(s):
 	except ValueError:
 		return False
 
+def is_operation(s):
+	return s in Operation.ALL
+
+def is_relation(s):
+	return s in Relation.ALL
+
 # Interpreters
 def to_number(s):
 	return float(s) if '.' in s else int(s)
 
+def to_operation(s):
+	if s == "+":
+		return Operation.ADDITION
+	if s == "-":
+		return Operation.SUBTRACTION
+	if s == "*":
+		return Operation.MULTIPLICATION
+	if s == "/":
+		return Operation.DIVISION
+
+def to_relation(s):
+	if s == "=":
+		return Relation.EQUIVALENCE
+
 # Parsers
-def get_expression(word):
-	"""Parses a word into an expression.
-
-	Args:
-		word: The word to parse.
-
-	Returns:
-		The expression, or None
-	"""
-	exp = None
-
+def parse_word(word):
 	if is_number(word):
-		exp = Expression(Expression.CONSTANT, to_number(word))
+		return Term(Term.CONSTANT, to_number(word))
 
-	return exp
+	if is_operation(word):
+		return Term(Term.OPERATION, to_operation(word))
 
-def get_proposition(sentence):
-	"""Parses a sentence into an proposition.
+	if is_relation(word):
+		return Relation.EQUIVALENCE
 
-	Args:
-		sentence: The sentence to parse.
+	return None
 
-	Return:
-		The equation detected in the sentence.
-	"""
-	prop = Proposition()
+def get_statements(sentences):
+	statements = []
 
-	for word in word_tokenize(sentence):
-		exp = get_expression(word)
-		if exp is not None:
-			prop.add(exp)
+	for sentence in sentences:
+		statement = Statement()
+		expression = Expression()
 
-	return prop
+		for word in word_tokenize(sentence):
+			r = parse_word(word)
+
+			if is_relation(r):
+				# assume a relationship as a break for expressions
+				statement.add(expression)
+				expression = Expression()
+
+				if statement.relation is not None:
+					# assume second relationship is a new statement
+					statements.append(statement)
+					statement = Statement()
+
+				statement.relate(r)
+				continue
+
+			if isinstance(r, Term):
+				# Add terms to the current expression
+				expression.add(r)
+				continue
+
+	if statement.relation is None:
+		# assume equality relationship
+		statement.relate(Relation.EQUIVALENCE)
+		statement.add(expression)
+
+	if len(statement.expressions) == 1:
+		# assign a variable
+		statement.add(Expression([Term(Term.VARIABLE, "x")]))
+
+	statements.append(statement)
+	return statements
 
 # Solvers
 def solve_problem(problem):
 	tokenizer = load("tokenizers/punkt/english.pickle")
 	sentences = tokenizer.tokenize(problem.strip())
-	propositions = [get_proposition(s) for s in sentences]
+	statements = get_statements(sentences)
 
-	print "\n".join([str(p) for p in propositions])
+	for s in statements:
+		print str(s)
 
 # Script
 def argparser():
