@@ -1,0 +1,9 @@
+Assumption: Word problem
+Sentence: Jane has 9 balloons.
+Tags: [('Jane', 'NNP'), ('has', 'VBZ'), ('9', 'CD'), ('balloons', 'NNS'), ('.', '.')]
+Sentence: 6 are green and the rest are blue.
+Tags: [('6', 'CD'), ('are', 'VBP'), ('green', 'JJ'), ('and', 'CC'), ('the', 'DT'), ('rest', 'NN'), ('are', 'VBP'), ('blue', 'JJ'), ('.', '.')]
+Sentence: How many balloons are blue?
+Tags: [('How', 'WRB'), ('many', 'JJ'), ('balloons', 'NNS'), ('are', 'VBP'), ('blue', 'JJ'), ('?', '.')]
+Problem input: Jane has 9 balloons. 6 are green and the rest are blue. How many balloons are blue?
+

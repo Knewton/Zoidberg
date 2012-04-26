@@ -3,7 +3,7 @@ from argparse import ArgumentParser, FileType
 from sys import exit, stdout
 from re import compile
 from nltk.data import load
-from nltk import word_tokenize
+from nltk import word_tokenize, pos_tag
 from sympy.solvers import solve
 from sympy import Symbol, Eq
 from copy import copy
@@ -15,6 +15,12 @@ class Operation:
 	MULTIPLICATION="*"
 	DIVISION="/"
 	ALL=["*", "/", "+", "-"]
+	TESTER=[
+		"*",
+		"/",
+		"+",
+		"-"
+	]
 
 	@staticmethod
 	def do(op, t1, t2):
@@ -31,6 +37,7 @@ class Operation:
 class Relation:
 	EQUIVALENCE="="
 	ALL=["="]
+	TESTER=["="]
 
 # Representations
 class Term(object):
@@ -134,10 +141,10 @@ def is_number(s):
 		return False
 
 def is_operation(s):
-	return s in Operation.ALL
+	return s in Operation.TESTER
 
 def is_relation(s):
-	return s in Relation.ALL
+	return s in Relation.TESTER
 
 # Interpreters
 def to_number(s):
@@ -150,7 +157,7 @@ def to_operation(s):
 		return Operation.SUBTRACTION
 	if s == "*":
 		return Operation.MULTIPLICATION
-	if s == "/":
+	if s in ["/", chr(247)]:
 		return Operation.DIVISION
 
 def to_relation(s):
@@ -170,13 +177,12 @@ def parse_word(word):
 
 	return Term(Term.VARIABLE, Symbol(word))
 
-def get_statements(sentences):
+def parse_proposition(sentences):
 	statements = []
 	statement = Statement()
 	expression = Expression()
 
 	for sentence in sentences:
-
 		for word in word_tokenize(sentence):
 			r = parse_word(word)
 
@@ -198,7 +204,8 @@ def get_statements(sentences):
 				expression.add(r)
 				continue
 
-	statement.add(expression)
+	if len(expression.terms) > 0:
+		statement.add(expression)
 
 	if statement.relation is None:
 		# assume equality relationship
@@ -210,6 +217,27 @@ def get_statements(sentences):
 
 	statements.append(statement)
 	return statements
+
+def parse_word_problem(sentences):
+
+	for sentence in sentences:
+		tags = pos_tag(word_tokenize(sentence))
+		print "Sentence: {0}".format(sentence)
+		print "Tags:", tags
+
+	return []
+
+def get_statements(sentences):
+	words = []
+	for sentence in sentences:
+		words.extend(word_tokenize(sentence))
+
+	if len(list(set(Relation.TESTER) & set(words))) > 0:
+		print "Assumption: Mathematics proposition(s)"
+		return parse_proposition(sentences)
+	else:
+		print "Assumption: Word problem"
+		return parse_word_problem(sentences)
 
 # Solvers
 def solve_problem(problem):

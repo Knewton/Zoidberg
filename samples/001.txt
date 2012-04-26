@@ -1,0 +1,5 @@
+Assumption: Mathematics proposition(s)
+Problem input: 436 / 4 =
+
+Statement: 436 / 4 = x
+Solution: 109

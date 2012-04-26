@@ -1,0 +1,7 @@
+Assumption: Word problem
+Sentence: I have 8 balls, half of them are red.
+Tags: [('I', 'PRP'), ('have', 'VBP'), ('8', 'CD'), ('balls', 'NNS'), (',', ','), ('half', 'DT'), ('of', 'IN'), ('them', 'PRP'), ('are', 'VBP'), ('red', 'VBN'), ('.', '.')]
+Sentence: How many are red?
+Tags: [('How', 'WRB'), ('many', 'JJ'), ('are', 'VBP'), ('red', 'VBN'), ('?', '.')]
+Problem input: I have 8 balls, half of them are red. How many are red?
+
