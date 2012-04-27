@@ -256,6 +256,29 @@ def estimate_answer_type(word):
 		return AnswerType.NUMERIC
 	raise Exception("Did not estimate answer type")
 
+def compute_total_statement(unit_values):
+	total_exp = Expression([Term(Term.VARIABLE, new_var())])
+	summative_exp = Expression()
+
+	statement = Statement()
+	statement.relate(Relation.EQUIVALENCE)
+	statement.add(total_exp)
+	statement.add(summative_exp)
+
+	summative_terms = []
+	# Solving for a total is an explicit equivalence relation
+	for k in unit_values.keys():
+		val = unit_values[k]
+		term = Term(Term.VARIABLE, val)
+		summative_terms.append(term)
+		summative_terms.append(Term(Term.OPERATION, Operation.ADDITION))
+
+	# Remove the hanging addition operation
+	summative_terms.pop()
+	summative_exp.terms.extend(summative_terms)
+
+	return statement
+
 def total_equivalence_statement(unit_values):
 	total_exp = Expression()
 	summative_exp = Expression()
@@ -343,10 +366,13 @@ def interpret_question(question):
 	return QuestionInterpretation(answer_type, solution_var, solution_unit)
 
 def conveys_ownership(word):
-	return word in ["has"]
+	return word in ["has", "got", "had"]
 
 def conveys_equality(word):
-	return word in ["are"]
+	return word in ["are", "got", "had"]
+
+def conveys_current_value(word):
+	return word in ["had"]
 
 def conveys_symbolic_value(word):
 	# "the rest"
@@ -371,6 +397,12 @@ def extract_statements(interp, sentences):
 	current_unit = None
 	current_context = None
 
+	if interp.unit is None:
+		# If no unit specified, use the var as the unit
+		print "Assuming variable '{0}' is also a unit".format(interp.var)
+		interp.unit = interp.var
+		current_unit = interp.var
+
 	def define_unit(unit, type, val):
 		if not unit in unit_values.keys():
 			unit_values[unit] = {}
@@ -385,7 +417,7 @@ def extract_statements(interp, sentences):
 		words = word_tokenize(sentence)
 		tags = pos_tag(words)
 		# Debugging
-		#print tags
+		print tags
 		for t in tags:
 			word, tag = t
 
@@ -399,16 +431,17 @@ def extract_statements(interp, sentences):
 				print "  '{0}' is the new context".format(word)
 				current_context = word
 
-			# Present tense verbs
-			if tag in ["VBZ", "VBP"]:
+			# Present and past tense verbs
+			if tag in ["VBZ", "VBP", "VBD"]:
 				if conveys_ownership(word) and current_context is not None:
 					print "  '{0}' conveys ownership for context".format(word)
 					group_into_context = True
 				if conveys_equality(word):
 					print "  '{0}' conveys equality".format(word)
-					if last_variable is None and last_constant is not None:
-						print "  Equality assignment pending"
-						pending_equality = True
+					pending_equality = True
+				if conveys_current_value(word):
+					print "  '{0}' conveys a current value".format(word)
+					last_variable = "__current__"
 
 			# Adjective or numerical ordinal; good candidate for variable id
 			if tag == "JJ":
@@ -439,8 +472,14 @@ def extract_statements(interp, sentences):
 
 			# Numeric/cardinal
 			if tag == "CD":
-				print "  Setting '{0}' as last_constant".format(word)
-				last_constant = to_number(word)
+				if pending_equality and last_variable:
+					define_unit(current_unit, last_variable, to_number(word))
+					pending_equality = False
+					last_variable = None
+					last_pending_action = "equality"
+				else:
+					print "  Setting '{0}' as last_constant".format(word)
+					last_constant = to_number(word)
 
 			# Common plural noun; good candidate for variable identification
 			if tag == "NNS":
@@ -477,30 +516,35 @@ def extract_statements(interp, sentences):
 					solve_units.append(unit)
 					print "  Symbol '{0}' needs solving".format(val)
 
-		if len(solve_units) > 0:
-			for unit in solve_units:
-				if "__total__" in unit_values[unit].keys():
-					print "Creating equality for unit '{0}'".format(unit)
-					statement = total_equivalence_statement(unit_values[unit])
+		if len(solve_units) == 0:
+			print "Assuming we're solving for the answer unit"
+			solve_units.append(interp.unit)
 
-				if unit == interp.unit and group == context_containing_answer:
-					print "Unit answers question!"
-					statements.append(statement)
+		for unit in solve_units:
+			value_keys = unit_values[unit].keys()
+			if "__total__" in value_keys:
+				print "Creating equality for unit '{0}'".format(unit)
+				statement = total_equivalence_statement(unit_values[unit])
+			elif "__current__" in value_keys:
+				print "Computing total for unit '{0}'".format(unit)
+				statement = compute_total_statement(unit_values[unit])
+
+			if unit == interp.unit and group == context_containing_answer:
+				print "Unit answers question!"
+				statements.append(statement)
 	return statements
 
 def parse_word_problem(sentences):
 	# Break the word problem down into the question being asked and the
 	# details which likely contain the info needed to answer the question.
 	# This info will be condensed into mathematical statements.
-	questions, details = [], []
+	questions = []
 	question = None
 
 	# Attempt to find the question to answer
 	for s in sentences:
 		if "?" in s:
 			questions.append(s)
-		else:
-			details.append(s)
 	if len(questions) != 1:
 		# Handle only single questions right now. Multipart is probably harder.
 		raise Exception("Could not detect the question")
@@ -511,7 +555,7 @@ def parse_word_problem(sentences):
 	print str(interpretation)
 
 	print "Gathering data..."
-	return extract_statements(interpretation, details)
+	return extract_statements(interpretation, sentences)
 
 def get_statements(sentences):
 	words = []
