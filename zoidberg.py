@@ -5,7 +5,7 @@ from re import compile
 from nltk.data import load
 from nltk import word_tokenize, pos_tag
 from sympy.solvers import solve
-from sympy import Symbol, Eq
+from sympy import Symbol, Eq, Rational
 from copy import copy
 
 # Enums
@@ -52,6 +52,7 @@ class QuestionInterpretation(object):
 		self.type = type
 		self.var = Symbol(var)
 		self.unit = unit
+		self.constraints = []
 
 	def __str__(self):
 		out = []
@@ -64,7 +65,22 @@ class QuestionInterpretation(object):
 		if self.unit is not None:
 			out.append(self.unit)
 
+		if len(self.constraints) > 0:
+			out.append("with")
+			constr = []
+			for c in self.constraints:
+				unit, value = c
+				constr.append("{0} {1}".format(value, unit))
+			out.append(", ".join(constr))
+
 		return "Question Interpretation: {0}.".format(" ".join(out))
+
+	def constrain(self, unit, value):
+		self.constraints.append([unit, value])
+
+	def constraint_units(self):
+		return list(set([c[0] for c in self.constraints]))
+
 
 class Term(object):
 	VARIABLE="var"
@@ -256,6 +272,27 @@ def estimate_answer_type(word):
 		return AnswerType.NUMERIC
 	raise Exception("Did not estimate answer type")
 
+def conversion_statement(factors, interp):
+	total_exp = Expression([Term(Term.VARIABLE, new_var())])
+	compute_exp = Expression()
+
+	statement = Statement()
+	statement.relate(Relation.EQUIVALENCE)
+	statement.add(total_exp)
+	statement.add(compute_exp)
+
+	for c in interp.constraints:
+		unit, value = c
+		for new_unit in factors[unit].keys():
+			print new_unit, interp.unit
+			if new_unit == interp.unit:
+				compute_exp.add(Term(Term.VARIABLE, value))
+				compute_exp.add(Term(Term.OPERATION, Operation.MULTIPLICATION))
+				compute_exp.add(Term(Term.VARIABLE, factors[unit][new_unit]))
+				break
+
+	return statement
+
 def compute_total_statement(unit_values):
 	total_exp = Expression([Term(Term.VARIABLE, new_var())])
 	summative_exp = Expression()
@@ -313,22 +350,39 @@ def interpret_question(question):
 	next_adjective_ordinal = False
 	next_noun_target_variable = False
 	next_adjective_context = False
+	next_value_constraint = False
+	next_noun_constraint_unit = False
 
 	# Interpretation
 	answer_type = None
 	solution_var = None
 	solution_unit = None
+	constraint_value = None
+	constraint_unit = None
 
 	question_words = word_tokenize(question)
 	question_tags = pos_tag(question_words)
 
+	print question_tags
+
 	for t in question_tags:
 		word, tag = t
+		word = word.lower()
+
 		# WRB is a Wh-Adverb (who, what, why) and a good indicator for the
 		# question start
 		if tag == "WRB":
 			print "  '{0}' colors next adjective as ordinal".format(word)
 			next_adjective_ordinal = True
+
+		# Numeric/cardinal
+		if tag == "CD":
+			if next_value_constraint:
+				print "  '{0}' likely a constraint".format(word)
+				constraint_value = to_number(word)
+				next_value_constraint = False
+				if not constraint_unit:
+					next_noun_constraint_unit = True
 
 		# An Adjective or ordinal; likely ordinal if an adverb preceeds it.
 		# Could also be a good ordinal candidate when followed by a verb
@@ -348,11 +402,21 @@ def interpret_question(question):
 				solution_var = word
 
 		# Common plural noun; good candidate for variable to identify
-		if tag == "NNS":
+		if tag in ["NNS", "NN"]:
 			if next_noun_target_variable and solution_var is None:
 				print "  '{0}' likely the variable to solve for".format(word)
 				solution_var = word
 				next_noun_target_variable = False
+			if next_noun_constraint_unit and constraint_unit is None:
+				print "  '{0}' likely the unit for constraint".format(word)
+				constraint_unit = word
+				next_noun_constraint_unit = False
+
+		# Proposition or subordinate conjunction; good candidate for constraint
+		if tag == "IN":
+			if conveys_constraint(word):
+				print "  '{0}' likely a constraint".format(word)
+				next_value_constraint = True
 
 		# Present tense verb; candidate for criteria filtering
 		if tag == "VBP":
@@ -363,7 +427,15 @@ def interpret_question(question):
 	if not answer_type or not solution_var:
 		raise Exception("Could not interperet question")
 
-	return QuestionInterpretation(answer_type, solution_var, solution_unit)
+	interp = QuestionInterpretation(answer_type, solution_var, solution_unit)
+
+	if constraint_unit and constraint_value:
+		interp.constrain(constraint_unit, constraint_value)
+
+	return interp
+
+def conveys_constraint(word):
+	return word in ["with"]
 
 def conveys_ownership(word):
 	return word in ["has", "got", "had"]
@@ -391,17 +463,27 @@ def extract_statements(interp, sentences):
 	groupings = {}
 	# A listing of values for a unit by it's variable type
 	unit_values = {}
+	conversion_factors = {}
 	last_constant = None
 	last_variable = None
 	# Current important bits for tracking and implicit reference
 	current_unit = None
 	current_context = None
+	current_unit_conversion = None
 
 	if interp.unit is None:
 		# If no unit specified, use the var as the unit
 		print "Assuming variable '{0}' is also a unit".format(interp.var)
-		interp.unit = interp.var
-		current_unit = interp.var
+		interp.unit = str(interp.var)
+		current_unit = interp.unit
+
+	def define_conversion(u1, v1, u2, v2=None):
+		if v2 == None:
+			v2 = 1
+		print "  Creating conversion factor for '{0}'".format(u1)
+		if not u1 in conversion_factors:
+			conversion_factors[u1] = {}
+		conversion_factors[u1][u2] = Rational(v2, v1)
 
 	def define_unit(unit, type, val):
 		if not unit in unit_values.keys():
@@ -420,16 +502,32 @@ def extract_statements(interp, sentences):
 		print tags
 		for t in tags:
 			word, tag = t
+			word = word.lower()
 
-			# Proper noun; likely used for contextual grouping
-			if tag == "NNP":
-				print "  '{0}' likely context for grouping".format(word)
-				if word not in context_groups:
-					context_groups.append(word)
-					groupings[word] = []
-				# assign current context
-				print "  '{0}' is the new context".format(word)
-				current_context = word
+			# Proper noun; likely used for contextual grouping and vars
+			if tag in ["NNP", "NNS"]:
+				if word in [interp.unit, interp.var]:
+					current_unit = word
+					print "  '{0}' is now the current unit".format(word)
+					print "  '{0}' is the solution unit".format(word)
+					if last_constant is not None:
+						if last_variable is None:
+							define_unit(word, "__total__", last_constant)
+						last_constant = None
+						last_pending_action = "implicit_constant"
+				elif word in interp.constraint_units():
+					print "  '{0}' is a constraint unit".format(word)
+					if pending_equality and last_constant:
+						define_conversion(word, last_constant, current_unit,
+							current_unit_conversion)
+				else:
+					print "  '{0}' likely context for grouping".format(word)
+					if word not in context_groups:
+						context_groups.append(word)
+						groupings[word] = []
+					# assign current context
+					print "  '{0}' is the new context".format(word)
+					current_context = word
 
 			# Present and past tense verbs
 			if tag in ["VBZ", "VBP", "VBD"]:
@@ -481,57 +579,53 @@ def extract_statements(interp, sentences):
 					print "  Setting '{0}' as last_constant".format(word)
 					last_constant = to_number(word)
 
-			# Common plural noun; good candidate for variable identification
-			if tag == "NNS":
-				if word == interp.var:
-					print "  '{0}' is the solution variable".format(word)
-				if word == interp.unit:
-					current_unit = word
-					print "  '{0}' is now the current unit".format(word)
-					print "  '{0}' is the solution unit".format(word)
-					if last_constant is not None:
-						if last_variable is None:
-							define_unit(word, "__total__", last_constant)
-						last_constant = None
-						last_pending_action = "implicit_constant"
-
 	statements = []
-	if len(context_groups) == 1:
-		context_containing_answer = context_groups[0]
-		print "Only one context; statement should contain answer"
-
 	print "Forming statements..."
-	for group in context_groups:
-		print "Processing context group '{0}'".format(group)
-		solve_units = []
+	if len(context_groups) == 0:
+		print "No context for solution; checking answer for likely step"
+		if len(interp.constraints) > 0 and len(conversion_factors) > 0:
+			print "Answer likely requires a unit conversion"
+			print "Creating conversion for unit '{0}'".format(interp.unit)
+			statement = conversion_statement(conversion_factors, interp)
 
-		for blob in groupings[group]:
-			if blob[0] == "unit_values":
-				t, unit, var = blob
-				val = unit_values[unit][var]
-				print "  owns {0} {1} {2}".format(val, var, unit)
-				if isinstance(val, Symbol):
-					if var == interp.var:
-						print "  {0} answers question!".format(var)
-					solve_units.append(unit)
-					print "  Symbol '{0}' needs solving".format(val)
+		if statement:
+			statements.append(statement)
+	else:
+		if len(context_groups) == 1:
+			context_containing_answer = context_groups[0]
+			print "Only one context; statement should contain answer"
 
-		if len(solve_units) == 0:
-			print "Assuming we're solving for the answer unit"
-			solve_units.append(interp.unit)
+		for group in context_groups:
+			print "Processing context group '{0}'".format(group)
+			solve_units = []
 
-		for unit in solve_units:
-			value_keys = unit_values[unit].keys()
-			if "__total__" in value_keys:
-				print "Creating equality for unit '{0}'".format(unit)
-				statement = total_equivalence_statement(unit_values[unit])
-			elif "__current__" in value_keys:
-				print "Computing total for unit '{0}'".format(unit)
-				statement = compute_total_statement(unit_values[unit])
+			for blob in groupings[group]:
+				if blob[0] == "unit_values":
+					t, unit, var = blob
+					val = unit_values[unit][var]
+					print "  owns {0} {1} {2}".format(val, var, unit)
+					if isinstance(val, Symbol):
+						if var == interp.var:
+							print "  {0} answers question!".format(var)
+						solve_units.append(unit)
+						print "  Symbol '{0}' needs solving".format(val)
 
-			if unit == interp.unit and group == context_containing_answer:
-				print "Unit answers question!"
-				statements.append(statement)
+			if len(solve_units) == 0:
+				print "Assuming we're solving for the answer unit"
+				solve_units.append(interp.unit)
+
+			for unit in solve_units:
+				value_keys = unit_values[unit].keys()
+				if "__total__" in value_keys:
+					print "Creating equality for unit '{0}'".format(unit)
+					statement = total_equivalence_statement(unit_values[unit])
+				elif "__current__" in value_keys:
+					print "Computing total for unit '{0}'".format(unit)
+					statement = compute_total_statement(unit_values[unit])
+
+				if unit == interp.unit and group == context_containing_answer:
+					print "Unit answers question!"
+					statements.append(statement)
 	return statements
 
 def parse_word_problem(sentences):
