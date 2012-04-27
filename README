@@ -1,7 +1,10 @@
-Dependencies:
-* SymPy
-* NLTK
-* NumPy
+= Zoidberg
+Solves word problems and math equations.
 
-Usage:
-cat samples/001_* | ./zoidberg.py
+= Python dependencies
+* SymPy
+* NumPy
+* NLTK
+
+= Usage
+cat calibrations/002.txt | ./zoidberg.py
