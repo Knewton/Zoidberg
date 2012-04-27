@@ -363,7 +363,8 @@ def interpret_question(question):
 	question_words = word_tokenize(question)
 	question_tags = pos_tag(question_words)
 
-	print question_tags
+	# Debugging
+	#print question_tags
 
 	for t in question_tags:
 		word, tag = t
@@ -499,7 +500,7 @@ def extract_statements(interp, sentences):
 		words = word_tokenize(sentence)
 		tags = pos_tag(words)
 		# Debugging
-		print tags
+		#print tags
 		for t in tags:
 			word, tag = t
 			word = word.lower()
