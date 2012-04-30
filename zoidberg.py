@@ -284,7 +284,6 @@ def conversion_statement(factors, interp):
 	for c in interp.constraints:
 		unit, value = c
 		for new_unit in factors[unit].keys():
-			print new_unit, interp.unit
 			if new_unit == interp.unit:
 				compute_exp.add(Term(Term.VARIABLE, value))
 				compute_exp.add(Term(Term.OPERATION, Operation.MULTIPLICATION))
@@ -681,6 +680,8 @@ def argparser():
 	parser = ArgumentParser(description=desc)
 	parser.add_argument("--input", type=FileType("r"), default="-",
 						help="The question to solve")
+	parser.add_argument("--output", default=stdout, type=FileType("w"),
+						help="The output file. Defaults to stdout")
 	return parser
 
 def main():

@@ -1,7 +1,0 @@
-Assumption: Word problem
-Sentence: Licorice are 5 cents.
-Tags: [('Licorice', 'NNP'), ('are', 'VBP'), ('5', 'CD'), ('cents', 'NNS'), ('.', '.')]
-Sentence: How many licorice can you buy with 10 cents?
-Tags: [('How', 'WRB'), ('many', 'JJ'), ('licorice', 'NN'), ('can', 'MD'), ('you', 'PRP'), ('buy', 'VB'), ('with', 'IN'), ('10', 'CD'), ('cents', 'NNS'), ('?', '.')]
-Problem input: Licorice are 5 cents. How many licorice can you buy with 10 cents?
-

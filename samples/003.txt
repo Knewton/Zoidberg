@@ -1,7 +1,0 @@
-Assumption: Word problem
-Sentence: Kyle got 3 new shirts on his birthday.
-Tags: [('Kyle', 'NNP'), ('got', 'VBD'), ('3', 'CD'), ('new', 'JJ'), ('shirts', 'NNS'), ('on', 'IN'), ('his', 'PRP$'), ('birthday', 'NN'), ('.', '.')]
-Sentence: If he already had 5, how many shirts does he have now?
-Tags: [('If', 'IN'), ('he', 'PRP'), ('already', 'RB'), ('had', 'VBD'), ('5', 'CD'), (',', ','), ('how', 'WRB'), ('many', 'JJ'), ('shirts', 'NNS'), ('does', 'VBZ'), ('he', 'PRP'), ('have', 'VB'), ('now', 'RB'), ('?', '.')]
-Problem input: Kyle got 3 new shirts on his birthday. If he already had 5, how many shirts does he have now?
-
