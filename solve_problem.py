@@ -10,7 +10,7 @@ def argparser():
 						help="The question to solve")
 	parser.add_argument("--output", default=stdout, type=FileType("w"),
 						help="The output file. Defaults to stdout")
-	parser.add_argument("--debug", action="store_true", default=True,
+	parser.add_argument("--debug", action="store_true", default=False,
 						help="Display debugging information")
 	return parser
 

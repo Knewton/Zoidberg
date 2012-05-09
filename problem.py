@@ -27,7 +27,8 @@ them.
 """
 from nltk.data import load
 from nltk import word_tokenize, pos_tag
-from interpreters.standard_interpreter import Interpretation
+from interpreter import Interpretation
+from solver import Solution
 
 class Problem(object):
 	def __init__(self, text, debug=False):
@@ -76,44 +77,57 @@ class Problem(object):
 	def solve(self):
 		if self.solution is None:
 			self.interpret()
-			#self.solution = Solution(self)
+			self.solution = Solution(self)
 
 		return self.solution
 
+	def get_answer(self):
+		self.solve()
+		return self.solution.answer
+
 	def __str__(self):
-		"""Output the problem as an asciidoc"""
+		"""Output the problem details in asciidoc"""
 		out = []
 
+		# Helpers
 		def title(t, tier="=="):
 			out.append("{0} {1}".format(tier, t))
 
 		def block(t):
 			out.append("****\n{0}\n****\n".format(t))
 
+		# Create output
 		title("Problem")
 		out.append(self.text)
-
-		if self.sentence_tags is not None and self.debug:
-			title("Parser debugging", "===")
-
-			# Display all the sentence tags
-			title("Sentences", "====")
-			for tags in self.sentence_tags:
-				block(str(tags))
-
-			# Define what each tag means
-			title("Tags", "====")
-			tagdict = load('help/tagsets/upenn_tagset.pickle')
-			for t in self.all_tags:
-				if not t in tagdict:
-					d = ("?", "No examples")
-				else:
-					d = tagdict[t]
-				block("*Tag '{0}'*: {1}\n\n{2}".format(t, d[0], d[1]))
 
 		if self.interpretation is not None:
 			title("Interpretation")
 			out.append(str(self.interpretation))
+
+		if self.solution is not None:
+			title("Solution")
+			out.append(str(self.solution))
+
+			title("Answer")
+			block(self.solution.answer)
+
+		if self.debug:
+			title("Debugging")
+			if self.sentence_tags is not None:
+				# Display all the sentence tags
+				title("Sentences", "===")
+				for tags in self.sentence_tags:
+					block(str(tags))
+
+				# Define what each tag means
+				title("Tags", "===")
+				tagdict = load('help/tagsets/upenn_tagset.pickle')
+				for t in self.all_tags:
+					if not t in tagdict:
+						d = ("?", "No examples")
+					else:
+						d = tagdict[t]
+					block("*Tag '{0}'*: {1}\n\n{2}".format(t, d[0], d[1]))
 
 		return "\n".join(out) + "\n"
 
