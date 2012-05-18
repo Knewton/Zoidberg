@@ -22,17 +22,6 @@ class Operation:
 		"-"
 	]
 
-	@staticmethod
-	def do(op, t1, t2):
-		if op == "+":
-			result = t1 + t2
-		if op == "-":
-			result = t1 - t2
-		if op == "*":
-			result = t1 * t2
-		if op == "/":
-			result = t1 / t2
-		return Term(Term.VARIABLE, result)
 
 class AnswerType:
 	# Answer is likely a number

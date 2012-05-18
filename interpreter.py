@@ -21,6 +21,7 @@ class Interpretation(Thinker):
 		# Current state
 		self.last_value = None
 		self.last_operation = None
+		self.last_relation = None
 
 		# Output
 		self.expression = None
@@ -49,15 +50,19 @@ class Interpretation(Thinker):
 			self._think("No statement created.")
 			if self.expression:
 				self._create_statement("of assumed equality.")
-				self._add("expression")
-				self.statement.relation = Relation.EQUIVALENCE
+			self.last_relation = Relation.EQUIVALENCE
+			self._handle_relation()
 
 		is_equivalence = self.statement.relation == Relation.EQUIVALENCE
 		if is_equivalence and len(self.statement.expressions) == 1:
+			if self.expression:
+				self._think("Adding current expression to statement.")
+				self._add("expression")
+			else:
 				self._create_expression("for hanging equality.")
 				self._set_variable()
 				self._add("expression")
-				self._add("statement")
+			self._add("statement")
 
 	# Output
 	def _create_statement(self, reasoning):
@@ -74,9 +79,20 @@ class Interpretation(Thinker):
 	def _create_expression(self, reasoning):
 		self._think("New expression {0}", reasoning)
 		self.expression = Expression()
+		self._handle_relation()
+
+	# Handlers
+	def _handle_relation(self):
+		if self.last_relation:
+			if not self.statement:
+				self._create_statement("for relationship.")
+			self._add("expression")
+			self._add("last_relation")
 
 	# Expression building
 	def _add_term(self, term):
+		if self.build_expression and not self.expression:
+			self._create_expression("for new term")
 		self.expression.terms.append(term)
 
 	def _add(self, v):
@@ -90,6 +106,10 @@ class Interpretation(Thinker):
 			self.statements.append(val)
 			return
 
+		if v == "last_relation":
+			self.statement.relation = val
+			return
+
 		if v == "last_value":
 			t = Term(Term.VALUE, val)
 		if v == "last_operation":
@@ -100,7 +120,7 @@ class Interpretation(Thinker):
 	# States
 	def _set_variable(self, name=None):
 		if name:
-			self._think("'{0}' is a value (a variable).", v)
+			self._think("'{0}' is a value (a variable).", name)
 			v = Symbol(name)
 		else:
 			v = self._create_variable()
@@ -114,6 +134,14 @@ class Interpretation(Thinker):
 		self.last_value = v
 		if self.build_expression:
 			self._add("last_value")
+
+	def _set_relation(self, v):
+		v = convert.to_relation(v)
+		self.last_relation = v
+		self._think("'{0}' is a relationship.", v)
+
+		if self.expression:
+			self._handle_relation()
 
 	def _set_operation(self, v):
 		v = convert.to_operation(v)
@@ -136,8 +164,12 @@ class Interpretation(Thinker):
 	def _interpret(self, word, tag):
 		if word.isalpha():
 			self._think("{0} is alpha", word)
+			if self.build_expression:
+				self._set_variable(word)
 		else:
 			if infer.is_number(word):
 				self._set_constant(word)
+			if infer.is_relation(word):
+				self._set_relation(word)
 			if infer.is_operation(word):
 				self._set_operation(word)

@@ -25,3 +25,7 @@ def is_number(s):
 def is_operation(s):
 	convert.to_operation(s)
 
+@test_conversion
+def is_relation(s):
+	convert.to_relation(s)
+

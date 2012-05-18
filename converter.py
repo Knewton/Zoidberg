@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """Zoidberg conversions"""
-from definitions import Operation
+from definitions import Operation, Relation
 
 # Utility
 def members(cls):
@@ -21,3 +21,6 @@ def to_number(s):
 
 def to_operation(s):
 	return convert(s, Operation)
+
+def to_relation(s):
+	return convert(s, Relation)

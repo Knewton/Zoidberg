@@ -28,3 +28,6 @@ class Operation:
 
 class Relation:
 	EQUIVALENCE="="
+
+	class Defs:
+		EQUIVALENCE=["="]
