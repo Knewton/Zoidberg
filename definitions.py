@@ -9,7 +9,7 @@ class Operation:
 	ALL=["*", "/", "+", "-"]
 
 	class Defs:
-		ADDITION=["+"]
+		ADDITION=["+", "buys", "another"]
 		SUBTRACTION=["-"]
 		MULTIPLICATION=["*"]
 		DIVISION=["/"]
@@ -31,3 +31,6 @@ class Relation:
 
 	class Defs:
 		EQUIVALENCE=["="]
+
+# Conceptual indicator lists
+ownership = ["has"]

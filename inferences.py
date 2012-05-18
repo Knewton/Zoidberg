@@ -4,6 +4,7 @@
 A collection of function to make inferences on how a word should be used.
 """
 import converter as convert
+import definitions as defs
 
 # Decorator for capturing conversion failures
 def test_conversion(fn):
@@ -29,3 +30,12 @@ def is_operation(s):
 def is_relation(s):
 	convert.to_relation(s)
 
+# Concepts conveyed
+class conveys:
+	@staticmethod
+	def ownership(s):
+		return s in defs.ownership
+
+	@staticmethod
+	def operation(s):
+		return s in defs.operation
