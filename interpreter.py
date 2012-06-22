@@ -11,6 +11,10 @@ from statement import Statement
 from expression import Expression
 from term import Term
 from sympy import Symbol
+from quirks import quirk_fix
+from re import compile
+
+ALPHA = compile("[A-Za-z]")
 
 class Interpretation(Thinker):
 	def __init__(self, problem):
@@ -20,11 +24,13 @@ class Interpretation(Thinker):
 		self.context_ownership = False
 
 		# Current state
+		self.last_tag = None
 		self.last_value = None
 		self.last_operation = None
 		self.last_relation = None
 		self.last_unit = None
 		self.last_context = None
+		self.primary_context = None
 
 		# Output
 		self.expression = None
@@ -71,7 +77,7 @@ class Interpretation(Thinker):
 		is_equivalence = self.statement.relation == Relation.EQUIVALENCE
 		if is_equivalence and len(self.statement.expressions) == 1:
 			if self.expression:
-				self._think("Adding current expression to statement.")
+				self._think("Inserting current expression to statement.")
 				self._add("expression")
 			else:
 				self._create_expression("for hanging equality.")
@@ -103,6 +109,15 @@ class Interpretation(Thinker):
 			self._think("New context '{0}'", context)
 			self.contexts[context] = {}
 
+	def _rename_context(self, context, newname):
+		if context in self.contexts:
+			self._think("Context '{0}' becomes '{1}'", context, newname)
+			self.contexts[newname] = self.contexts[context]
+			del self.contexts[context]
+			if context == self.primary_context:
+				self._think("Renaming primary context to '{0}'", newname)
+				self.primary_context = newname
+
 	def _create_unit(self, unit):
 		if not unit in self.units:
 			self._think("New unit '{0}'", unit)
@@ -121,10 +136,8 @@ class Interpretation(Thinker):
 								"for {0} owned by {1}".format(
 									self.last_unit, self.last_context))
 							c[self.last_unit] = self.expression
-							self._clear("last_unit")
 					else:
 						self._add("last_value")
-						self._clear("last_unit")
 
 	def _handle_relation(self):
 		if self.last_relation:
@@ -134,10 +147,20 @@ class Interpretation(Thinker):
 			self._add("last_relation")
 
 	def _handle_tag(self, tag, word):
-		if tag == "NNP": # noun, proper, singular
+		tag, word, thought = quirk_fix(tag, word)
+		if thought is not None:
+			self._think(thought)
+
+		if tag in ["NNP", "NN"]: # noun, proper, singular, common
 			self._think("I think '{0}' is a context", word)
-			self._create_context(word)
-			self._set_context(word)
+			if self.last_tag == tag:
+				context = "{0} {1}".format(self.last_context, word)
+				self._rename_context(self.last_context, context)
+				self.last_context = None
+				self._set_context(context)
+			else:
+				self._create_context(word)
+				self._set_context(word)
 
 		if tag == "NNS": #noun, common, plural
 			if self.last_value and not self.last_unit:
@@ -146,16 +169,16 @@ class Interpretation(Thinker):
 			if word in self.units:
 				self._set_unit(word)
 
-		if tag == "VBZ": # verb, present tense, 3rd person singular
+		if tag in ["VBZ", "VBD"]: # verb, present tense, past tense
 			if self.last_context:
 				if infer.conveys.ownership(word):
 					self._think("I think '{0}' conveys ownership", word)
 					self.context_ownership = True
 				elif infer.is_operation(word):
-					self._think("I think '{0}' conveys operation", word)
+					self._think("I think '{0}' conveys an operation", word)
 					self._set_operation(word)
 
-		if tag == "PRP": # pronoun, personal
+		if tag in ["PRP", "PRP$"]: # pronoun, personal
 			if self.last_context:
 				self._think("I think '{0}' refers to '{1}'", word,
 					self.last_context)
@@ -164,6 +187,15 @@ class Interpretation(Thinker):
 			self._think("I think '{0}' is a determiner.", word)
 			if infer.is_operation(word):
 				self._think("I think '{0}' is an operation; skipping.", word)
+			if infer.conveys.variable(word):
+				self._set_variable(word)
+
+		if tag == ".":
+			if self.last_context != self.primary_context:
+				self._think("Resetting context to '{0}'", self.primary_context)
+				self.last_context = self.primary_context
+
+		self.last_tag = tag
 
 	# Expression building
 	def _add_term(self, term):
@@ -177,6 +209,9 @@ class Interpretation(Thinker):
 	def _add(self, v):
 		val = getattr(self, v)
 		self._clear(v)
+		if val is None:
+			return
+
 		if v == "expression":
 			self.statement.expressions.append(val)
 			return
@@ -193,15 +228,23 @@ class Interpretation(Thinker):
 			t = Term(Term.VALUE, val)
 		if v == "last_operation":
 			t = Term(Term.OPERATION, val)
-		self._think("Adding term '{0}' to current expression.", str(t))
+		self._think("Inserting term '{0}' to current expression.", str(t))
 		self._add_term(t)
 
 	# States
 	def _set_context(self, context):
+		if not self.primary_context:
+			self._think("Setting primary context to '{0}'", context)
+			self.primary_context = context
+
 		if not self.last_context:
 			self._think("Setting current context to '{0}'", context)
 			self.last_context = context
 			self._handle_unit_context()
+		else:
+			self._think("Switching context to '{0}'", context)
+			self._handle_unit_context()
+			self.last_context = context
 
 	def _set_unit(self, unit):
 		if not self.last_unit:
@@ -220,13 +263,13 @@ class Interpretation(Thinker):
 		else:
 			v = self._create_variable()
 		self.last_value = v
-		if self.build_expression:
+		if self.build_expression or self.expression:
 			self._add("last_value")
 
 	def _set_constant(self, v):
 		v = convert.to_number(v)
 		self.last_value = v
-		if self.build_expression:
+		if self.build_expression or self.expression:
 			self._add("last_value")
 
 	def _set_relation(self, v):
@@ -254,7 +297,7 @@ class Interpretation(Thinker):
 
 	# Support
 	def _interpret(self, word, tag):
-		if word.isalpha():
+		if ALPHA.match(word) or tag == ".":
 			if self.build_expression:
 				self._set_variable(word)
 			else:

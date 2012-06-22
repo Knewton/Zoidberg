@@ -27,6 +27,8 @@ class Solution(Thinker):
 		self._think("Solving equivalence statement")
 		a = self._solve_expression(expressions[0])
 		b = self._solve_expression(expressions[1])
+		self._think("I think a = {0}", a)
+		self._think("I think b = {0}", b)
 		soln = solve(Eq(a, b))
 
 		# solution returned as an array of answers or an object

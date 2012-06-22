@@ -10,7 +10,7 @@ class Operation:
 
 	class Defs:
 		ADDITION=["+", "buys", "another"]
-		SUBTRACTION=["-"]
+		SUBTRACTION=["-", "ate", "gave", "sells"]
 		MULTIPLICATION=["*"]
 		DIVISION=["/"]
 
@@ -33,4 +33,5 @@ class Relation:
 		EQUIVALENCE=["="]
 
 # Conceptual indicator lists
-ownership = ["has"]
+ownership = ["has", "bought", "his", "her"]
+variable = ["some"]

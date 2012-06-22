@@ -39,3 +39,7 @@ class conveys:
 	@staticmethod
 	def operation(s):
 		return s in defs.operation
+
+	@staticmethod
+	def variable(s):
+		return s in defs.variable

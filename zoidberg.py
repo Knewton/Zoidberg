@@ -22,7 +22,6 @@ class Operation:
 		"-"
 	]
 
-
 class AnswerType:
 	# Answer is likely a number
 	NUMERIC="num"
