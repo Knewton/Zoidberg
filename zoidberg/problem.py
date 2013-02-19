@@ -1,10 +1,15 @@
 #!/usr/bin/env python
 from nltk import word_tokenize, pos_tag, data
+from inference import Inference
+from brain import Brain
 
 class Problem(object):
-	def __init__(self, text):
+	def __init__(self, text, brain_path=None):
 		# Problem text
 		self.text = text
+
+		# Problem brain
+		self.brain = Brain(brain_path)
 
 		# Digest
 		self.sentences = None
@@ -12,13 +17,17 @@ class Problem(object):
 		self.all_tags = None
 		self.all_words = None
 		self.longest_word = None
-		self.digest()
+
+		# Inference
+		self.inference = None
 
 	def digest(self):
+		if self.sentences is not None:
+			return
+
 		# Digest the problem into sentences
-		if self.sentences is None:
-			tokenizer = data.load("tokenizers/punkt/english.pickle")
-			self.sentences = tokenizer.tokenize(self.text.strip())
+		tokenizer = data.load("tokenizers/punkt/english.pickle")
+		self.sentences = tokenizer.tokenize(self.text.strip())
 
 		# Digest each sentence into words and part-of-speech tags
 		if self.sentence_tags is None:
@@ -38,8 +47,16 @@ class Problem(object):
 			self.all_tags = list(set(all_tags))
 			self.all_words = list(set(all_words))
 
+	def infer(self):
+		if self.inference is not None:
+			return
+
+		self.digest()
+		self.inference = Inference(self)
+
 	def solve(self):
-		pass
+		self.infer()
+		self.brain.dump()
 
 	def __str__(self):
 		o = []
@@ -48,7 +65,7 @@ class Problem(object):
 		o.append("## The problem")
 		o.append(self.text)
 
-		o.append("## Parsed problem")
+		o.append("## Digested problem")
 		for s_tags in self.sentence_tags:
 			words, tags = [], []
 			for tag in s_tags:
@@ -57,5 +74,8 @@ class Problem(object):
 			o.append("\t".join(words))
 			o.append("\t".join(tags))
 			o.append("")
+
+		if self.inference is not None:
+			o.append(str(self.inference))
 
 		return "\n".join(o)
