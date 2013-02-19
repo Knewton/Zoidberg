@@ -38,6 +38,12 @@ class Inference(object):
 		# identify the time period
 		self.conjunctions = []
 		self.subordinates = []
+		# Query guess; accumulate points to determine what sentence is question
+		self.possible_queries = {}
+		self.query_points = {
+			"question_mark": [],
+			"verb_form": []
+		}
 
 		# Store a reference to the problem
 		self.problem = problem
@@ -45,10 +51,17 @@ class Inference(object):
 		# Execute
 		self._execute()
 
+	def _possible_query(self, index):
+		if not index in self.possible_queries:
+			self.possible_queries[index] = 1
+		else:
+			self.possible_queries[index] += 1
+
 	def _execute(self):
 		p = self.problem
 		last_word, last_tag = None, None
 		last_verb_tag = None
+		index = 0
 
 		for s_tags in p.sentence_tags:
 			last_verb_tag = None
@@ -85,6 +98,7 @@ class Inference(object):
 						if last_verb_tag is not None:
 							# VB*...VB indicates a question not an operation
 							self.raw_operators.pop()
+							self.query_points["verb_form"].append(index)
 					elif tag != "VBG":
 						last_verb_tag = tag
 						self.raw_operators.append(word)
@@ -92,9 +106,13 @@ class Inference(object):
 				if tag == "IN":
 					last_conjunction = word
 
+				if tag == "." and word == "?":
+					self.query_points["question_mark"].append(index)
+
 				last_word = word
 				last_tag = tag
 				s_index += 1
+			index += 1
 
 		# Make all the inferred items unique
 		self.raw_operators = list(set(self.raw_operators))
@@ -121,18 +139,36 @@ class Inference(object):
 			self.subordinates.append(p.brain.subordinate(subordinate))
 		self.subordinates = list(set(self.subordinates))
 
+		# Resolve the query
+		self._possible_query(len(p.sentence_tags) - 1)
+		for query_type in self.query_points:
+			for i in self.query_points[query_type]:
+				self._possible_query(i)
+		high_score = 0
+		for query_index in self.possible_queries:
+			score = self.possible_queries[query_index]
+			if score > high_score:
+				high_score = score
+				self.query = query_index
+			elif score == high_score:
+				self.query = None
+
 	def __str__(self):
 		o = []
 		i = ["I think this problem is about"]
 		thought_any = False
 
 		multiple_contexts = len(self.contexts) > 1
-
 		for x in [self.contexts, self.operators, self.units]:
 			f = list_format(x)
 			if f is not None:
 				thought_any = True
 				i.append(f)
+
+		if self.query is not None:
+			i.append("and asks a single question")
+		else:
+			i.append("however, I don't know what it wants for an answer")
 
 		o.append("## Problem inference")
 		if thought_any:

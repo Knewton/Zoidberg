@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from nltk import word_tokenize, pos_tag, data
-from inference import Inference
 from brain import Brain
+from inference import Inference
+from query import Query
 
 class Problem(object):
 	def __init__(self, text, brain_path=None):
@@ -18,8 +19,9 @@ class Problem(object):
 		self.all_words = None
 		self.longest_word = None
 
-		# Inference
+		# Engines
 		self.inference = None
+		self.question = None
 
 	def digest(self):
 		if self.sentences is not None:
@@ -54,8 +56,15 @@ class Problem(object):
 		self.digest()
 		self.inference = Inference(self)
 
-	def solve(self):
+	def query(self):
+		if self.question is not None:
+			return
+
 		self.infer()
+		self.question = Query(self)
+
+	def solve(self):
+		self.query()
 		self.brain.dump()
 
 	def __str__(self):
@@ -77,5 +86,10 @@ class Problem(object):
 
 		if self.inference is not None:
 			o.append(str(self.inference))
+			o.append("")
+
+		if self.question is not None:
+			o.append(str(self.question))
+			o.append("")
 
 		return "\n".join(o)
