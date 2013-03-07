@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from utilities import output_tuples
 from nltk import word_tokenize, pos_tag, data
 from brain import Brain
 from inference import Inference
@@ -18,6 +19,7 @@ class Problem(object):
 		self.all_tags = None
 		self.all_words = None
 		self.longest_word = None
+		self.last_context = None
 
 		# Engines
 		self.inference = None
@@ -67,29 +69,24 @@ class Problem(object):
 		self.query()
 		self.brain.dump()
 
+	def tag_print(self, src, o):
+		return output_tuples(src, o, self.longest_word)
+
 	def __str__(self):
 		o = []
 
 		o.append("# Zoidberg Solution")
-		o.append("## The problem")
+
+		o.append("\n## The problem")
 		o.append(self.text)
 
 		o.append("## Digested problem")
-		for s_tags in self.sentence_tags:
-			words, tags = [], []
-			for tag in s_tags:
-				words.append("{: <{l}}".format(tag[0], l=self.longest_word))
-				tags.append("{: <{l}}".format(tag[1], l=self.longest_word))
-			o.append("\t".join(words))
-			o.append("\t".join(tags))
-			o.append("")
+		self.tag_print(self.sentence_tags, o)
 
 		if self.inference is not None:
 			o.append(str(self.inference))
-			o.append("")
 
 		if self.question is not None:
 			o.append(str(self.question))
-			o.append("")
 
 		return "\n".join(o)

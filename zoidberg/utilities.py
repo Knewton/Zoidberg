@@ -156,3 +156,29 @@ def unpackage(file_path, package_type=None):
 
 	# Return the destination
 	return basedir
+
+def output_tuples(src, o, l, frmt=False):
+	for tuples in src:
+		words, tags = [], []
+		index = 0
+		for tup in tuples:
+			word, tag = tup
+
+			# Sometimes our values are packed in tuples
+			if not isinstance(word, basestring):
+				if word[0] is not None:
+					word = word[0]
+				else:
+					# Sometimes our values are packed as values themselves
+					word = word[1]
+
+			if index == 0:
+				word = word.capitalize()
+
+			words.append("{: <{l}}".format(word, l=l))
+			tags.append("{: <{l}}".format(tag, l=l))
+			index += 1
+		o.append("\t".join(words))
+		o.append("\t".join(tags))
+		o.append("")
+

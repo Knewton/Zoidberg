@@ -6,6 +6,11 @@ ANSWER_FORMATS = {
 	"context": "Answer is a context (Mary, Dr. Jones)"
 }
 
+SOLUTION_WORKFLOW = {
+	"plug_and_chug": "Extract symbols, construct expression, solve.",
+	"contrast": "Create comparison expression to contrast solution values."
+}
+
 class Query(object):
 	def __init__(self, problem):
 		self.problem = problem
@@ -20,14 +25,19 @@ class Query(object):
 		self.unit = None
 		self.subordinate = None
 
-		self._execute()
+		self.solution_workflow = None
+		self.comparison_type = None
 
-	def _execute(self):
+		self.execute()
+
+	def execute(self):
 		p = self.problem
 		i = p.inference
 
-		if i.query is None:
+		if len(i.queries) == 0:
 			return
+
+		return # @TODO: Remove this DEBUG break
 
 		self.query_sentence = p.sentences[i.query]
 		self.query_tags = p.sentence_tags[i.query]
@@ -52,22 +62,28 @@ class Query(object):
 		# tl;dr Every question is a number until I learns me better schoolin'.
 		self.answer_format = ANSWER_FORMATS["expression"]
 
-		# Is the question being phrased?
-		# This is used as a tristate over a boolean, with None as "maybe" state
-		phrasing_question = False
+		last_noun_tag = None
 
 		for s_tag in self.query_tags:
 			word, tag = s_tag
-			if tag in ["WRB", "WDT", "WP", "WP$"]: # Wh- determiner
-				phrasing_question = None # Maybe phrasing
 
-			if tag == "JJ": # Adjective
-				if phrasing_question is None:
-					phrasing_question = True
 					# @NOTE: If I wasn't ignoring the fact questions could be
 					# about other things, the two step process of determining
 					# phrasing is likely a lovely place to figure out what the
 					# answer type is, as well.
+
+			if tag == "NNS": # Probably a unit
+				if phrasing_question:
+					if word in i.units:
+						self.unit = word
+						self.solution_workflow = "plug_and_chug"
+
+			# JJR: Commparative adjective (bigger)
+			# JJS: Superlative adjective (biggest)
+			if tag in ["JJR", "JJS"]:
+				self.solution_workflow = "plug_and_chug"
+				self.comparison_type = p.brain.comparison(word)
+
 
 	def __str__(self):
 		o = []

@@ -1,0 +1,1 @@
+{"subordinates": {"now": "time_ending", "beginning": "time_starting"}, "comparison_adj": {"fewer": "lt"}, "operator_verbs": {"has": "eq", "bought": "ad", "ate": "su", "buys": "ad", "gave": "su", "gives": "su"}}

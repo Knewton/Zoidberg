@@ -5,7 +5,8 @@ import sys
 DEFAULT_PATH = "~/.zoidberg.brain.json"
 DEFAULT_BRAIN = {
 	"operator_verbs": {},
-	"subordinates": {}
+	"subordinates": {},
+	"comparison_adj": {}
 }
 
 # Various mathematical operators we know of
@@ -23,7 +24,17 @@ SUBORDINATES = [
 	("time_ending", "Time: Ending")
 ]
 
-def _input(data, prompt):
+COMPARISONS = [
+	("gt", "Greater than"),
+	("lt", "Less than"),
+	("gr", "Greatest"),
+	("le", "Least"),
+	("av", "Average")
+]
+
+INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
+
+def get_input(data, prompt):
 	i = 0
 	for k in data:
 		i += 1
@@ -33,16 +44,20 @@ def _input(data, prompt):
 	r = int(raw_input(prompt))
 
 	if r < 0 or r > len(data):
-		return _input(data, prompt)
+		return get_input(data, prompt)
 	return data[r - 1][0]
 
-def input_operator_type(x):
-	print "What operation does the verb '{0}' indicate?".format(x)
-	return _input(OPERATORS, "'{0}' indicates: ".format(x))
+def input_operator_type(x, ref):
+	print INPUT_STR.format("operation", "the verb ", x, ref)
+	return get_input(OPERATORS, "'{0}' indicates: ".format(x))
 
-def input_subordinate_type(x):
-	print "What subordinate does '{0}' indicate?".format(x)
-	return _input(SUBORDINATES, "'{0}' indicates: ".format(x))
+def input_subordinate_type(x, ref):
+	print INPUT_STR.format("subordinate", "", x, ref)
+	return get_input(SUBORDINATES, "'{0}' indicates: ".format(x))
+
+def input_comparison_type(x, ref):
+	print INPUT_STR.format("comparison", "", x, ref)
+	return get_input(COMPARISONS, "'{0}' indicates: ".format(x))
 
 class Brain(object):
 	def __init__(self, path=None):
@@ -54,18 +69,22 @@ class Brain(object):
 		if self.raw is None:
 			self.raw = DEFAULT_BRAIN
 
-	def _proc(self, key, val, fn):
+	def proc(self, key, val, fn, ref):
 		if not key in self.raw:
 			self.raw[key] = {}
 		if not val in self.raw[key]:
-			self.raw[key][val] = fn(val)
+			self.raw[key][val] = fn(val, ref)
 		return self.raw[key][val]
 
-	def subordinate(self, sub):
-		return self._proc("subordinates", sub, input_subordinate_type)
+	def subordinate(self, sub, ref):
+		return self.proc("subordinates", sub, input_subordinate_type, ref)
 
-	def operator(self, verb):
-		return self._proc("operator_verbs", verb, input_operator_type)
+	def operator(self, verb, ref):
+		return self.proc("operator_verbs", verb, input_operator_type, ref)
+
+	def comparison(self, comp, ref):
+		return self.proc("comparison_adj", verb, input_comparison_type, ref)
 
 	def dump(self):
 		set_json(self.path, self.raw)
+
