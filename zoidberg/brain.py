@@ -6,7 +6,8 @@ DEFAULT_PATH = "~/.zoidberg.brain.json"
 DEFAULT_BRAIN = {
 	"operator_verbs": {},
 	"subordinates": {},
-	"comparison_adj": {}
+	"comparison_adj": {},
+	"answer_syntax": {}
 }
 
 # Various mathematical operators we know of
@@ -30,6 +31,12 @@ COMPARISONS = [
 	("gr", "Greatest"),
 	("le", "Least"),
 	("av", "Average")
+]
+
+ANSWERS = [
+	("expression", "Answer is the solution to an expression (4 cars)"),
+	("unit", "Answer is the unit of the solution to an expression (cars)"),
+	("context", "Answer is the owner of the solution to an expression (Joe)")
 ]
 
 INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
@@ -59,6 +66,10 @@ def input_comparison_type(x, ref):
 	print INPUT_STR.format("comparison", "", x, ref)
 	return get_input(COMPARISONS, "'{0}' indicates: ".format(x))
 
+def input_answer_syntax(x, ref):
+	print INPUT_STR.format("question", "", x, ref)
+	return get_input(ANSWERS, "'{0}' indicates: ".format(x))
+
 class Brain(object):
 	def __init__(self, path=None):
 		if path is None:
@@ -84,6 +95,9 @@ class Brain(object):
 
 	def comparison(self, comp, ref):
 		return self.proc("comparison_adj", verb, input_comparison_type, ref)
+
+	def answer_syntax(self, query, ref):
+		return self.proc("answer_syntax", query, input_answer_syntax, ref)
 
 	def dump(self):
 		set_json(self.path, self.raw)

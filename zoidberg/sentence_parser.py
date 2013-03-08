@@ -176,3 +176,6 @@ class SentenceParser(object):
 			self.subordinates.append(p.brain.subordinate(subordinate, text))
 		self.subordinates = list(set(self.subordinates))
 
+	def __str__(self):
+		return self.sentence_text
+
