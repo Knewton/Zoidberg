@@ -1,14 +1,15 @@
 #!/usr/bin/env python
 
 ANSWER_SYNTAX = {
-	"expression": "is the solution to an expression.",
-	"unit": "is the unit of the solution to an expression.",
-	"context": "is the owner of the solution to an expression."
+	"unknown": "unknown to me",
+	"expression": "value",
+	"unit": "unit",
+	"context": "owner"
 }
 
-SOLUTION_WORKFLOW = {
-	"plug_and_chug": "Extract symbols, construct expression, solve.",
-	"contrast": "Create comparison expression to contrast solution values."
+ANSWER_SUBORDINATE = {
+	"time_starting": "at the beginning of the problem",
+	"time_ending": "at the end of the problem"
 }
 
 class Answer(object):
@@ -16,53 +17,102 @@ class Answer(object):
 		self.query = query
 
 		self.syntax = None
-		self.context = None
-		self.unit = None
 		self.subordinate = None
-		self.workflow = None
-		self.comparison = None
+
+		self.relative_value = False
+		self.value = None
+		self.unit = None
+		self.context = None
 
 		self.execute()
 
 	def execute(self):
 		p = self.query.problem
 
+		# The asking process determines what type of answer we want
+		asking = False
+
+		# The refining process determines the origin of our answer
+		refining = False
+
+		# The specifying process adds restrictions to an asnwer
+		specifying = False
+
 		for v_part in self.query:
-			val, part = v_part
+			val, part, subtype = v_part
 
 			if part == "asking":
 				self.syntax = p.brain.answer_syntax(val, str(self.query))
+				asking = True
 
-		# Everything below here is dragons whatfor should be slain
-		print self.syntax
-		return
+			# assume unit appearing during asking for answer
+			if part == "unit" and asking:
+				self.unit = val
 
-		for s_tag in self.query_tags:
-			word, tag = s_tag
+			# The qstart ends asking and begins refining
+			if part == "q_start":
+				asking = False
+				refining = True
 
-					# @NOTE: If I wasn't ignoring the fact questions could be
-					# about other things, the two step process of determining
-					# phrasing is likely a lovely place to figure out what the
-					# answer type is, as well.
+			# The qstart ends asking and begins specifying
+			if part == "q_stop":
+				refining = True
+				specifying = True
 
-			if tag == "NNS": # Probably a unit
-				if phrasing_question:
-					if word in i.units:
-						self.unit = word
-						self.solution_workflow = "plug_and_chug"
+			# assume context during refining is owner
+			if part == "context" and refining:
+				self.context = val
 
-			# JJR: Commparative adjective (bigger)
-			# JJS: Superlative adjective (biggest)
-			if tag in ["JJR", "JJS"]:
-				self.solution_workflow = "plug_and_chug"
-				self.comparison_type = p.brain.comparison(word)
+			# Assume subordinate during specifying is answer condition
+			if part == "subordinate" and specifying:
+				subs = self.query.subordinates
+				self.subordinate = [s for s in subs if s[1] == val[1]]
+				if len(self.subordinate) > 0:
+					self.subordinate = self.subordinate[0][0]
+				else:
+					self.subordinate = None
 
 	def __str__(self):
 		o = []
 
-		o.append("\n### {0}".format(self.query))
+		o.append("\n### {0}".format(str(self.query)))
 
-		if self.syntax:
-			o.append("The answer {0}".format(ANSWER_SYNTAX[self.syntax]))
+		i = ["The answer is"]
+
+		# Are we surprised about the answer format?
+		surprised = False
+		if self.syntax is None:
+			i.append(ANSWER_SYNTAX["unknown"])
+		else:
+			if self.syntax == "expression" and not self.relative_value:
+				surprised = self.value is not None
+			elif self.syntax == "unit":
+				surprised = self.unit is not None
+			elif self.syntax == "context":
+				surprised = self.unit is not None
+			syntax = ANSWER_SYNTAX[self.syntax]
+
+		if surprised:
+			mode = "surprisingly known"
+		else:
+			mode = "unknown"
+		i.append("the {0} {1} of".format(mode, syntax))
+
+		if self.value:
+			if self.relative_value:
+				i.append("the")
+			i.append(self.value)
+
+		if self.unit:
+			i.append(self.unit)
+
+		if self.context:
+			i.append("owned by {0}".format(self.context))
+
+		if self.subordinate:
+			i.append(ANSWER_SUBORDINATE[self.subordinate])
+
+		o.append(" ".join(i) + ".")
 
 		return "\n".join(o)
+

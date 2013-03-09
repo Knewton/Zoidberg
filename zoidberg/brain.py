@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from os.path import isfile, realpath, expanduser
 from utilities import get_json, set_json
 import sys
 
@@ -7,7 +8,9 @@ DEFAULT_BRAIN = {
 	"operator_verbs": {},
 	"subordinates": {},
 	"comparison_adj": {},
-	"answer_syntax": {}
+	"answer_syntax": {},
+	"plurality": {},
+	"gender": {}
 }
 
 # Various mathematical operators we know of
@@ -37,6 +40,19 @@ ANSWERS = [
 	("expression", "Answer is the solution to an expression (4 cars)"),
 	("unit", "Answer is the unit of the solution to an expression (cars)"),
 	("context", "Answer is the owner of the solution to an expression (Joe)")
+]
+
+PLURALITY = [
+	("singular", "Refers to a single (balloon, she)"),
+	("plural", "Refers to a plural (balloons, they)")
+]
+
+GENDERS = [
+	("masculine", "Refers to a male gender"),
+	("feminine", "Refers to a female gender"),
+	("neutral", "Refers to a non-gendered entity"),
+	("mixed", "Refers to a mixture of genders (a group of people)"),
+	("ambiguous", "Refers to a man or woman but is not clear enough to know")
 ]
 
 INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
@@ -70,13 +86,23 @@ def input_answer_syntax(x, ref):
 	print INPUT_STR.format("question", "", x, ref)
 	return get_input(ANSWERS, "'{0}' indicates: ".format(x))
 
+def input_plurality(x, ref):
+	print INPUT_STR.format("plurality", "the pronoun ", x, ref)
+	return get_input(PLURALITY, "'{0}' indicates: ".format(x))
+
+def input_gender(x, ref):
+	print INPUT_STR.format("gender", "", x, ref)
+	return get_input(GENDERS, "'{0}' indicates: ".format(x))
+
 class Brain(object):
 	def __init__(self, path=None):
 		if path is None:
 			path = DEFAULT_PATH
 
-		self.path = path
-		self.raw = get_json(self.path)
+		self.path = realpath(expanduser(path))
+		self.raw = None
+		if isfile(self.path):
+			self.raw = get_json(self.path)
 		if self.raw is None:
 			self.raw = DEFAULT_BRAIN
 
@@ -98,6 +124,11 @@ class Brain(object):
 
 	def answer_syntax(self, query, ref):
 		return self.proc("answer_syntax", query, input_answer_syntax, ref)
+
+	def noun_like(self, n, ref):
+		plurality = self.proc("plurality", n, input_plurality, ref)
+		gender = self.proc("gender", n, input_gender, ref)
+		return (plurality, gender)
 
 	def dump(self):
 		set_json(self.path, self.raw)

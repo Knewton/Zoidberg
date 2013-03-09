@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from utilities import list_format
+from utilities import list_format, uniq
 from sentence_parser import SentenceParser
 
 OPERATOR_STR = {
@@ -79,10 +79,10 @@ class Inference(object):
 			index += 1
 
 		# Ensure uniqueness in our data
-		raw_operators = list(set(raw_operators))
-		self.contexts = list(set(self.contexts))
-		self.units = list(set(self.units))
-		self.subordinates = list(set(self.subordinates))
+		raw_operators = uniq(raw_operators)
+		self.contexts = uniq(self.contexts)
+		self.units = uniq(self.units)
+		self.subordinates = uniq(self.subordinates)
 
 		if len(self.contexts) > 1:
 			op_key = OPERATOR_STR["multiple_contexts"]
@@ -95,7 +95,7 @@ class Inference(object):
 		for op in raw_operators:
 			if op != "eq" or len(raw_operators) == 1:
 				self.operators.append(op_key[op])
-		self.operators = list(set(self.operators))
+		self.operators = uniq(self.operators)
 
 	def __str__(self):
 		o = []

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from utilities import output_tuples
+from utilities import output_tuples, uniq
 from nltk import word_tokenize, pos_tag, data
 from brain import Brain
 from inference import Inference
@@ -19,7 +19,19 @@ class Problem(object):
 		self.all_tags = None
 		self.all_words = None
 		self.longest_word = None
-		self.last_context = None
+
+		# Mrs. Jones
+		self.last_contexts = {
+			"plurality": {
+				"singular": None,
+				"plural": None,
+			},
+			"gender": {
+				"male": None,
+				"female": None,
+				"neutral": None
+			}
+		}
 
 		# Engines
 		self.inference = None
@@ -48,8 +60,8 @@ class Problem(object):
 						self.longest_word = l
 					all_tags.append(t[1])
 			self.sentence_tags = sentence_tags
-			self.all_tags = list(set(all_tags))
-			self.all_words = list(set(all_words))
+			self.all_tags = uniq(all_tags)
+			self.all_words = uniq(all_words)
 
 	def infer(self):
 		if self.inference is not None:
