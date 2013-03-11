@@ -75,10 +75,10 @@ class Answer(object):
 	def __str__(self):
 		o = []
 
-		o.append("\n### Question")
+		o.append("\n### Question text")
 		o.append(str(self.query))
 
-		o.append("\n#### Answer interpretation")
+		o.append("\n### Answer interpretation")
 
 		i = ["The answer is"]
 

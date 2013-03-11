@@ -30,9 +30,11 @@ class Query(object):
 	def __str__(self):
 		o = []
 
-		o.append("## Questions asked")
+		index = 1
 		for a in self.answers:
+			o.append("\n## Question {0}".format(index))
 			o.append(str(a))
+			index += 1
 
 		return "\n".join(o)
 

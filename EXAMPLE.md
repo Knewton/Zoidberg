@@ -26,12 +26,13 @@ I think this problem is about Jane getting balloons and asks a single question.
     How many   	balloons   	does       	Jane       	have       	now        	?          
     asking     	unit       	q_start    	context    	q_stop     	subordinate	punctuation
 
-## Questions asked
 
-### Question
+## Question 1
+
+### Question text
 How many balloons does she have now?
 
-#### Answer interpretation
+### Answer interpretation
 The answer is the unknown value of balloons owned by Jane at the end of the problem.
 # Zoidberg Solution
 
@@ -67,12 +68,13 @@ I think this problem is about Mrs. Jones and her friends exchanging bananas and 
     How many   	bananas    	did        	Mrs. Jones 	buy        	in         	the        	beginning  	?          
     asking     	unit       	q_start    	context    	q_stop     	conjunction	noise      	subordinate	punctuation
 
-## Questions asked
 
-### Question
+## Question 1
+
+### Question text
 How many bananas did she buy in the beginning?
 
-#### Answer interpretation
+### Answer interpretation
 The answer is the unknown value of bananas owned by Mrs. Jones at the beginning of the problem.
 # Zoidberg Solution
 
@@ -102,12 +104,13 @@ I think this problem is about Tony and his sister exchanging jars and asks a sin
     How many   	jars       	does       	Tony       	have       	now        	?          
     asking     	unit       	q_start    	context    	q_stop     	subordinate	punctuation
 
-## Questions asked
 
-### Question
+## Question 1
+
+### Question text
 How many jars does he have now?
 
-#### Answer interpretation
+### Answer interpretation
 The answer is the unknown value of jars owned by Tony at the end of the problem.
 # Zoidberg Solution
 
@@ -137,12 +140,13 @@ I think this problem is about Lucy and Ethelle having dolls and asks a single qu
     How many   	dolls      	does       	Ethelle    	have       	?          
     asking     	unit       	q_start    	context    	q_stop     	punctuation
 
-## Questions asked
 
-### Question
+## Question 1
+
+### Question text
 How many dolls does Ethelle have?
 
-#### Answer interpretation
+### Answer interpretation
 The answer is the unknown value of dolls owned by Ethelle.
 # Zoidberg Solution
 
@@ -172,10 +176,11 @@ I think this problem is about Joey and Chandler having toy cars and asks a singl
     How many   	fewer      	toy cars   	does       	Chandler   	have       	than       	Joey       	?          
     asking     	unknown    	unit       	q_start    	context    	q_stop     	conjunction	context    	punctuation
 
-## Questions asked
 
-### Question
+## Question 1
+
+### Question text
 How many fewer toy cars does Chandler have than Joey?
 
-#### Answer interpretation
+### Answer interpretation
 The answer is the unknown value of toy cars owned by Joey.
