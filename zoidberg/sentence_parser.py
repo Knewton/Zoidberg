@@ -8,6 +8,7 @@ class SentenceParser(object):
 		self.problem = problem
 		self.sentence_text = text
 		self.question = False
+		self.longest_phrase = None
 
 		# The parsed sentence of chunked components
 		self.parsed = []
@@ -29,11 +30,22 @@ class SentenceParser(object):
 
 		self.execute()
 
-	def track(self, val, attr, subtype=None):
+	def track_longer(self, v):
+		l = len(v)
+		if self.longest_phrase is None or self.longest_phrase < l:
+			self.longest_phrase = l
+
+	def track(self, val, attr, subtype=None, index=None):
 		if attr == "context":
 			if subtype is not None:
 				self.resolve_context(subtype, val)
-		self.parsed.append((val, attr, subtype))
+		tup = (val, attr, subtype)
+		if index is not None:
+			self.parsed[index] = tup
+		else:
+			self.parsed.append(tup)
+		self.track_longer(val)
+		self.track_longer(attr)
 
 	def resolve_context(self, subtype, val=None):
 		p = self.problem
@@ -102,7 +114,7 @@ class SentenceParser(object):
 					self.track(context, "context", subtype)
 				else:
 					if last_conjunction is not None:
-						conjunction = (last_conjunction, word)
+						conjunction = (word, last_conjunction)
 						self.conjunctions.append(conjunction)
 						did_something = True
 						self.track(conjunction, "subordinate", subtype)
@@ -147,12 +159,12 @@ class SentenceParser(object):
 					if last_verb_tag is not None:
 						# VB*...VB indicates a question not an operation
 						q_start = self.raw_operators.pop()
-						self.parsed[last_verb] = (q_start, "q_start", subtype)
+						self.track(q_start, "q_start", subtype, last_verb)
 						did_something = True
 						self.track(word, "q_stop", subtype)
 				elif tag != "VBG":
 					last_verb_tag = tag
-					last_verb = index - 1
+					last_verb = len(self.parsed)
 					self.raw_operators.append(word)
 					did_something = True
 					self.track(word, "operator", subtype)
@@ -176,9 +188,9 @@ class SentenceParser(object):
 
 			if tag == "RB": # An adverb, probably a subordinate?
 				if last_conjunction is not None:
-					conjunction = (last_conjunction, word)
+					conjunction = (word, last_conjunction)
 				else:
-					conjunction = (None, word)
+					conjunction = (word, None)
 				self.conjunctions.append(conjunction)
 				did_something = True
 				self.track(conjunction, "subordinate", subtype)
@@ -219,9 +231,9 @@ class SentenceParser(object):
 
 		# Resolve the subordinates
 		for o in self.conjunctions:
-			conjunction, subordinate = o
+			subordinate, conjunction = o
 			self.subordinates.append(
-				(p.brain.subordinate(subordinate, text), subordinate))
+				(subordinate, p.brain.subordinate(subordinate, text)))
 		self.subordinates = uniq(self.subordinates)
 
 	def __str__(self):

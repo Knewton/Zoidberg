@@ -170,7 +170,10 @@ def output_tuples(src, o, l, frmt=False):
 
 			# Sometimes our values are packed in tuples
 			if not isinstance(word, basestring):
-				word = word[1]
+				if word[0] is not None:
+					word = word[0]
+				else:
+					word = word[1]
 
 			if index == 0 and tag != "context":
 				word = word.capitalize()

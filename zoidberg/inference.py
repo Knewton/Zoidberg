@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from utilities import list_format, uniq
+from utilities import list_format, uniq, output_tuples
 from sentence_parser import SentenceParser
 
 OPERATOR_STR = {
@@ -30,6 +30,7 @@ class Inference(object):
 	def __init__(self, problem):
 		# The parsed sentences used for making inferences
 		self.sentences = []
+		self.longest_phrase = None
 
 		# The sentences which are questions
 		self.queries = []
@@ -59,6 +60,10 @@ class Inference(object):
 		else:
 			self.possible_queries[index] += 1
 
+	def track_longer(self, l):
+		if self.longest_phrase is None or self.longest_phrase < l:
+			self.longest_phrase = l
+
 	def execute(self):
 		p = self.problem
 		raw_operators = []
@@ -67,6 +72,7 @@ class Inference(object):
 		for s_tags in p.sentence_tags:
 			s = SentenceParser(s_tags, p, p.sentences[index])
 			self.sentences.append(s)
+			self.track_longer(s.longest_phrase)
 
 			raw_operators += s.operators
 			self.contexts += s.contexts
@@ -123,6 +129,6 @@ class Inference(object):
 			o.append("I have literally no idea what's going on here.")
 
 		o.append("\n## Parsed problem")
-		self.problem.tag_print(self.sentences, o)
+		output_tuples(self.sentences, o, self.longest_phrase)
 
 		return "\n".join(o)

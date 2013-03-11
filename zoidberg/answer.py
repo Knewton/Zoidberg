@@ -66,9 +66,9 @@ class Answer(object):
 			# Assume subordinate during specifying is answer condition
 			if part == "subordinate" and specifying:
 				subs = self.query.subordinates
-				self.subordinate = [s for s in subs if s[1] == val[1]]
+				self.subordinate = [s for s in subs if s[0] == val[0]]
 				if len(self.subordinate) > 0:
-					self.subordinate = self.subordinate[0][0]
+					self.subordinate = self.subordinate[0][1]
 				else:
 					self.subordinate = None
 

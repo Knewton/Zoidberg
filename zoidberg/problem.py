@@ -81,9 +81,6 @@ class Problem(object):
 		self.query()
 		self.brain.dump()
 
-	def tag_print(self, src, o):
-		return output_tuples(src, o, self.longest_word)
-
 	def __str__(self):
 		o = []
 
@@ -93,7 +90,7 @@ class Problem(object):
 		o.append(self.text)
 
 		o.append("## Digested problem")
-		self.tag_print(self.sentence_tags, o)
+		output_tuples(self.sentence_tags, o, self.longest_word)
 
 		if self.inference is not None:
 			o.append(str(self.inference))
