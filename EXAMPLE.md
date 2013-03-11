@@ -28,17 +28,10 @@ I think this problem is about Jane getting balloons and asks a single question.
 
 ## Questions asked
 
-<<<<<<< HEAD
-### Question text
-How many balloons does she have now?
-
-### Answer interpretation
-=======
 ### Question
 How many balloons does she have now?
 
 #### Answer interpretation
->>>>>>> Clearer formatting headers
 The answer is the unknown value of balloons owned by Jane at the end of the problem.
 # Zoidberg Solution
 
@@ -76,17 +69,10 @@ I think this problem is about Mrs. Jones and her friends exchanging bananas and 
 
 ## Questions asked
 
-<<<<<<< HEAD
-### Question text
-How many bananas did she buy in the beginning?
-
-### Answer interpretation
-=======
 ### Question
 How many bananas did she buy in the beginning?
 
 #### Answer interpretation
->>>>>>> Clearer formatting headers
 The answer is the unknown value of bananas owned by Mrs. Jones at the beginning of the problem.
 # Zoidberg Solution
 
@@ -118,17 +104,10 @@ I think this problem is about Tony and his sister exchanging jars and asks a sin
 
 ## Questions asked
 
-<<<<<<< HEAD
-### Question text
-How many jars does he have now?
-
-### Answer interpretation
-=======
 ### Question
 How many jars does he have now?
 
 #### Answer interpretation
->>>>>>> Clearer formatting headers
 The answer is the unknown value of jars owned by Tony at the end of the problem.
 # Zoidberg Solution
 
@@ -160,17 +139,10 @@ I think this problem is about Lucy and Ethelle having dolls and asks a single qu
 
 ## Questions asked
 
-<<<<<<< HEAD
-### Question text
-How many dolls does Ethelle have?
-
-### Answer interpretation
-=======
 ### Question
 How many dolls does Ethelle have?
 
 #### Answer interpretation
->>>>>>> Clearer formatting headers
 The answer is the unknown value of dolls owned by Ethelle.
 # Zoidberg Solution
 
@@ -202,15 +174,8 @@ I think this problem is about Joey and Chandler having toy cars and asks a singl
 
 ## Questions asked
 
-<<<<<<< HEAD
-### Question text
-How many fewer toy cars does Chandler have than Joey?
-
-### Answer interpretation
-=======
 ### Question
 How many fewer toy cars does Chandler have than Joey?
 
 #### Answer interpretation
->>>>>>> Clearer formatting headers
 The answer is the unknown value of toy cars owned by Joey.
