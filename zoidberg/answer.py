@@ -75,10 +75,17 @@ class Answer(object):
 	def __str__(self):
 		o = []
 
+<<<<<<< HEAD
 		o.append("\n### Question text")
 		o.append(str(self.query))
 
 		o.append("\n### Answer interpretation")
+=======
+		o.append("\n### Question")
+		o.append(str(self.query))
+
+		o.append("\n#### Answer interpretation")
+>>>>>>> Clearer formatting headers
 
 		i = ["The answer is"]
 
