@@ -30,7 +30,7 @@ class Query(object):
 	def __str__(self):
 		o = []
 
-		o.append("## Answer formulation")
+		o.append("## Questions asked")
 		for a in self.answers:
 			o.append(str(a))
 
