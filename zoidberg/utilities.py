@@ -181,7 +181,8 @@ def output_tuples(src, o, l, frmt=False):
 			words.append("{: <{l}}".format(word, l=l))
 			tags.append("{: <{l}}".format(tag, l=l))
 			index += 1
-		o.append("\t".join(words))
-		o.append("\t".join(tags))
+		# Add 4 spaces for preformatted in markdown
+		o.append("    " + ("\t".join(words)))
+		o.append("    " + ("\t".join(tags)))
 		o.append("")
 
