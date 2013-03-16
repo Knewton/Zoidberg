@@ -4,6 +4,7 @@ from nltk import word_tokenize, pos_tag, data
 from brain import Brain
 from inference import Inference
 from query import Query
+from solution import Solution
 
 class Problem(object):
 	def __init__(self, text, brain_path=None):
@@ -36,6 +37,7 @@ class Problem(object):
 		# Engines
 		self.inference = None
 		self.question = None
+		self.solution = None
 
 	def digest(self):
 		if self.sentences is not None:
@@ -78,7 +80,14 @@ class Problem(object):
 		self.question = Query(self)
 
 	def solve(self):
+		if self.solution is not None:
+			return
+
 		self.query()
+		self.solution = Solution(self)
+
+		# Maybe move this into a different mode so you can see everything but
+		self.solution.compute_correct()
 		self.brain.dump()
 
 	def __str__(self):
@@ -97,5 +106,8 @@ class Problem(object):
 
 		if self.question is not None:
 			o.append(str(self.question))
+
+		if self.solution is not None:
+			o.append(str(self.solution))
 
 		return "\n".join(o)

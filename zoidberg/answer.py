@@ -12,6 +12,14 @@ ANSWER_SUBORDINATE = {
 	"time_ending": "at the end of the problem"
 }
 
+# A Zoidberg answer refers to the structure and syntax of what the correct
+# response to the problem should be. As a result, the "answer" to a question
+# is an assertion as to what the correct answer will be; the "solution" to
+# question is the actual correct response.
+#
+# Example:
+#     Answer:   The unknown value of apples owned by everyone.
+#     Solution: 6 apples
 class Answer(object):
 	def __init__(self, query):
 		self.query = query

@@ -14,6 +14,7 @@ class SentenceParser(object):
 		self.parsed = []
 
 		# Collection of verbs which describe data manipulations
+		self.operator = {}
 		self.operators = []
 		self.raw_operators = []
 
@@ -75,10 +76,11 @@ class SentenceParser(object):
 			return iter(self.parsed)
 
 	def get_subtype(self, word, tag):
-		if tag[:2] == "NN": # Nouns
-			return self.problem.brain.noun_like(word, self.sentence_text)
-		elif tag[:3] == "PRP": # Pronouns
-			return self.problem.brain.noun_like(word, self.sentence_text)
+		brain = self.problem.brain
+		text = self.sentence_text
+
+		if tag[:2] == "NN" or tag[:3] == "PRP": # Nouns and Pronouns
+			return brain.noun_like(word, text)
 		else:
 			return None
 
@@ -167,6 +169,7 @@ class SentenceParser(object):
 					last_verb = len(self.parsed)
 					self.raw_operators.append(word)
 					did_something = True
+					subtype = self.get_subtype(word, tag)
 					self.track(word, "operator", subtype)
 
 			if tag == "IN":
@@ -222,12 +225,14 @@ class SentenceParser(object):
 		self.contexts = uniq(self.contexts)
 		self.units = uniq(self.units)
 
-		text = self.sentence_text
-
 		# Resolve the verbs to actual operators using the brain
 		for o in self.raw_operators:
-			self.operators.append(p.brain.operator(o, text))
+			op = p.brain.operator(o, self.sentence_text)
+			self.operators.append(op)
+			self.operator[o] = op
 		self.operators = uniq(self.operators)
+
+		text = self.sentence_text
 
 		# Resolve the subordinates
 		for o in self.conjunctions:

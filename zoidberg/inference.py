@@ -3,19 +3,19 @@ from utilities import list_format, uniq, output_tuples
 from sentence_parser import SentenceParser
 
 OPERATOR_STR = {
-	"multiple_contexts": {
-		"eq": "having",
-		"ad": "exchanging",
-		"mu": "exchanging",
-		"su": "exchanging",
-		"di": "exchanging"
-	},
 	"single_context": {
 		"eq": "having",
 		"ad": "getting",
 		"mu": "getting",
 		"su": "losing",
 		"di": "losing"
+	},
+	"multiple_contexts": {
+		"eq": "having",
+		"ad": "exchanging",
+		"mu": "exchanging",
+		"su": "exchanging",
+		"di": "exchanging"
 	},
 	"no_context": {
 		"eq": "some",
