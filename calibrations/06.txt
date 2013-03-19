@@ -1,1 +1,5 @@
-Brad has 12 cigarettes. He smokes 5 cigarettes. Brad gives 3 cigarettes to Jon. How many cigarettes does Brad have now?
+Marc has 10 apples.
+He throws 2 apples away.
+He gives 2 apples to Jim.
+Marc gives 3 apples to Julia.
+How many apples does Marc have now?
