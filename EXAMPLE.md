@@ -34,6 +34,17 @@ How many balloons does she have now?
 
 ### Answer interpretation
 The answer is the unknown value of balloons owned by Jane at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+balloons owend by Jane = 14
+
+### Sentence 2
+balloons owend by Jane + 6
+
+## Correct response
+20 balloons
 # Zoidberg Solution
 
 ## The problem
@@ -76,6 +87,20 @@ How many bananas did she buy in the beginning?
 
 ### Answer interpretation
 The answer is the unknown value of bananas owned by Mrs. Jones at the beginning of the problem.
+
+## Data extraction
+
+### Sentence 1
+bananas owend by Mrs. Jones + some
+
+### Sentence 2
+bananas owend by her friends - 5
+
+### Sentence 3
+bananas owend by Mrs. Jones - 4
+
+## Correct response
+No idea! Sorry!
 # Zoidberg Solution
 
 ## The problem
@@ -112,6 +137,17 @@ How many jars does he have now?
 
 ### Answer interpretation
 The answer is the unknown value of jars owned by Tony at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+jars owend by Tony = 19
+
+### Sentence 2
+jars owend by Tony - 16
+
+## Correct response
+3 jars
 # Zoidberg Solution
 
 ## The problem
@@ -148,6 +184,17 @@ How many dolls does Ethelle have?
 
 ### Answer interpretation
 The answer is the unknown value of dolls owned by Ethelle.
+
+## Data extraction
+
+### Sentence 1
+dolls owend by Lucy = 8
+
+### Sentence 2
+dolls owend by Ethelle = 4
+
+## Correct response
+No idea! Sorry!
 # Zoidberg Solution
 
 ## The problem
@@ -184,3 +231,14 @@ How many fewer toy cars does Chandler have than Joey?
 
 ### Answer interpretation
 The answer is the unknown value of toy cars owned by Joey.
+
+## Data extraction
+
+### Sentence 1
+toy cars owend by Joey = 13
+
+### Sentence 2
+toy cars owend by Chandler = 6
+
+## Correct response
+No idea! Sorry!
