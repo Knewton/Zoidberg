@@ -25,6 +25,9 @@ class Answer(object):
 		self.query = query
 
 		self.syntax = None
+		self.relative = False
+		self.rel_mode = None
+		self.comparator = None
 		self.subordinate = None
 
 		self.relative_value = False
@@ -53,9 +56,22 @@ class Answer(object):
 				self.syntax = p.brain.answer_syntax(val, str(self.query))
 				asking = True
 
+			if part == "rel_less":
+				if asking:
+					self.relative = True
+					self.rel_mode = "su"
+
+			if part == "rel_more":
+				if asking:
+					self.relative = True
+					self.rel_mode = "ad"
+
 			# assume unit appearing during asking for answer
 			if part == "unit" and asking:
 				self.unit = val
+
+			if part == "comparator_context":
+				self.comparator = val[0]
 
 			# The qstart ends asking and begins refining
 			if part == "q_start":
@@ -105,6 +121,9 @@ class Answer(object):
 
 		if surprised:
 			mode = "surprisingly known"
+		elif self.relative:
+			if self.rel_mode == "su":
+				mode = "difference in"
 		else:
 			mode = "unknown"
 		i.append("the {0} {1} of".format(mode, syntax))
@@ -119,6 +138,9 @@ class Answer(object):
 
 		if self.context:
 			i.append("owned by {0}".format(self.context))
+
+		if self.relative:
+			i.append("with respect to {0}".format(self.comparator))
 
 		if self.subordinate:
 			i.append(ANSWER_SUBORDINATE[self.subordinate])

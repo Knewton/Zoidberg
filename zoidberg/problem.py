@@ -28,9 +28,22 @@ class Problem(object):
 				"plural": None,
 			},
 			"gender": {
-				"male": None,
-				"female": None,
-				"neutral": None
+				"masculine": None,
+				"feminine": None,
+				"neutral": None,
+				"mixed": None
+			}
+		}
+		self.previous_contexts = {
+			"plurality": {
+				"singular": None,
+				"plural": None,
+			},
+			"gender": {
+				"masculine": None,
+				"feminine": None,
+				"neutral": None,
+				"mixed": None
 			}
 		}
 
