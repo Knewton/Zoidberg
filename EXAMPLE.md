@@ -1,3 +1,11 @@
+
+how many asking
+balloons unit
+does q_start
+Jane context
+have q_stop
+('now', None) subordinate
+? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -38,13 +46,22 @@ The answer is the unknown value of balloons owned by Jane at the end of the prob
 ## Data extraction
 
 ### Sentence 1
-balloons owend by Jane = 14
+balloons owned by Jane = 14
 
 ### Sentence 2
-balloons owend by Jane + 6
+balloons owned by Jane + 6
 
 ## Correct response
 20 balloons
+how many asking
+bananas unit
+did q_start
+Mrs. Jones context
+buy q_stop
+in conjunction
+the noise
+('beginning', 'in') subordinate
+? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -74,7 +91,7 @@ I think this problem is about Mrs. Jones, her family, and her friends exchanging
     context        	operator       	constant       	unit           	punctuation    
 
     Mrs. Jones     	gave           	the            	remaining      	4              	bananas        	to             	her friends    	.              
-    context        	operator       	noise          	solution_zero  	constant       	unit           	unknown        	context        	punctuation    
+    context        	operator       	noise          	solution_zero  	constant       	unit           	noise          	context        	punctuation    
 
     How many       	bananas        	did            	Mrs. Jones     	buy            	in             	the            	beginning      	?              
     asking         	unit           	q_start        	context        	q_stop         	conjunction    	noise          	subordinate    	punctuation    
@@ -91,18 +108,25 @@ The answer is the unknown value of bananas owned by Mrs. Jones at the beginning 
 ## Data extraction
 
 ### Sentence 1
-bananas owend by Mrs. Jones = 0
-bananas owend by Mrs. Jones + x
+bananas owned by Mrs. Jones = 0
+bananas owned by Mrs. Jones + x
 
 ### Sentence 2
-bananas owend by Mrs. Jones - 5
+bananas owned by Mrs. Jones - 5
 
 ### Sentence 3
-bananas owend by Mrs. Jones - 4
-bananas owend by Mrs. Jones == 0
+bananas owned by Mrs. Jones - 4
+bananas owned by Mrs. Jones == 0
 
 ## Correct response
 9 bananas
+how many asking
+jars unit
+does q_start
+Tony context
+have q_stop
+('now', None) subordinate
+? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -126,7 +150,7 @@ I think this problem is about Tony and his sister exchanging jars and asks a sin
     context        	operator       	constant       	unit           	punctuation    
 
     Tony           	gives          	16             	jars           	to             	his sister     	.              
-    context        	operator       	constant       	unit           	unknown        	context        	punctuation    
+    context        	operator       	constant       	unit           	noise          	context        	punctuation    
 
     How many       	jars           	does           	Tony           	have           	now            	?              
     asking         	unit           	q_start        	context        	q_stop         	subordinate    	punctuation    
@@ -143,13 +167,19 @@ The answer is the unknown value of jars owned by Tony at the end of the problem.
 ## Data extraction
 
 ### Sentence 1
-jars owend by Tony = 19
+jars owned by Tony = 19
 
 ### Sentence 2
-jars owend by Tony - 16
+jars owned by Tony - 16
 
 ## Correct response
 3 jars
+how many asking
+dolls unit
+does q_start
+Ethelle context
+have q_stop
+? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -190,14 +220,23 @@ The answer is the unknown value of dolls owned by Ethelle.
 ## Data extraction
 
 ### Sentence 1
-dolls owend by Lucy = 8
+dolls owned by Lucy = 8
 
 ### Sentence 2
-dolls owend by Ethelle = 8
-dolls owend by Ethelle + 4
+dolls owned by Ethelle = 8
+dolls owned by Ethelle + 4
 
 ## Correct response
 12 dolls
+how many asking
+fewer rel_less
+toy cars unit
+does q_start
+Chandler context
+have q_stop
+than conjunction
+('Joey', (u'singular', u'masculine')) comparator_context
+? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -238,13 +277,20 @@ The answer is the difference in value of toy cars owned by Chandler with respect
 ## Data extraction
 
 ### Sentence 1
-toy cars owend by Joey = 13
+toy cars owned by Joey = 13
 
 ### Sentence 2
-toy cars owend by Chandler = 6
+toy cars owned by Chandler = 6
 
 ## Correct response
 7 fewer toy cars
+how many asking
+apples unit
+does q_start
+Marc context
+have q_stop
+('now', None) subordinate
+? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -281,10 +327,10 @@ I think this problem is about Marc, Jim, and Julia exchanging apples and asks a 
     context    	operator   	constant   	unit       	noise      	punctuation
 
     Marc       	gives      	2          	apples     	to         	Jim        	.          
-    context    	operator   	constant   	unit       	unknown    	context    	punctuation
+    context    	operator   	constant   	unit       	noise      	context    	punctuation
 
     Marc       	gives      	3          	apples     	to         	Julia      	.          
-    context    	operator   	constant   	unit       	unknown    	context    	punctuation
+    context    	operator   	constant   	unit       	noise      	context    	punctuation
 
     How many   	apples     	does       	Marc       	have       	now        	?          
     asking     	unit       	q_start    	context    	q_stop     	subordinate	punctuation
@@ -301,16 +347,73 @@ The answer is the unknown value of apples owned by Marc at the end of the proble
 ## Data extraction
 
 ### Sentence 1
-apples owend by Marc = 10
+apples owned by Marc = 10
 
 ### Sentence 2
-apples owend by Marc - 2
+apples owned by Marc - 2
 
 ### Sentence 3
-apples owend by Marc - 2
+apples owned by Marc - 2
 
 ### Sentence 4
-apples owend by Marc - 3
+apples owned by Marc - 3
 
 ## Correct response
 3 apples
+how many asking
+fish context
+are pre_ind_plu
+swimming acting
+in conjunction
+the noise
+('pond', 'in') subordinate
+('now', None) subordinate
+? punctuation
+# Zoidberg Solution
+
+## The problem
+8 fish are swimming in a pond. 4 more fish join them.
+How many fish are swimming in the pond now?
+
+## Digested problem
+    8       	fish    	are     	swimming	in      	a       	pond    	.       
+    CD      	JJ      	NN      	VBG     	IN      	DT      	NN      	.       
+
+    4       	more    	fish    	join    	them    	.       
+    LS      	JJR     	JJ      	NN      	PRP     	.       
+
+    How     	many    	fish    	are     	swimming	in      	the     	pond    	now     	?       
+    WRB     	JJ      	JJ      	VBP     	VBG     	IN      	DT      	NN      	RB      	.       
+
+## Problem inference
+I think this problem is about an increasing number of swimming fish in a pond and asks a single question.
+
+## Parsed problem
+    8          	fish       	are        	swimming   	in         	a          	pond       	.          
+    constant   	context    	pre_ind_plu	acting     	conjunction	constant   	subordinate	punctuation
+
+    4          	more       	fish       	join       	fish       	.          
+    constant   	rel_more   	context    	operator   	context    	punctuation
+
+    How many   	fish       	are        	swimming   	in         	the        	pond       	now        	?          
+    asking     	context    	pre_ind_plu	acting     	conjunction	noise      	subordinate	subordinate	punctuation
+
+
+## Question 1
+
+### Question text
+How many fish are swimming in the pond now?
+
+### Answer interpretation
+The answer is the unknown value of fish swimming fish in a pond at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+swimming fish in a pond = 8
+
+### Sentence 2
+swimming fish in a pond + 4
+
+## Correct response
+12 fish

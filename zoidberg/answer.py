@@ -28,17 +28,23 @@ class Answer(object):
 		self.relative = False
 		self.rel_mode = None
 		self.comparator = None
-		self.subordinate = None
+		self.subordinates = []
 
 		self.relative_value = False
 		self.value = None
 		self.unit = None
 		self.context = None
 
+		self.last_unrefined_context = None
+
+		self.actor = None
+		self.action = None
+
 		self.execute()
 
 	def execute(self):
 		p = self.query.problem
+		i = p.inference
 
 		# The asking process determines what type of answer we want
 		asking = False
@@ -51,6 +57,7 @@ class Answer(object):
 
 		for v_part in self.query:
 			val, part, subtype = v_part
+			print val, part
 
 			if part == "asking":
 				self.syntax = p.brain.answer_syntax(val, str(self.query))
@@ -66,6 +73,19 @@ class Answer(object):
 					self.relative = True
 					self.rel_mode = "ad"
 
+			if part == "pre_ind_plu":
+				if asking and self.last_unrefined_context:
+					self.actor = self.last_unrefined_context
+					self.last_unrefined_context = None
+
+			# Specifying the acting is tantamount to ending the question
+			if part == "acting":
+				if asking:
+					self.action = val
+					asking = False
+					refining = True
+					specifying = True
+
 			# assume unit appearing during asking for answer
 			if part == "unit" and asking:
 				self.unit = val
@@ -78,23 +98,24 @@ class Answer(object):
 				asking = False
 				refining = True
 
-			# The qstart ends asking and begins specifying
+			# The qstop ends asking and begins specifying
 			if part == "q_stop":
 				refining = True
 				specifying = True
 
 			# assume context during refining is owner
-			if part == "context" and refining:
-				self.context = val
+			if part == "context":
+				if refining:
+					self.context = val
+				else:
+					self.last_unrefined_context = val
 
 			# Assume subordinate during specifying is answer condition
 			if part == "subordinate" and specifying:
 				subs = self.query.subordinates
 				self.subordinate = [s for s in subs if s[0] == val[0]]
 				if len(self.subordinate) > 0:
-					self.subordinate = self.subordinate[0][1]
-				else:
-					self.subordinate = None
+					self.subordinates += self.subordinate
 
 	def __str__(self):
 		o = []
@@ -128,6 +149,9 @@ class Answer(object):
 			mode = "unknown"
 		i.append("the {0} {1} of".format(mode, syntax))
 
+		if self.actor:
+			i.append("{0} {1}".format(self.actor, self.action))
+
 		if self.value:
 			if self.relative_value:
 				i.append("the")
@@ -142,8 +166,13 @@ class Answer(object):
 		if self.relative:
 			i.append("with respect to {0}".format(self.comparator))
 
-		if self.subordinate:
-			i.append(ANSWER_SUBORDINATE[self.subordinate])
+		if len(self.subordinates) > 0:
+			for sub in self.subordinates:
+				w, s = sub
+				if s == "place_noun":
+					i.append(self.query.problem.inference.subordinate_strings[w])
+				else:
+					i.append(ANSWER_SUBORDINATE[s])
 
 		o.append(" ".join(i) + ".")
 

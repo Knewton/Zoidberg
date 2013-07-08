@@ -20,12 +20,14 @@ class Problem(object):
 		self.all_tags = None
 		self.all_words = None
 		self.longest_word = None
+		self.units_acting_as_context = {}
 
 		# Mrs. Jones
 		self.last_contexts = {
 			"plurality": {
 				"singular": None,
 				"plural": None,
+				"regular": None
 			},
 			"gender": {
 				"masculine": None,

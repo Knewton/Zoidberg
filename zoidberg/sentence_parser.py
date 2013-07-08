@@ -4,6 +4,30 @@ from utilities import uniq
 
 class SentenceParser(object):
 	def __init__(self, sentence, problem, text):
+		self.index = 0
+		self.acting = False
+		self.last_operator = None
+		self.last_operator_type = None
+		self.last_word = None
+		self.last_tag = None
+		self.last_unit = None
+		self.last_unit_tag = None
+		self.last_unit_index = None
+		self.last_verb_tag = None
+		self.last_verb = -1
+		self.last_noun_tag = None
+		self.last_subtype = None
+		self.last_conjunction = None
+		self.conjunction_parts = []
+		self.phrasing_question = False
+		self.subtype = None
+		self.is_relative_quantity = False
+		self.partial_context = None
+		self.last_partial_context = None
+		self.partial_subtype = None
+		self.comparator_context = None
+		self.main_context = None
+		self.last_context = None
 		self.sentence = sentence
 		self.problem = problem
 		self.sentence_text = text
@@ -24,10 +48,18 @@ class SentenceParser(object):
 		# Units are the way to define the "apple" of "Joe's apples"
 		self.units = []
 
+		# Actions are like a joint structure of contexts and units
+		# in that a context can "own" an action the same way it can
+		# own a unit. The action also acts as a "subcontext" as the
+		# context owner (in this case, actor) can be "performing" an
+		# action which differentiates it from the larger context.
+		self.actions = []
+
 		# Subordinate conjunctions; time/place/cause and effect which can
 		# identify the time period
 		self.conjunctions = []
 		self.subordinates = []
+		self.subordinate_strings = {}
 
 		self.execute()
 
@@ -107,80 +139,68 @@ class SentenceParser(object):
 
 	def execute(self):
 		p = self.problem
-		index = 0
 
-		last_word = None
-		last_tag = None
-		last_verb_tag = None
-		last_verb = -1
-		last_noun_tag = None
-		last_subtype = None
-		last_conjunction = None
-		phrasing_question = False
-		subtype = None
-		is_relative_quantity = False
-		partial_context = None
-		last_partial_context = None
-		partial_subtype = None
-		comparator_context = None
-		main_context = None
-
-		for s_tag in self.sentence:
-			word, tag = s_tag
+		def process(word, tag):
 			did_something = False
-			subtype = None
-			if index == 0 and tag not in ["NNP", "NNPS"]:
+			self.subtype = None
+			if self.index == 0 and tag not in ["NNP", "NNPS"]:
 				# Fix capitalization for non proper nouns
 				word = word.lower()
 
-			tag = p.brain.retag(word, tag)
+			word, tag = p.brain.retag(word, tag)
 			if tag == "!!!":
 				print "Missing retag converter in the brain"
 				exit(1)
 
+			if self.last_conjunction is not None:
+				self.conjunction_parts.append(word)
+
 			# Fix the parser as we go on brain retags
-			def do_track(subtype):
+			def do_track(subtype, tag):
 				if subtype[0] is None and subtype[1] is None:
 					subtype = None
 					tag = p.brain.retag(word, tag)
-					return False
-				return True
+					return (False, subtype, tag)
+				return (True, subtype, tag)
 
 			if tag in ["NN", "NNS"]:
-				if last_tag in ["PRP$"]:
+				if self.last_tag in ["PRP$"]:
 					# Detects Jane's friends; probably context
-					context = " ".join([partial_context, word])
+					context = " ".join([self.partial_context, word])
 					self.parsed.pop()
+					self.last_context = context
 					self.contexts.append(context)
 					did_something = True
-					subtype = self.get_subtype(word, tag)
+					self.subtype = self.get_subtype(word, tag)
 
-					partial_context = None
-					last_partial_context = None
-					partial_subtype = None
+					self.partial_context = None
+					self.last_partial_context = None
+					self.partial_subtype = None
 
-					if do_track(subtype):
-						if subtype[0] == "plural" and subtype[1] == "mixed":
+					track, self.subtype, tag = do_track(self.subtype, tag)
+
+					if track:
+						if self.subtype[0] == "plural" and self.subtype[1] == "mixed":
 							# PRP$ will always have a noun like last_subtype
-							last_plural, last_gender = last_subtype
+							last_plural, last_gender = self.last_subtype
 							# Last Plural Context
 							lpc = p.last_contexts["plurality"][last_plural]
 							# Last Gender Context
 							lgc = p.last_contexts["gender"][last_gender]
 
-							last_context = None
+							self.last_context = None
 							if lgc == lpc:
-								last_context = lgc
+								self.last_context = lgc
 							elif lgc is not None:
-								last_context = lgc
+								self.last_context = lgc
 							elif lpc is not None:
-								last_context = lpc
+								self.last_context = lpc
 
-							if last_context is not None:
+							if self.last_context is not None:
 								# Last context string
 								inc = p.brain.inclusive(word,
-									"'{0}' ({1}) in '{2}'".format(last_word,
-															last_context[0],
+									"'{0}' ({1}) in '{2}'".format(self.last_word,
+															self.last_context[0],
 															context))
 								# Add the context by the word for easier lookup
 								# this will capture 'her friends' and define
@@ -190,179 +210,252 @@ class SentenceParser(object):
 								p.brain.add("inclusive", context, inc)
 						# Assume the first context after a comparison is the
 						# comparator context
-						if is_relative_quantity and not comparator_context and main_context:
-							comparator_context = context
-							self.track(context, "comparator_context", subtype, conv=True)
+						if self.is_relative_quantity and not self.comparator_context and self.main_context:
+							self.comparator_context = context
+							self.track(context, "comparator_context", self.subtype, conv=True)
 						else:
-							main_context = context
-							self.track(context, "context", subtype)
+							self.main_context = context
+							self.track(context, "context", self.subtype)
 				else:
-					if last_conjunction is not None:
-						conjunction = (word, last_conjunction)
+					if self.last_conjunction is not None:
+						conjunction = (word, self.last_conjunction)
+						self.last_conjunction = None
+						self.subordinate_strings[word] = " ".join(self.conjunction_parts)
+						self.conjunction_parts = []
 						self.conjunctions.append(conjunction)
 						did_something = True
-						self.track(conjunction, "subordinate", subtype)
+						self.track(conjunction, "subordinate", self.subtype)
 					else:
-						subtype = self.get_subtype(word, tag)
-						if do_track(subtype):
+						self.subtype = self.get_subtype(word, tag)
+						track, self.subtype, tag = do_track(self.subtype, tag)
+						did_something = True
+						if track:
 							unit = word
-							if tag == "NNS" and last_tag == "NN":
-								unit = " ".join([last_word, word])
+							if tag == "NNS" and self.last_tag == "NN":
+								unit = " ".join([self.last_word, word])
 								self.units.pop()
 								self.parsed.pop()
-							self.units.append(unit)
-							did_something = True
-							self.track(unit, "unit", subtype)
 
-			if not did_something and subtype == None:
-				subtype = self.get_subtype(word, tag)
+							if not unit in p.units_acting_as_context or not p.units_acting_as_context[unit]:
+								self.last_unit = unit
+								self.last_unit_tag = tag
+								self.last_unit_index = len(self.parsed)
+								self.units.append(unit)
+								self.track(unit, "unit", self.subtype)
+							else:
+								context = unit
+								# @TODO: This needs to be a subroutine or something
+								self.last_context = context
+								self.contexts.append(context)
+								if self.is_relative_quantity and not self.comparator_context and self.main_context:
+									self.comparator_context = context
+									self.track(context, "comparator_context", self.subtype)
+								else:
+									self.main_context = context
+									self.track(context, "context", self.subtype)
+
+			if not did_something and self.subtype == None:
+				self.subtype = self.get_subtype(word, tag)
 
 			if tag == "SUB":
 				did_something = True
-				self.track(word, "subordinate", subtype)
+				self.track(word, "subordinate", self.subtype)
 
 			if tag == "PRP":
-				c = self.resolve_context(subtype)
+				c = self.resolve_context(self.subtype)
 				if c is not None:
+					# If we're setting a relative quantity and the contexts are
+					# the same we're not actually setting a relative quantity
+					# we are simply indicating a mathematical operand
+					if self.is_relative_quantity and c[0] == self.last_context:
+						self.is_relative_quantity = False
 					did_something = True
-					if is_relative_quantity and not comparator_context and main_context:
-						comparator_context = c[0]
-						self.track(c[0], "comparator_context", subtype, conv=True)
+					if self.is_relative_quantity and not self.comparator_context and self.main_context:
+						self.comparator_context = c[0]
+						self.track(c[0], "comparator_context", self.subtype, conv=True)
 					else:
-						main_context = c[0]
-						self.track(c[0], "context", subtype)
+						self.main_context = c[0]
+						self.track(c[0], "context", self.subtype)
 
 			if tag == "PRP$":
-				if last_conjunction is not None:
-					if is_relative_quantity and not comparator_context and main_context:
+				if self.last_conjunction is not None:
+					if self.is_relative_quantity and not self.comparator_context and self.main_context:
 						did_something = True
-						comparator_context = word
-						self.track(word, "comparator_context", subtype, conv=True)
-						last_conjunction = None
+						self.comparator_context = word
+						self.track(word, "comparator_context", self.subtype, conv=True)
+						self.last_conjunction = None
+						self.conjunction_parts = []
 
 				if not did_something:
 					did_something = True
-					partial_context = word
-					partial_subtype = subtype
-					last_partial_context = self.track(word, "partial_context",
-							subtype)
+					self.partial_context = word
+					self.partial_subtype = self.subtype
+					self.last_partial_context = self.track(word, "partial_context",
+							self.subtype)
 
 			if tag in ["NNP", "NNPS"]:
-				if last_tag in ["NNP", "NNPS"]:
+				if self.last_tag in ["NNP", "NNPS"]:
 					# Last was partial context; the "Mrs." in "Mrs. Jones"
+					self.last_context = None
 					lc = self.contexts.pop()
 					self.parsed.pop()
 
-					context = " ".join([last_word, word])
-					if is_relative_quantity and comparator_context == lc:
-						comparator_context = context
-					if subtype is not None and subtype[1] == "ambiguous":
-						old = self.get_subtype(last_word, last_tag)
-						subtype = (subtype[0], old[1])
+					context = " ".join([self.last_word, word])
+					if self.is_relative_quantity and self.comparator_context == lc:
+						self.comparator_context = context
+					if self.subtype is not None and self.subtype[1] == "ambiguous":
+						old = self.get_subtype(self.last_word, self.last_tag)
+						self.subtype = (self.subtype[0], old[1])
 				else:
 					context = word
+				self.last_context = context
 				self.contexts.append(context)
 				did_something = True
-				if is_relative_quantity and not comparator_context and main_context:
-					comparator_context = context
-					self.track(context, "comparator_context", subtype)
+				if self.is_relative_quantity and not self.comparator_context and self.main_context:
+					self.comparator_context = context
+					self.track(context, "comparator_context", self.subtype)
 				else:
-					main_context = context
-					self.track(context, "context", subtype)
+					self.main_context = context
+					self.track(context, "context", self.subtype)
 
 			if tag[:2] == "VB":
 				if tag == "VB":
-					if last_verb_tag is not None:
+					if self.last_verb_tag is not None:
 						# VB*...VB indicates a question not an operation
+						self.last_operator = None
 						q_start = self.raw_operators.pop()
-						self.track(q_start, "q_start", subtype, last_verb)
+						self.track(q_start, "q_start", self.subtype, self.last_verb)
 						did_something = True
-						self.track(word, "q_stop", subtype)
+						self.track(word, "q_stop", self.subtype)
 				elif tag != "VBG":
-					last_verb_tag = tag
-					last_verb = len(self.parsed)
+					self.last_verb_tag = tag
+					self.last_verb = len(self.parsed)
+					self.last_operator = word
 					self.raw_operators.append(word)
 					did_something = True
-					subtype = self.get_subtype(word, tag)
-					self.track(word, "operator", subtype)
+					self.subtype = self.get_subtype(word, tag)
+					self.track(word, "operator", self.subtype)
 				else:
 					did_something = True
 					gtype = p.brain.gerund(word, self.sentence_text)
-					self.track(word, gtype, subtype)
+					if gtype == "acting":
+						self.acting = False
+						self.actions.append(word)
+					self.track(word, gtype, self.subtype)
 
 			if tag == "JJR":
 				did_something = True
 				adj = p.brain.relative(word, self.sentence_text)
-				is_relative_quantity = adj != "noise"
-				self.track(word, adj, subtype)
+				self.is_relative_quantity = adj != "noise"
+				self.track(word, adj, self.subtype)
 
 			if tag == "IN":
-				last_conjunction = word
+				self.last_conjunction = word
+				self.conjunction_parts.append(word)
 				did_something = True
-				self.track(word, "conjunction", subtype)
+				self.track(word, "conjunction", self.subtype)
 
 			if tag == ".":
 				did_something = True
-				self.track(word, "punctuation", subtype)
+				self.track(word, "punctuation", self.subtype)
 
 			if tag == "CD": # A cardinal number
 				did_something = True
-				self.track(word, "constant", subtype)
+				self.track(word, "constant", self.subtype)
 
 			if tag == "DT": # A determiner (the)
 				did_something = True
 				dtype = p.brain.determiner(word, self.sentence_text)
-				self.track(word, dtype, subtype)
+				self.track(word, dtype, self.subtype)
 
 			if tag == "RB": # An adverb, probably a subordinate?
-				if last_conjunction is not None:
-					conjunction = (word, last_conjunction)
+				if self.last_conjunction is not None:
+					conjunction = (word, self.last_conjunction)
+					self.last_conjunction = None
+					self.subordinate_strings[word] = " ".join(self.conjunction_parts)
+					self.conjunction_parts = []
 				else:
 					conjunction = (word, None)
+					self.subordinate_strings[word] = word
 				self.conjunctions.append(conjunction)
 				did_something = True
-				self.track(conjunction, "subordinate", subtype)
+				self.track(conjunction, "subordinate", self.subtype)
 
 			# Anything about phrasing must come before the wh-determiner block
 			if tag == "JJ": # Adjective
-				if phrasing_question:
+				if self.phrasing_question:
 					self.parsed.pop()
 					did_something = True
-					self.track(" ".join([last_word, word]), "asking", subtype)
+					self.track(" ".join([self.last_word, word]), "asking", self.subtype)
+
+			if tag == "PIP":
+				did_something = True
+				self.track(word, "pre_ind_plu", self.subtype)
+				self.acting = True
+				if self.last_unit is not None and self.last_context is None:
+					# If we have a present indicitive plural with no context
+					# it is likely that we're dealing with a context which has
+					# been misinterpreted as a unit, so switch that
+					# mistake here.
+					p.units_acting_as_context[self.last_unit] = True
+
+					# Remove the last unit and make it a context
+					context = self.units.pop()
+					self.last_context = context
+					self.contexts.append(context)
+					if self.is_relative_quantity and not self.comparator_context and self.main_context:
+						self.comparator_context = context
+						self.track(context, "comparator_context", self.subtype, self.last_unit_index)
+					else:
+						self.main_context = context
+						self.track(context, "context", self.subtype, self.last_unit_index)
+
+					# @TODO: This needs a much better tracking system
+					self.last_unit = None
+					self.last_unit_tag = None
+					self.last_unit_index = -1
 
 			if tag in ["WRB", "WDT", "WP", "WP$"]: # Wh- determiner
 				self.question = True
-				phrasing_question = True
+				self.phrasing_question = True
 				did_something = True
-				self.track(word, "asking", subtype)
-			elif phrasing_question:
-				phrasing_question = False
+				self.track(word, "asking", self.subtype)
+			elif self.phrasing_question:
+				self.phrasing_question = False
+
+			if self.subtype is not None:
+				did_something = True
 
 			if not did_something:
-				self.track((word, tag), "unknown", subtype)
+				p.brain.unknown(word, tag, self.subtype, self.sentence_text)
+				process(word, tag)
 
-			last_word = word
-			last_tag = tag
-			last_subtype = subtype
-			index += 1
+			self.last_word = word
+			self.last_tag = tag
+			self.last_subtype = self.subtype
 
-		if partial_context:
-			context = partial_context
-			idx = last_partial_context
-			stype = partial_subtype
+		for s_tag in self.sentence:
+			process(*s_tag)
+			self.index += 1
 
-			partial_context = None
-			last_partial_context = None
-			partial_subtype = None
+		if self.partial_context:
+			context = self.partial_context
+			idx = self.last_partial_context
+			stype = self.partial_subtype
 
-			if is_relative_quantity and not comparator_context and main_context:
-				comparator_context = context
+			self.partial_context = None
+			self.last_partial_context = None
+			self.partial_subtype = None
+
+			if self.is_relative_quantity and not self.comparator_context and self.main_context:
+				self.comparator_context = context
 				self.track(context, "comparator_context", stype, idx, True)
 
 		# Make all the inferred items unique
 		self.raw_operators = uniq(self.raw_operators)
 		self.contexts = uniq(self.contexts)
 		self.units = uniq(self.units)
+		self.actions = uniq(self.actions)
 
 		# Resolve the verbs to actual operators using the brain
 		for o in self.raw_operators:

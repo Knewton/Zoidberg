@@ -15,7 +15,8 @@ DEFAULT_BRAIN = {
 	"determiners": {},
 	"inclusive": {},
 	"relative": {},
-	"gerunds": {}
+	"gerunds": {},
+	"numbers": {}
 }
 
 # Various mathematical operators we know of
@@ -30,7 +31,8 @@ OPERATORS = [
 # Various types of supported subordinace
 SUBORDINATES = [
 	("time_starting", "Time: Beginning"),
-	("time_ending", "Time: Ending")
+	("time_ending", "Time: Ending"),
+	("place_noun", "Place (pond, mall, home, work)")
 ]
 
 RELATIVE = [
@@ -52,7 +54,8 @@ DETERMINERS = [
 
 GERUNDS = [
 	("noise", "This has no numeric connotations. (walking)"),
-	("solution_zero", "Connotes the ending value is zero (remaining)")
+	("solution_zero", "Connotes the ending value is zero (remaining)"),
+	("acting", "Is some action being performed (dancing, swimming)")
 ]
 
 COMPARISONS = [
@@ -71,14 +74,15 @@ ANSWERS = [
 
 PLURALITY = [
 	("singular", "Refers to a single (balloon, she)"),
-	("plural", "Refers to a plural (balloons, they)")
+	("plural", "Refers to a plural (balloons, they)"),
+	("regular", "Refers to a regular plural (fish, sheep)")
 ]
 
 GENDERS = [
 	("masculine", "Refers to a male gender"),
 	("feminine", "Refers to a female gender"),
 	("neutral", "Refers to a non-gendered entity"),
-	("mixed", "Refers to a mixture of genders (a group of people)"),
+	("mixed", "Refers to a mixture of/ambiguous genders (a group of )"),
 	("ambiguous", "Refers to a man or woman but is not clear enough to know")
 ]
 
@@ -88,24 +92,20 @@ RETAGS = [
 	("subordinates", "This indicates a point in time"),
 	("comparison_adj", "This indicates a comparison between things"),
 	("answer_syntax", "This frames the answer to the question"),
-	("nounlike", "This is a noun or pronoun")
+	("nounlike", "This is a noun or pronoun"),
+	("numbers", "This is a cardinal number"),
+	("pre_ind_plu", "This is present indicitive plural (someone ->is<-, they ->are<-)")
 ]
 
 INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
 
-def get_input(data, prompt, x, ref, brain):
-	i = 0
+def get_input(data, prompt, x, ref, brain, force_retag=False):
 	msg = "\t{0}. {1}"
-	print "\t0. This word has been misidentified."
-	for k in data:
-		i += 1
-		print msg.format(i, k[1])
-
 	sys.stdin = open('/dev/tty')
-	r = int(raw_input(prompt))
 
 	def retag():
-		print "Okay, how should '{0}' be treated?".format(x)
+		if not force_retag:
+			print "Okay, how should '{0}' be treated?".format(x)
 		i = 0
 		for k in RETAGS:
 			i += 1
@@ -128,6 +128,8 @@ def get_input(data, prompt, x, ref, brain):
 			brain.answer_syntax(x, ref)
 		elif item == "nounlike":
 			brain.noun_like(x, ref)
+		elif item == "numbers":
+			brain.number(x, ref)
 		elif item == "noise":
 			brain.add("determiners", x, "noise")
 			# A false in the indicator means it's noise and can be ignored
@@ -136,6 +138,17 @@ def get_input(data, prompt, x, ref, brain):
 		# None in any of the values in an indicator that it's been retagged
 		# This is for the original add
 		return None
+
+	if force_retag:
+		return retag()
+
+	i = 0
+	print "\t0. This word has been misidentified."
+	for k in data:
+		i += 1
+		print msg.format(i, k[1])
+
+	r = int(raw_input(prompt))
 
 	if r == 0:
 		return retag()
@@ -147,6 +160,11 @@ def get_input(data, prompt, x, ref, brain):
 def input_operator_type(x, ref, brain):
 	print INPUT_STR.format("operation", "the verb ", x, ref)
 	return get_input(OPERATORS, "'{0}' indicates: ".format(x), x, ref, brain)
+
+def input_unknown(pack, ref, brain):
+	x, tag, subtype = pack
+	print INPUT_STR.format("concept", "", x, ref)
+	return get_input([], "'{0}' is: ".format(x), x, ref, brain, True)
 
 def input_subordinate_type(x, ref, brain):
 	print INPUT_STR.format("subordinate", "", x, ref)
@@ -185,6 +203,19 @@ def input_inclusive(x, ref, brain):
 	print "Is the group '{0}' inclusive of {1}?".format(x, ref)
 	return get_input(INCLUSIVE, "'{0}' is: ".format(x), x, ref, brain)
 
+def input_number(x, ref, brain):
+	print INPUT_STR.format("numeric quantity", "", x, ref)
+	prompt = "Please input the actual numerical value of '{0}': ".format(x)
+	sys.stdin = open('/dev/tty')
+	r = raw_input(prompt)
+	try:
+		if r == "":
+			r = x
+		r = float(r) if "." in r else int(r)
+		return r
+	except ValueError:
+		return input_number(x, ref, brain)
+
 class Brain(object):
 	def __init__(self, path=None):
 		if path is None:
@@ -198,6 +229,11 @@ class Brain(object):
 			self.raw = DEFAULT_BRAIN
 
 	def add(self, key, val, value):
+		key = str(key)
+		val = str(val)
+		if value is not None:
+			value = str(value)
+
 		if not key in self.raw:
 			self.raw[key] = {}
 		if not val in self.raw[key]:
@@ -211,22 +247,27 @@ class Brain(object):
 		if val in self.raw["retagged"]:
 			item = self.raw["retagged"][val]
 			if item == "subordinates":
-				return "SUB"
+				tag = "SUB"
 			elif item == "operator_verbs":
-				return "VBX"
+				tag = "VBX"
 			elif item == "comparison_adj":
 				# @TODO No comparisons yet!
-				return "COMP"
+				tag = "COMP"
 			elif item == "answer_syntax":
-				return "ANSYX"
+				tag = "ANSYX"
 			elif item == "nounlike":
-				return "NN"
+				tag = "NN"
 			elif item == "noise":
-				return "DT"
+				tag = "DT"
+			elif item == "numbers":
+				tag = "CD"
+				val = str(self.raw["numbers"][val])
+			elif item == "pre_ind_plu":
+				tag = "PIP"
 			else:
 				print item
-				return "!!!"
-		return tag
+				tag = "!!!"
+		return (val, tag)
 
 	def proc(self, key, val, fn, ref):
 		value = None
@@ -235,20 +276,23 @@ class Brain(object):
 		return self.add(key, val, value)
 
 	def subordinate(self, sub, ref):
-		return self.proc("subordinates", sub, input_subordinate_type, ref)
+		subtype = self.proc("subordinates", sub, input_subordinate_type, ref)
+		if subtype == "place_noun":
+			self.noun_like(sub, ref)
+		return subtype
 
 	def operator(self, verb, ref):
 		return self.proc("operator_verbs", verb, input_operator_type, ref)
 
 	def comparison(self, comp, ref):
-		return self.proc("comparison_adj", verb, input_comparison_type, ref)
+		return self.proc("comparison_adj", comp, input_comparison_type, ref)
 
 	def answer_syntax(self, query, ref):
 		return self.proc("answer_syntax", query, input_answer_syntax, ref)
 
 	def noun_like(self, n, ref):
 		plurality = self.proc("plurality", n, input_plurality, ref)
-		if not plurality:
+		if plurality is None:
 			gender = None
 		else:
 			gender = self.proc("gender", n, input_gender, ref)
@@ -270,6 +314,12 @@ class Brain(object):
 
 	def relative(self, n, ref):
 		return self.proc("relative", n, input_relative, ref)
+
+	def unknown(self, n, tag, subtype, ref):
+		return self.proc("unknown", (n, tag, subtype), input_unknown, ref)
+
+	def number(self, n, ref):
+		return self.proc("numbers", n, input_number, ref)
 
 	def dump(self):
 		set_json(self.path, self.raw)

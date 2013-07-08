@@ -1,0 +1,2 @@
+8 fish are swimming in a pond. 4 more fish join them.
+How many fish are swimming in the pond now?

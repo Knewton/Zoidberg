@@ -1,1 +1,7 @@
-* Calibration 5 needs work; other calibrations appear to work
+* Calibrations greater than 7 are broken
+* There's a bug right now where on the first run through a problem where you 
+	specify a correct pre_ind_plu using the unknown setter, the brain farts 
+	and it answers incorrectly, but if rerun answers just fine.
+	Repro steps:
+		* Remove brain
+		* Answer calibration 7

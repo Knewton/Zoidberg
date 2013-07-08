@@ -15,12 +15,19 @@ OP_DISPLAY = {
 }
 
 def number(s):
-	return float(s) if '.' in s else int(s)
+	try:
+		return float(s) if '.' in s else int(s)
+	except ValueError:
+		return -1
 
 class Solution(object):
 	def __init__(self, problem):
 		self.problem = problem
 		self.last_index = 0
+
+		self.last_container = None
+		self.last_action = None
+		self.last_actor = None
 
 		self.context = None
 		self.operator = None
@@ -32,6 +39,7 @@ class Solution(object):
 
 		self.sentence_data = []
 		self.data = None
+		self.actor_data = None
 		letters = [chr(x) for x in xrange(ord("a"), ord("z")+1)]
 		self.varpool = letters[-3:] + letters[:-3]
 
@@ -43,6 +51,11 @@ class Solution(object):
 		self.symbols = {}
 		self.correct_responses = []
 
+		self.container = None
+		self.containers = None
+		self.actor = None
+		self.action = None
+
 		self.execute()
 
 	def store_var(self, idx, var):
@@ -53,8 +66,15 @@ class Solution(object):
 		else:
 			self.middle_vars.append(var)
 
-	def get_symbol(self, context, unit, idx=-1, operator=None, constant=None):
-		sym = " ".join([context, unit])
+	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None):
+		if context is None or unit is None:
+			return (False, Symbol("BROKEN"), "BROKEN")
+
+		s = [context, unit]
+		if container is not None and container != "_unknown_":
+			s.append(container)
+
+		sym = " ".join(s)
 		first_time = sym not in self.symbols
 		hindsight_inference = False
 		if first_time:
@@ -94,6 +114,18 @@ class Solution(object):
 		return (hindsight_inference, symbol, var)
 
 	def reset_extractor(self):
+		if self.action is not None:
+			self.last_action = self.action
+
+		if self.actor is not None:
+			self.last_actor = self.actor
+
+		if self.container is not None:
+			self.last_container = self.container
+
+		self.container = None
+		self.actor = None
+		self.action = None
 		self.context = None
 		self.operator = None
 		self.constant = None
@@ -105,11 +137,17 @@ class Solution(object):
 	def generate_expression(self, zeroes_out=False):
 		if self.data is None:
 			self.data = {}
+		if self.actor_data is None:
+			self.actor_data = {}
 
+		actor = "@{0}".format(self.actor)
+		action = self.action
 		context = self.context
 		operator = self.operator
 		constant = self.constant
+		container = self.container
 		unit = self.unit
+		data = None
 
 		if context is None:
 			context = "_unknown_"
@@ -117,21 +155,83 @@ class Solution(object):
 		if unit is None:
 			unit = "_unknown_"
 
-		if context not in self.data:
-			self.data[context] = {}
+		k1, k2 = None, None
+		if actor and action:
+			if actor not in self.actor_data:
+				self.actor_data[actor] = {}
 
-		if unit not in self.data[context]:
-			self.data[context][unit] = []
+			if action not in self.actor_data[actor]:
+				self.actor_data[actor][action] = []
 
-		if self.relative and self.comparator_context:
-			sym = " ".join([self.comparator_context, unit])
-			if operator == "eq":
-				operator = self.rel_mode
-				self.data[context][unit].append(("eq", sym))
+			# Assume an equality in this case
+			if operator is None and constant is not None:
+				operator = "eq"
 
-		self.data[context][unit].append((operator, constant))
-		if zeroes_out:
-			self.data[context][unit].append(("ans", "0"))
+			data = self.actor_data[actor][action]
+			k1 = actor
+			k2 = action
+		else:
+			if self.last_action is not None and context == self.last_actor:
+				actor = "@{0}".format(self.last_actor)
+				action = self.last_action
+
+				if not actor in self.actor_data:
+					self.actor_data[actor] = {}
+
+				if not action in self.actor_data[actor]:
+					self.actor_data[actor][action] = []
+
+				if container is None and self.last_container is not None:
+					container = self.last_container
+
+				# Only one action for the actor, so it's likely this
+				data = self.actor_data[actor][action]
+
+				k1 = actor
+				k2 = action
+			else:
+				if context not in self.data:
+					self.data[context] = {}
+
+				if unit not in self.data[context]:
+					self.data[context][unit] = []
+
+				data = self.data[context][unit]
+				k1 = context
+				k2 = unit
+
+		if data is not None:
+			if self.relative and self.comparator_context:
+				sym = " ".join([self.comparator_context, unit])
+				if operator == "eq":
+					operator = self.rel_mode
+					data.append(("eq", sym))
+
+			data.append((operator, constant))
+			if zeroes_out:
+				data.append(("ans", "0"))
+
+		# If nothing was done there's nothing to do
+		if len(data) == 0:
+			self.data = None
+			self.actor_data = None
+			self.containers = None
+
+		if container is None:
+			container = "_unknown_"
+
+		if container is not None:
+			if self.containers is None:
+				self.containers = {}
+
+			if not container in self.containers:
+				self.containers[container] = {}
+
+			if not k1 in self.containers[container]:
+				self.containers[container][k1] = {}
+
+			self.containers[container][k1][k2] = data
+
 		self.reset_extractor()
 
 	def has_any(self):
@@ -156,6 +256,7 @@ class Solution(object):
 			# we only want to change the context to the primary one
 			did_set_context = False
 			zeroes_out = False
+			last_context = None
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
 
@@ -163,11 +264,12 @@ class Solution(object):
 					if not did_set_context:
 						did_set_context = True
 						self.context = val
+					last_context = val
 
-				if part == "operator":
+				if part == "operator" and not self.operator:
 					self.operator = parser.operator[val]
 
-				if part == "constant":
+				if part == "constant" and not self.constant:
 					self.constant = val
 
 				if part == "unit":
@@ -187,6 +289,20 @@ class Solution(object):
 				if part == "comparator_context":
 					self.comparator_context = val[0]
 
+				if part == "pre_ind_plu":
+					if last_context and not self.actor:
+						self.actor = last_context
+						last_context = None
+
+				if part == "acting":
+					if self.actor:
+						self.action = val
+
+				if part == "subordinate":
+					if val[1] is not None:
+						# If we have a conjunction we have an container
+						self.container = val[0]
+
 				if self.has_all():
 					self.generate_expression(zeroes_out)
 
@@ -201,9 +317,11 @@ class Solution(object):
 			else:
 				self.reset_extractor()
 
-			if self.data is not None:
-				self.sentence_data.append(self.data)
+			if self.containers is not None:
+				self.sentence_data.append(self.containers)
 				self.data = None
+				self.actor_data = None
+				self.containers = None
 
 	def newvar(self):
 		sym = self.varpool.pop(0)
@@ -217,53 +335,59 @@ class Solution(object):
 		last_context = None
 		switch_context = False
 		new_sentence_data = []
-		for data in self.sentence_data:
-			new_data = {}
-			for context in data:
-				units = data[context]
+		for sd in self.sentence_data:
+			new_container = {}
+			for container in sd:
+				data = sd[container]
+				new_data = {}
+				for context in data:
+					units = data[context]
 
-				# Use the last context for inclusive context
-				if p.brain.is_inclusive(context):
-					if last_context is not None:
-						context = last_context
-						switch_context = True
+					# use the last context for inclusive context
+					if p.brain.is_inclusive(context):
+						if last_context is not None:
+							context = last_context
+							switch_context = True
+						else:
+							# @todo: this state should probably never happen?
+							# a context that is inclusive should have one context
+							# that preceeds it
+							print "Well this is a fine mess"
+							exit(1)
 					else:
-						# @TODO: This state should probably never happen?
-						# A context that is inclusive should have one context
-						# that preceeds it
-						print "Well this is a fine mess"
-						exit(1)
-				else:
-					switch_context = False
+						switch_context = False
 
-				new_units = {}
-				for unit in units:
-					# We increment at the start because of the bail-out nature
-					data_index = -1
+					new_units = {}
+					for unit in units:
+						# We increment at the start because of the bail-out nature
+						data_index = -1
 
-					new_values = []
-					for values in units[unit]:
-						data_index += 1
-						operator, constant = values
+						new_values = []
+						for values in units[unit]:
+							data_index += 1
+							operator, constant = values
 
-						if constant in self.symbols:
-							constant = self.symbols[constant]
-						elif constant is not None:
-							# Convert and type the constant properly
-							constant = number(constant)
+							if constant in self.symbols:
+								constant = self.symbols[constant]
+							elif constant is not None:
+								# Convert and type the constant properly
+								constant = number(constant)
 
-						# Apply the operation to the symbol
-						if operator is not None:
-							inf, symbol, con = self.get_symbol(context, unit,
-									index, operator, constant)
-							if inf:
-								new_values.append(("eq", "0"))
-						new_values.append((operator, con))
-					new_units[unit] = new_values
-				new_data[context] = new_units
-				last_context = context
+							# Apply the operation to the symbol
+							if operator is not None:
+								inf, symbol, con = self.get_symbol(context,
+										unit, container, index, operator, constant)
+								if inf:
+									new_values.append(("eq", "0"))
+							else:
+								con = constant
+							new_values.append((operator, con))
+						new_units[unit] = new_values
+					new_data[context] = new_units
+					last_context = context
+				new_container[container] = new_data
 			index += 1
-			new_sentence_data.append(new_data)
+			new_sentence_data.append(new_container)
 		self.sentence_data = new_sentence_data
 
 	def compute_correct(self):
@@ -273,12 +397,12 @@ class Solution(object):
 		i = p.inference
 		q = p.question
 
-		def add_response(val, unit):
+		def add_response(val, unit, idx):
 			for v in val:
 				i = [str(v)]
 				if unit is not None:
 					i.append(unit)
-				self.correct_responses.append(" ".join(i))
+				self.correct_responses.insert(idx, " ".join(i))
 
 		def simple_solve(sym):
 			for c in [Symbol, Function, Pow, Derivative]:
@@ -286,33 +410,49 @@ class Solution(object):
 					return solve(sym, sym)
 			return [sym]
 
+		index = 0
 		for answer in q.answers:
-			inf, equ, con = self.get_symbol(answer.context, answer.unit)
-			if answer.subordinate is not None:
-				if answer.subordinate == "time_ending":
-					l = len(self.ending_vars)
+			if answer.actor and answer.action:
+				# The answer in actor/action questions is the actor normally?
+				answer.unit = answer.actor
+				inf, equ, con = self.get_symbol("@" + answer.actor, answer.action, None, index)
+			else:
+				inf, equ, con = self.get_symbol(answer.context, answer.unit, None, index)
 
-					if l == 1:
-						symbol = self.symbols[self.ending_vars[0]]
-						add_response(solve(equ, symbol), answer.unit)
-					elif l == 0:
-						add_response(simple_solve(equ), answer.unit)
+			if len(answer.subordinates) > 0:
+				working_answer = None
+				for s in answer.subordinates:
+					word, sub = s
+					if sub == "time_ending":
+						l = len(self.ending_vars)
+
+						if l == 1:
+							symbol = self.symbols[self.ending_vars[0]]
+							add_response(solve(equ, symbol), answer.unit, index)
+						elif l == 0:
+							add_response(simple_solve(equ), answer.unit, index)
+						else:
+							self.correct_responses.append(
+								"Not sure; too many ending variables!")
+					elif sub == "time_starting":
+						l = len(self.beginning_vars)
+						if l == 1:
+							symbol = self.symbols[self.beginning_vars[0]]
+							add_response(solve(equ, symbol), answer.unit, index)
+						elif l == 0:
+							add_response(simple_solve(equ), answer.unit, index)
+						else:
+							self.correct_responses.append(
+								"Not sure; too many starting variables!")
+					elif sub == "place_noun":
+						if answer.actor and answer.action:
+							inf, equ, con = self.get_symbol("@" + answer.actor, answer.action, word, index)
+						else:
+							inf, equ, con = self.get_symbol(answer.context, answer.unit, word, index)
 					else:
-						self.correct_responses.append(
-							"Not sure; too many ending variables!")
-				elif answer.subordinate == "time_starting":
-					if len(self.beginning_vars) == 1:
-						symbol = self.symbols[self.beginning_vars[0]]
-						add_response(solve(equ, symbol), answer.unit)
-					elif l == 0:
-						add_response(simple_solve(equ))
-					else:
-						self.correct_responses.append(
-							"Not sure; too many starting variables!")
-				else:
-					self.correct_responses.append("No sure; no subordinates!")
+						self.correct_responses.append("No sure; unknown subordinate type {0} ({1})".format(sub, word))
 			elif answer.relative:
-				coinf, comp, conc= self.get_symbol(answer.comparator, answer.unit)
+				coinf, comp, conc = self.get_symbol(answer.comparator, answer.unit, None)
 
 				v = self.newvar()
 				v = 0
@@ -329,44 +469,81 @@ class Solution(object):
 				if answer.unit:
 					unt.append(answer.unit)
 
-				add_response(simple_solve(v), " ".join(unt))
+				add_response(simple_solve(v), " ".join(unt), index)
 			else:
-				add_response(simple_solve(equ), answer.unit)
+				add_response(simple_solve(equ), answer.unit, index)
+			index += 1
 
 	def __str__(self):
 		o = []
 
 		o.append("\n## Data extraction")
 		index = 1
-		for data in self.sentence_data:
-			s = []
-			for context in data:
-				for unit in data[context]:
-					for values in data[context][unit]:
-						operator, constant = values
-						i = []
+		for sd in self.sentence_data:
+			for container in sd:
+				data = sd[container]
+				s = []
+				for context in data:
+					for unit in data[context]:
+						for values in data[context][unit]:
+							operator, constant = values
+							i = []
 
-						display_constant = constant
-						if display_constant is None:
-							display_constant = "<an unknown number>"
+							actor = None
+							action = None
 
-						if operator is None:
-							continue # Probably the question
+							if context[0:1] == "@":
+								actor = context[1:]
+								action = unit
+								unit = None
+								context = None
 
-						if context != "_unknown_" and unit != "_unknown_":
-							i.append(unit)
-							i.append("owend by")
-							i.append(context)
-							i.append(OP_DISPLAY[operator])
-							i.append(display_constant)
-						else:
-							i.append("I don't know how to format this state!")
+							if context == "_unknown_":
+								context = None
 
-						s.append(" ".join(i))
+							if unit == "_unknown_":
+								unit = None
 
-			if len(s) > 0:
-				o.append("\n### Sentence {0}".format(index))
-				o.append("\n".join(s))
+							if container is None or container == "_unknown_":
+								container = None
+							else:
+								container = self.problem.inference.subordinate_strings[container]
+
+							display_constant = constant
+							if display_constant is None:
+								display_constant = "<an unknown number>"
+
+							if operator is None:
+								continue # Probably the question
+
+							if actor is not None and action is not None:
+								i.append(action)
+								i.append(actor)
+
+								if container is not None:
+									i.append(container)
+
+								i.append(OP_DISPLAY[operator])
+								i.append(display_constant)
+							elif context is not None and unit is not None:
+								i.append(unit)
+								i.append("owned by")
+								i.append(context)
+
+								if container is not None:
+									i.append(container)
+
+								i.append(OP_DISPLAY[operator])
+								i.append(display_constant)
+							else:
+								did_something = False
+								i.append("I don't know how to format this!")
+
+							s.append(" ".join(i))
+
+				if len(s) > 0:
+					o.append("\n### Sentence {0}".format(index))
+					o.append("\n".join(s))
 			index += 1
 
 		if len(self.correct_responses) > 0:
