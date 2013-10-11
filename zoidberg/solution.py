@@ -492,7 +492,7 @@ class Solution(object):
 							actor = None
 							action = None
 
-							if context[0:1] == "@":
+							if context is not None and context[0:1] == "@":
 								actor = context[1:]
 								action = unit
 								unit = None
@@ -506,7 +506,7 @@ class Solution(object):
 
 							if container is None or container == "_unknown_":
 								container = None
-							else:
+							elif container in  self.problem.inference.subordinate_strings:
 								container = self.problem.inference.subordinate_strings[container]
 
 							display_constant = constant

@@ -417,3 +417,59 @@ swimming fish in a pond + 4
 
 ## Correct response
 12 fish
+how many asking
+pieces unit
+of conjunction
+('pizza', 'of') subordinate
+did q_start
+Michael context
+have q_stop
+left subordinate
+? punctuation
+# Zoidberg Solution
+
+## The problem
+Michael had 8 pieces of pizza. He ate 2 pieces of pizza. How many pieces of pizza did Michael have left?
+
+## Digested problem
+    Michael	had    	8      	pieces 	of     	pizza  	.      
+    NNP    	VBD    	CD     	NNS    	IN     	NN     	.      
+
+    He     	ate    	2      	pieces 	of     	pizza  	.      
+    PRP    	VBP    	CD     	NNS    	IN     	NN     	.      
+
+    How    	many   	pieces 	of     	pizza  	did    	Michael	have   	left   	?      
+    WRB    	JJ     	NNS    	IN     	NN     	VBD    	NNP    	VB     	VBN    	.      
+
+## Problem inference
+I think this problem is about Michael losing pieces and asks a single question.
+
+## Parsed problem
+    Michael    	had        	8          	pieces     	of         	pizza      	.          
+    context    	operator   	constant   	unit       	conjunction	subordinate	punctuation
+
+    Michael    	ate        	2          	pieces     	of         	pizza      	.          
+    context    	operator   	constant   	unit       	conjunction	subordinate	punctuation
+
+    How many   	pieces     	of         	pizza      	did        	Michael    	have       	left       	?          
+    asking     	unit       	conjunction	subordinate	q_start    	context    	q_stop     	subordinate	punctuation
+
+
+## Question 1
+
+### Question text
+How many pieces of pizza did Michael have left?
+
+### Answer interpretation
+The answer is the unknown value of pieces owned by Michael.
+
+## Data extraction
+
+### Sentence 1
+pieces owned by Michael = 8
+
+### Sentence 2
+pieces owned by Michael - 2
+
+## Correct response
+6 pieces

@@ -141,7 +141,10 @@ class Inference(object):
 
 		for op in raw_operators:
 			if op != "eq" or len(raw_operators) == 1:
-				self.operators.append(op_key[op])
+				try:
+					self.operators.append(op_key[op])
+				except:
+					pass
 		self.operators = uniq(self.operators)
 
 		if pre_ops:
