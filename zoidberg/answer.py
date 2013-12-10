@@ -57,7 +57,7 @@ class Answer(object):
 
 		for v_part in self.query:
 			val, part, subtype = v_part
-			print val, part
+			#print val, part
 
 			if part == "asking":
 				self.syntax = p.brain.answer_syntax(val, str(self.query))

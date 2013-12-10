@@ -163,7 +163,7 @@ def input_operator_type(x, ref, brain):
 
 def input_unknown(pack, ref, brain):
 	x, tag, subtype = pack
-	print INPUT_STR.format("concept", "", x, ref)
+	print INPUT_STR.format("concept", tag + " ", x, ref)
 	return get_input([], "'{0}' is: ".format(x), x, ref, brain, True)
 
 def input_subordinate_type(x, ref, brain):

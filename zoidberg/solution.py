@@ -67,6 +67,8 @@ class Solution(object):
 			self.middle_vars.append(var)
 
 	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None):
+		#print "context:", context
+		#print "unit:", unit
 		if context is None or unit is None:
 			return (False, Symbol("BROKEN"), "BROKEN")
 
@@ -471,6 +473,10 @@ class Solution(object):
 
 				add_response(simple_solve(v), " ".join(unt), index)
 			else:
+				#print "solution debugging"
+				#print equ
+				#print answer.unit
+				#print index
 				add_response(simple_solve(equ), answer.unit, index)
 			index += 1
 

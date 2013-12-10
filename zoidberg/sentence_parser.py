@@ -5,6 +5,8 @@ from utilities import uniq
 class SentenceParser(object):
 	def __init__(self, sentence, problem, text):
 		self.index = 0
+		self.framing_question = False
+		self.did_frame_question = False
 		self.acting = False
 		self.last_operator = None
 		self.last_operator_type = None
@@ -218,13 +220,29 @@ class SentenceParser(object):
 							self.track(context, "context", self.subtype)
 				else:
 					if self.last_conjunction is not None:
-						conjunction = (word, self.last_conjunction)
+						if tag == "NN" and self.last_tag in ["IN"]:
+							self.subtype = self.get_subtype(word, tag)
+							track, self.subtype, tag = do_track(self.subtype, tag)
+							did_something = True
+							if track:
+								unit = " ".join([self.last_unit, self.last_word, word])
+								self.units.pop()
+								self.parsed.pop()
+								self.parsed.pop()
+								self.last_unit = unit
+								self.last_unit_tag = tag
+								self.last_unit_index = len(self.parsed)
+								self.units.append(unit)
+								self.track(unit, "unit", self.subtype)
+						else:
+							conjunction = (word, self.last_conjunction)
+							self.subordinate_strings[word] = " ".join(self.conjunction_parts)
+							self.conjunction_parts = []
+							self.conjunctions.append(conjunction)
+							did_something = True
+							self.track(conjunction, "subordinate", self.subtype)
+
 						self.last_conjunction = None
-						self.subordinate_strings[word] = " ".join(self.conjunction_parts)
-						self.conjunction_parts = []
-						self.conjunctions.append(conjunction)
-						did_something = True
-						self.track(conjunction, "subordinate", self.subtype)
 					else:
 						self.subtype = self.get_subtype(word, tag)
 						track, self.subtype, tag = do_track(self.subtype, tag)
@@ -324,17 +342,47 @@ class SentenceParser(object):
 						# VB*...VB indicates a question not an operation
 						self.last_operator = None
 						q_start = self.raw_operators.pop()
-						self.track(q_start, "q_start", self.subtype, self.last_verb)
+						st = self.get_subtype(self.last_verb, self.last_verb_tag)
+						self.track(q_start, "q_start", st, self.last_verb)
+						self.framing_question = False
+						self.did_frame_question = True
 						did_something = True
 						self.track(word, "q_stop", self.subtype)
+					elif self.framing_question:
+						did_something = True
+						self.framing_question = False
+						self.did_frame_question = True
+						self.track(word, "q_stop", self.subtype)
 				elif tag != "VBG":
-					self.last_verb_tag = tag
-					self.last_verb = len(self.parsed)
-					self.last_operator = word
-					self.raw_operators.append(word)
-					did_something = True
-					self.subtype = self.get_subtype(word, tag)
-					self.track(word, "operator", self.subtype)
+					if self.framing_question:
+						did_something = True
+						self.framing_question = False
+						self.did_frame_question = True
+						self.track(word, "q_stop", self.subtype)
+					else:
+						if self.question and not self.did_frame_question:
+							# We are asking a question and likely don't
+							# need to invoke all the operator logic; this is
+							# likely a "start the question" verb
+							if not self.framing_question:
+								did_something = True
+								self.framing_question = True
+								self.track(word, "q_start", self.subtype)
+						else:
+							op = p.brain.operator(word, self.sentence_text)
+							if op not in [None, False]: # Retagged
+								self.last_verb_tag = tag
+								self.last_verb = len(self.parsed)
+								self.last_operator = word
+								self.raw_operators.append(word)
+								did_something = True
+								self.operators.append(op)
+								self.operator[word] = op
+								self.subtype = self.get_subtype(word, tag)
+								self.track(word, "operator", self.subtype)
+							else:
+								did_something = True
+								process(word, tag)
 				else:
 					did_something = True
 					gtype = p.brain.gerund(word, self.sentence_text)
@@ -427,6 +475,7 @@ class SentenceParser(object):
 				did_something = True
 
 			if not did_something:
+				#print "Answer Unknown", word, tag
 				p.brain.unknown(word, tag, self.subtype, self.sentence_text)
 				process(word, tag)
 
@@ -456,12 +505,6 @@ class SentenceParser(object):
 		self.contexts = uniq(self.contexts)
 		self.units = uniq(self.units)
 		self.actions = uniq(self.actions)
-
-		# Resolve the verbs to actual operators using the brain
-		for o in self.raw_operators:
-			op = p.brain.operator(o, self.sentence_text)
-			self.operators.append(op)
-			self.operator[o] = op
 		self.operators = uniq(self.operators)
 
 		text = self.sentence_text

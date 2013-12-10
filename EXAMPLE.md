@@ -1,11 +1,4 @@
 
-how many asking
-balloons unit
-does q_start
-Jane context
-have q_stop
-('now', None) subordinate
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -53,15 +46,6 @@ balloons owned by Jane + 6
 
 ## Correct response
 20 balloons
-how many asking
-bananas unit
-did q_start
-Mrs. Jones context
-buy q_stop
-in conjunction
-the noise
-('beginning', 'in') subordinate
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -120,13 +104,6 @@ bananas owned by Mrs. Jones == 0
 
 ## Correct response
 9 bananas
-how many asking
-jars unit
-does q_start
-Tony context
-have q_stop
-('now', None) subordinate
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -174,12 +151,6 @@ jars owned by Tony - 16
 
 ## Correct response
 3 jars
-how many asking
-dolls unit
-does q_start
-Ethelle context
-have q_stop
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -228,15 +199,6 @@ dolls owned by Ethelle + 4
 
 ## Correct response
 12 dolls
-how many asking
-fewer rel_less
-toy cars unit
-does q_start
-Chandler context
-have q_stop
-than conjunction
-('Joey', (u'singular', u'masculine')) comparator_context
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -284,13 +246,6 @@ toy cars owned by Chandler = 6
 
 ## Correct response
 7 fewer toy cars
-how many asking
-apples unit
-does q_start
-Marc context
-have q_stop
-('now', None) subordinate
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -360,15 +315,6 @@ apples owned by Marc - 3
 
 ## Correct response
 3 apples
-how many asking
-fish context
-are pre_ind_plu
-swimming acting
-in conjunction
-the noise
-('pond', 'in') subordinate
-('now', None) subordinate
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -417,15 +363,6 @@ swimming fish in a pond + 4
 
 ## Correct response
 12 fish
-how many asking
-pieces unit
-of conjunction
-('pizza', 'of') subordinate
-did q_start
-Michael context
-have q_stop
-left subordinate
-? punctuation
 # Zoidberg Solution
 
 ## The problem
@@ -442,17 +379,17 @@ Michael had 8 pieces of pizza. He ate 2 pieces of pizza. How many pieces of pizz
     WRB    	JJ     	NNS    	IN     	NN     	VBD    	NNP    	VB     	VBN    	.      
 
 ## Problem inference
-I think this problem is about Michael losing pieces and asks a single question.
+I think this problem is about Michael losing pieces of pizza and asks a single question.
 
 ## Parsed problem
-    Michael    	had        	8          	pieces     	of         	pizza      	.          
-    context    	operator   	constant   	unit       	conjunction	subordinate	punctuation
+    Michael        	had            	8              	pieces of pizza	.              
+    context        	operator       	constant       	unit           	punctuation    
 
-    Michael    	ate        	2          	pieces     	of         	pizza      	.          
-    context    	operator   	constant   	unit       	conjunction	subordinate	punctuation
+    Michael        	ate            	2              	pieces of pizza	.              
+    context        	operator       	constant       	unit           	punctuation    
 
-    How many   	pieces     	of         	pizza      	did        	Michael    	have       	left       	?          
-    asking     	unit       	conjunction	subordinate	q_start    	context    	q_stop     	subordinate	punctuation
+    How many       	pieces of pizza	did            	Michael        	have           	left           	?              
+    asking         	unit           	q_start        	context        	q_stop         	subordinate    	punctuation    
 
 
 ## Question 1
@@ -461,15 +398,15 @@ I think this problem is about Michael losing pieces and asks a single question.
 How many pieces of pizza did Michael have left?
 
 ### Answer interpretation
-The answer is the unknown value of pieces owned by Michael.
+The answer is the unknown value of pieces of pizza owned by Michael.
 
 ## Data extraction
 
 ### Sentence 1
-pieces owned by Michael = 8
+pieces of pizza owned by Michael = 8
 
 ### Sentence 2
-pieces owned by Michael - 2
+pieces of pizza owned by Michael - 2
 
 ## Correct response
-6 pieces
+6 pieces of pizza
