@@ -58,13 +58,13 @@ class Solution(object):
 
 		self.execute()
 
-	def store_var(self, idx, var):
+	def store_var(self, idx, var, eq):
 		if idx == 0:
-			self.beginning_vars.append(var)
+			self.beginning_vars.append((var, eq))
 		elif idx == self.last_index:
-			self.ending_vars.append(var)
+			self.ending_vars.append((var, eq))
 		else:
-			self.middle_vars.append(var)
+			self.middle_vars.append((var, eq))
 
 	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None):
 		#print "context:", context
@@ -93,13 +93,15 @@ class Solution(object):
 			var = self.newvar()
 			constant = self.symbols[var]
 			if hindsight_inference:
-				self.store_var(idx, var)
+				self.store_var(idx, var, constant)
 		else:
 			var = str(constant)
 
+		#print idx, sym, operator
+
 		if operator is not None and constant is not None:
 			if operator == "eq":
-				self.store_var(idx, sym)
+				self.store_var(idx, sym, constant)
 				symbol = constant
 			elif operator == "ad":
 				symbol += constant
@@ -259,6 +261,7 @@ class Solution(object):
 			did_set_context = False
 			zeroes_out = False
 			last_context = None
+			last_container = None
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
 
@@ -304,8 +307,15 @@ class Solution(object):
 					if val[1] is not None:
 						# If we have a conjunction we have an container
 						self.container = val[0]
+						last_container = self.container
+
+				if part == "coordinating_conjunction":
+					#print "Restore context and container"
+					self.context = last_context
+					self.container = last_container
 
 				if self.has_all():
+					#print "Here and", zeroes_out
 					self.generate_expression(zeroes_out)
 
 				# @TODO: DEBUG
@@ -391,6 +401,7 @@ class Solution(object):
 			index += 1
 			new_sentence_data.append(new_container)
 		self.sentence_data = new_sentence_data
+#		print self.sentence_data
 
 	def compute_correct(self):
 		self.compute()
@@ -406,10 +417,17 @@ class Solution(object):
 					i.append(unit)
 				self.correct_responses.insert(idx, " ".join(i))
 
+		def safe_solve(*args):
+			try:
+				return solve(*args)
+			except Exception as e:
+				print str(e)
+				return "??"
+
 		def simple_solve(sym):
 			for c in [Symbol, Function, Pow, Derivative]:
 				if isinstance(sym, c):
-					return solve(sym, sym)
+					return safe_solve(sym, sym)
 			return [sym]
 
 		index = 0
@@ -430,7 +448,7 @@ class Solution(object):
 
 						if l == 1:
 							symbol = self.symbols[self.ending_vars[0]]
-							add_response(solve(equ, symbol), answer.unit, index)
+							add_response(safe_solve(equ, symbol), answer.unit, index)
 						elif l == 0:
 							add_response(simple_solve(equ), answer.unit, index)
 						else:
@@ -439,8 +457,8 @@ class Solution(object):
 					elif sub == "time_starting":
 						l = len(self.beginning_vars)
 						if l == 1:
-							symbol = self.symbols[self.beginning_vars[0]]
-							add_response(solve(equ, symbol), answer.unit, index)
+							name, symbol = self.beginning_vars[0]
+							add_response(safe_solve(equ, symbol), answer.unit, index)
 						elif l == 0:
 							add_response(simple_solve(equ), answer.unit, index)
 						else:
@@ -486,6 +504,7 @@ class Solution(object):
 		o.append("\n## Data extraction")
 		index = 1
 		for sd in self.sentence_data:
+			#print sd
 			for container in sd:
 				data = sd[container]
 				s = []

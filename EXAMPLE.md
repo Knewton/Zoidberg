@@ -75,7 +75,7 @@ I think this problem is about Mrs. Jones, her family, and her friends exchanging
     context        	operator       	constant       	unit           	punctuation    
 
     Mrs. Jones     	gave           	the            	remaining      	4              	bananas        	to             	her friends    	.              
-    context        	operator       	noise          	solution_zero  	constant       	unit           	noise          	context        	punctuation    
+    context        	operator       	noise          	solution_zero  	constant       	unit           	conjunction    	context        	punctuation    
 
     How many       	bananas        	did            	Mrs. Jones     	buy            	in             	the            	beginning      	?              
     asking         	unit           	q_start        	context        	q_stop         	conjunction    	noise          	subordinate    	punctuation    
@@ -127,7 +127,7 @@ I think this problem is about Tony and his sister exchanging jars and asks a sin
     context        	operator       	constant       	unit           	punctuation    
 
     Tony           	gives          	16             	jars           	to             	his sister     	.              
-    context        	operator       	constant       	unit           	noise          	context        	punctuation    
+    context        	operator       	constant       	unit           	conjunction    	context        	punctuation    
 
     How many       	jars           	does           	Tony           	have           	now            	?              
     asking         	unit           	q_start        	context        	q_stop         	subordinate    	punctuation    
@@ -282,10 +282,10 @@ I think this problem is about Marc, Jim, and Julia exchanging apples and asks a 
     context    	operator   	constant   	unit       	noise      	punctuation
 
     Marc       	gives      	2          	apples     	to         	Jim        	.          
-    context    	operator   	constant   	unit       	noise      	context    	punctuation
+    context    	operator   	constant   	unit       	conjunction	context    	punctuation
 
     Marc       	gives      	3          	apples     	to         	Julia      	.          
-    context    	operator   	constant   	unit       	noise      	context    	punctuation
+    context    	operator   	constant   	unit       	conjunction	context    	punctuation
 
     How many   	apples     	does       	Marc       	have       	now        	?          
     asking     	unit       	q_start    	context    	q_stop     	subordinate	punctuation
@@ -410,3 +410,54 @@ pieces of pizza owned by Michael - 2
 
 ## Correct response
 6 pieces of pizza
+# Zoidberg Solution
+
+## The problem
+Pigpen had some rocks.
+He kept 3 rocks for himself and gave the remaining 8 rocks to his friends.
+How many rocks did he have in the beginning?
+
+## Digested problem
+    Pigpen   	had      	some     	rocks    	.        
+    NNP      	VBD      	DT       	NNS      	.        
+
+    He       	kept     	3        	rocks    	for      	himself  	and      	gave     	the      	remaining	8        	rocks    	to       	his      	friends  	.        
+    PRP      	VBD      	CD       	NNS      	IN       	PRP      	CC       	VBD      	DT       	VBG      	CD       	NNS      	TO       	PRP$     	NNS      	.        
+
+    How      	many     	rocks    	did      	he       	have     	in       	the      	beginning	?        
+    WRB      	JJ       	NNS      	VBD      	PRP      	VBP      	IN       	DT       	NN       	.        
+
+## Problem inference
+I think this problem is about Pigpen and his friends exchanging rocks and asks a single question.
+
+## Parsed problem
+    Pigpen                  	had                     	some                    	rocks                   	.                       
+    context                 	operator                	variable                	unit                    	punctuation             
+
+    Pigpen                  	kept                    	3                       	rocks                   	for                     	Pigpen                  	and                     	gave                    	the                     	remaining               	8                       	rocks                   	to                      	his friends             	.                       
+    context                 	operator                	constant                	unit                    	conjunction             	context                 	coordinating_conjunction	operator                	noise                   	solution_zero           	constant                	unit                    	conjunction             	context                 	punctuation             
+
+    How many                	rocks                   	did                     	Pigpen                  	have                    	in                      	the                     	beginning               	?                       
+    asking                  	unit                    	q_start                 	context                 	q_stop                  	conjunction             	noise                   	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+How many rocks did he have in the beginning?
+
+### Answer interpretation
+The answer is the unknown value of rocks owned by Pigpen at the beginning of the problem.
+
+## Data extraction
+
+### Sentence 1
+rocks owned by Pigpen = x
+
+### Sentence 2
+rocks owned by Pigpen - 3
+rocks owned by Pigpen - 8
+rocks owned by Pigpen == 0
+
+## Correct response
+11 rocks

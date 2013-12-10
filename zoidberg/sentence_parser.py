@@ -294,6 +294,8 @@ class SentenceParser(object):
 					else:
 						self.main_context = c[0]
 						self.track(c[0], "context", self.subtype)
+					# Unset hanging conjunctions when we set a context
+					self.last_conjunction = None
 
 			if tag == "PRP$":
 				if self.last_conjunction is not None:
@@ -397,7 +399,7 @@ class SentenceParser(object):
 				self.is_relative_quantity = adj != "noise"
 				self.track(word, adj, self.subtype)
 
-			if tag == "IN":
+			if tag in ["IN", "TO"]:
 				self.last_conjunction = word
 				self.conjunction_parts.append(word)
 				did_something = True
@@ -470,6 +472,10 @@ class SentenceParser(object):
 				self.track(word, "asking", self.subtype)
 			elif self.phrasing_question:
 				self.phrasing_question = False
+
+			if tag == "CC":
+				did_something = True
+				self.track(word, "coordinating_conjunction")
 
 			if self.subtype is not None:
 				did_something = True
