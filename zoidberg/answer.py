@@ -125,6 +125,7 @@ class Answer(object):
 
 		o.append("\n### Answer interpretation")
 
+		is_req = False
 		i = ["The answer is"]
 
 		# Are we surprised about the answer format?
@@ -145,6 +146,8 @@ class Answer(object):
 		elif self.relative:
 			if self.rel_mode == "su":
 				mode = "difference in"
+			elif self.rel_mode == "ad":
+				mode = "increase in"
 		else:
 			mode = "unknown"
 		i.append("the {0} {1} of".format(mode, syntax))
@@ -161,15 +164,19 @@ class Answer(object):
 			i.append(self.unit)
 
 		if self.context:
-			i.append("owned by {0}".format(self.context))
+			if self.query.problem.inference.is_requirement_problem:
+				i.append("needed by {0}".format(self.context))
+			else:
+				i.append("owned by {0}".format(self.context))
 
 		if self.relative:
-			i.append("with respect to {0}".format(self.comparator))
+			if self.comparator is not None:
+				i.append("with respect to {0}".format(self.comparator))
 
 		if len(self.subordinates) > 0:
 			for sub in self.subordinates:
 				w, s = sub
-				if s == "place_noun":
+				if s is None or s == "place_noun":
 					i.append(self.query.problem.inference.subordinate_strings[w])
 				else:
 					i.append(ANSWER_SUBORDINATE[s])

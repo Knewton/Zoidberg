@@ -398,7 +398,7 @@ I think this problem is about Michael losing pieces of pizza and asks a single q
 How many pieces of pizza did Michael have left?
 
 ### Answer interpretation
-The answer is the unknown value of pieces of pizza owned by Michael.
+The answer is the unknown value of pieces of pizza owned by Michael at the end of the problem.
 
 ## Data extraction
 
@@ -456,8 +456,54 @@ rocks owned by Pigpen = x
 
 ### Sentence 2
 rocks owned by Pigpen - 3
-rocks owned by Pigpen - 8
 rocks owned by Pigpen == 0
 
 ## Correct response
-11 rocks
+3 rocks
+# Zoidberg Solution
+
+## The problem
+Mr. Lupis needs 4 eggs to bake 13 muffins. He has only 2 eggs. How many more eggs does he need to bake the muffins?
+
+## Digested problem
+    Mr.    	Lupis  	needs  	4      	eggs   	to     	bake   	13     	muffins	.      
+    NNP    	NNP    	VBZ    	CD     	NNS    	TO     	VB     	CD     	NNS    	.      
+
+    He     	has    	only   	2      	eggs   	.      
+    PRP    	VBZ    	RB     	CD     	NNS    	.      
+
+    How    	many   	more   	eggs   	does   	he     	need   	to     	bake   	the    	muffins	?      
+    WRB    	JJ     	RBR    	NNS    	VBZ    	PRP    	VBP    	TO     	VB     	DT     	NNS    	.      
+
+## Problem inference
+I think this problem is about Mr. Lupis eggs and asks a single question.
+
+## Parsed problem
+    Mr. Lupis  	needs      	4          	eggs       	to         	bake       	13         	muffins    	.          
+    context    	operator   	constant   	unit       	conjunction	operator   	constant   	subordinate	punctuation
+
+    Mr. Lupis  	has        	only       	2          	eggs       	.          
+    context    	operator   	noise      	constant   	unit       	punctuation
+
+    How many   	more       	eggs       	does       	Mr. Lupis  	need       	to         	bake       	the        	muffins    	?          
+    asking     	rel_more   	unit       	q_start    	context    	q_stop     	conjunction	operator   	noise      	subordinate	punctuation
+
+
+## Question 1
+
+### Question text
+How many more eggs does he need to bake the muffins?
+
+### Answer interpretation
+The answer is the increase in value of eggs needed by Mr. Lupis to bake muffins.
+
+## Data extraction
+
+### Sentence 1
+eggs needed by Mr. Lupis to bake muffins == 4
+
+### Sentence 2
+eggs owned by Mr. Lupis = 2
+
+## Correct response
+2 more eggs

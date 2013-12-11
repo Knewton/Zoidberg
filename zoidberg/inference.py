@@ -65,6 +65,9 @@ class Inference(object):
 		# Store a reference to the problem
 		self.problem = problem
 
+		# Is the problem about needing something?
+		self.is_requirement_problem = False
+
 		# Execute
 		self.execute()
 
@@ -87,6 +90,9 @@ class Inference(object):
 			s = SentenceParser(s_tags, p, p.sentences[index])
 			self.sentences.append(s)
 			self.track_longer(s.longest_phrase)
+
+			if s.is_about_requirements:
+				self.is_requirement_problem = True
 
 			raw_operators += s.operators
 			raw_actions += s.actions

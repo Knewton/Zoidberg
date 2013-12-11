@@ -9,3 +9,4 @@ cat calibrations/06.txt | zoidberg | tee -a EXAMPLE.md
 cat calibrations/07.txt | zoidberg | tee -a EXAMPLE.md
 cat calibrations/08.txt | zoidberg | tee -a EXAMPLE.md
 cat calibrations/09.txt | zoidberg | tee -a EXAMPLE.md
+cat calibrations/10.txt | zoidberg | tee -a EXAMPLE.md

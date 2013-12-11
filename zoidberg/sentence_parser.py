@@ -5,6 +5,7 @@ from utilities import uniq
 class SentenceParser(object):
 	def __init__(self, sentence, problem, text):
 		self.index = 0
+		self.is_about_requirements = False
 		self.framing_question = False
 		self.did_frame_question = False
 		self.acting = False
@@ -276,8 +277,12 @@ class SentenceParser(object):
 				self.subtype = self.get_subtype(word, tag)
 
 			if tag == "SUB":
+				conjunction = (word, self.last_conjunction)
+				self.subordinate_strings[word] = " ".join(self.conjunction_parts)
+				self.conjunction_parts = []
+				self.conjunctions.append(conjunction)
 				did_something = True
-				self.track(word, "subordinate", self.subtype)
+				self.track(conjunction, "subordinate", self.subtype)
 
 			if tag == "PRP":
 				c = self.resolve_context(self.subtype)
@@ -373,6 +378,8 @@ class SentenceParser(object):
 						else:
 							op = p.brain.operator(word, self.sentence_text)
 							if op not in [None, False]: # Retagged
+								if op == "re":
+									self.is_about_requirements = True
 								self.last_verb_tag = tag
 								self.last_verb = len(self.parsed)
 								self.last_operator = word
@@ -393,7 +400,7 @@ class SentenceParser(object):
 						self.actions.append(word)
 					self.track(word, gtype, self.subtype)
 
-			if tag == "JJR":
+			if tag in ["JJR", "COMP"]:
 				did_something = True
 				adj = p.brain.relative(word, self.sentence_text)
 				self.is_relative_quantity = adj != "noise"
@@ -410,6 +417,8 @@ class SentenceParser(object):
 				self.track(word, "punctuation", self.subtype)
 
 			if tag == "CD": # A cardinal number
+				if self.last_conjunction is not None:
+					self.conjunction_parts.pop()
 				did_something = True
 				self.track(word, "constant", self.subtype)
 

@@ -25,7 +25,9 @@ OPERATORS = [
 	("ad", "Addition"),
 	("su", "Subtraction"),
 	("mu", "Multiplication"),
-	("di", "Division")
+	("di", "Division"),
+	("re", "Requires (the total we need to answer)"),
+	("co", "Convert (change one unit into another)")
 ]
 
 # Various types of supported subordinace
@@ -251,7 +253,6 @@ class Brain(object):
 			elif item == "operator_verbs":
 				tag = "VBX"
 			elif item == "comparison_adj":
-				# @TODO No comparisons yet!
 				tag = "COMP"
 			elif item == "answer_syntax":
 				tag = "ANSYX"

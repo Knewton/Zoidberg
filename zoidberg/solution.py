@@ -11,7 +11,9 @@ OP_DISPLAY = {
 	"ad": "+",
 	"mu": "*",
 	"su": "-",
-	"di": "/"
+	"di": "/",
+	"re": "==",
+	"co": "->"
 }
 
 def number(s):
@@ -70,6 +72,7 @@ class Solution(object):
 		#print "context:", context
 		#print "unit:", unit
 		if context is None or unit is None:
+			raise Exception
 			return (False, Symbol("BROKEN"), "BROKEN")
 
 		s = [context, unit]
@@ -100,7 +103,7 @@ class Solution(object):
 		#print idx, sym, operator
 
 		if operator is not None and constant is not None:
-			if operator == "eq":
+			if operator in ["eq", "re"]:
 				self.store_var(idx, sym, constant)
 				symbol = constant
 			elif operator == "ad":
@@ -239,10 +242,10 @@ class Solution(object):
 		self.reset_extractor()
 
 	def has_any(self):
-		return self.context or self.operator or self.constant or self.unit
+		return self.container or self.context or self.operator or self.constant or self.unit
 
 	def has_all(self):
-		a = self.context and self.operator and self.constant and self.unit
+		a = self.container and self.context and self.operator and self.constant and self.unit
 		if self.relative:
 			if not self.comparator_context:
 				return False
@@ -273,6 +276,8 @@ class Solution(object):
 
 				if part == "operator" and not self.operator:
 					self.operator = parser.operator[val]
+					if self.operator == "co":
+						self.operator = None
 
 				if part == "constant" and not self.constant:
 					self.constant = val
@@ -439,6 +444,10 @@ class Solution(object):
 			else:
 				inf, equ, con = self.get_symbol(answer.context, answer.unit, None, index)
 
+			resp = None
+			dontSave = False
+			compContext = None
+
 			if len(answer.subordinates) > 0:
 				working_answer = None
 				for s in answer.subordinates:
@@ -448,9 +457,9 @@ class Solution(object):
 
 						if l == 1:
 							symbol = self.symbols[self.ending_vars[0]]
-							add_response(safe_solve(equ, symbol), answer.unit, index)
+							resp = (safe_solve(equ, symbol), answer.unit)
 						elif l == 0:
-							add_response(simple_solve(equ), answer.unit, index)
+							resp = (simple_solve(equ), answer.unit)
 						else:
 							self.correct_responses.append(
 								"Not sure; too many ending variables!")
@@ -458,44 +467,62 @@ class Solution(object):
 						l = len(self.beginning_vars)
 						if l == 1:
 							name, symbol = self.beginning_vars[0]
-							add_response(safe_solve(equ, symbol), answer.unit, index)
+							resp = (safe_solve(equ, symbol), answer.unit)
 						elif l == 0:
-							add_response(simple_solve(equ), answer.unit, index)
+							resp = (simple_solve(equ), answer.unit)
 						else:
 							self.correct_responses.append(
 								"Not sure; too many starting variables!")
-					elif sub == "place_noun":
+					elif sub == "place_noun" or sub is None:
+						compContext = word
 						if answer.actor and answer.action:
 							inf, equ, con = self.get_symbol("@" + answer.actor, answer.action, word, index)
 						else:
 							inf, equ, con = self.get_symbol(answer.context, answer.unit, word, index)
+						resp = (simple_solve(equ), answer.unit)
 					else:
+						dontSave = True
 						self.correct_responses.append("No sure; unknown subordinate type {0} ({1})".format(sub, word))
-			elif answer.relative:
-				coinf, comp, conc = self.get_symbol(answer.comparator, answer.unit, None)
-
-				v = self.newvar()
-				v = 0
-
-				# ad(dition): how many more
-				if answer.rel_mode == "ad":
-					v = equ - comp
-					unt = ["more"]
-				# su(btraction) how many fewer
-				elif answer.rel_mode == "su":
-					v = comp - equ
-					unt = ["fewer"]
-
-				if answer.unit:
-					unt.append(answer.unit)
-
-				add_response(simple_solve(v), " ".join(unt), index)
 			else:
 				#print "solution debugging"
 				#print equ
 				#print answer.unit
 				#print index
-				add_response(simple_solve(equ), answer.unit, index)
+				resp = (simple_solve(equ), answer.unit)
+
+			if answer.relative:
+				if answer.comparator is not None:
+					coinf, comp, conc = self.get_symbol(answer.comparator, answer.unit, compContext)
+				else:
+					coinf, comp, conc = self.get_symbol(answer.context, answer.unit, None)
+
+				r = None
+
+				if resp is None:
+					r = equ
+				else:
+					r, u = resp
+					# We will have already solved the equation by this point
+					r = r[0]
+
+				# ad(dition): how many more
+				if answer.rel_mode == "ad":
+					v = r - comp
+					unt = ["more"]
+				# su(btraction) how many fewer
+				elif answer.rel_mode == "su":
+					v = comp - r
+					unt = ["fewer"]
+
+				if answer.unit:
+					unt.append(answer.unit)
+
+				resp = (simple_solve(v), " ".join(unt))
+
+			if not dontSave:
+				r, u = resp
+				add_response(r, u, index)
+
 			index += 1
 
 	def __str__(self):
@@ -504,7 +531,6 @@ class Solution(object):
 		o.append("\n## Data extraction")
 		index = 1
 		for sd in self.sentence_data:
-			#print sd
 			for container in sd:
 				data = sd[container]
 				s = []
@@ -538,7 +564,7 @@ class Solution(object):
 							if display_constant is None:
 								display_constant = "<an unknown number>"
 
-							if operator is None:
+							if operator is None or operator == "co":
 								continue # Probably the question
 
 							if actor is not None and action is not None:
@@ -552,7 +578,13 @@ class Solution(object):
 								i.append(display_constant)
 							elif context is not None and unit is not None:
 								i.append(unit)
-								i.append("owned by")
+								if operator is not None and operator == "re":
+									i.append("needed by")
+								else:
+									i.append("owned by")
+
+#								if self.problem.inference.is_requirement_problem:
+
 								i.append(context)
 
 								if container is not None:
