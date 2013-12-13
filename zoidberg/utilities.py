@@ -8,6 +8,18 @@ from types import ListType
 from shutil import copyfile
 from json import dumps, loads
 
+def oxfordComma(inp):
+	o = [] + inp
+	outstr = ""
+	if len(o) > 1:
+		laststr = o.pop()[0]
+		o = [i[0] for i in o]
+		outstr = ", ".join(o)
+		outstr += " and {0}".format(laststr)
+	else:
+		return o[0]
+	return outstr
+
 def list_format(orig):
 	# Copy the list to not disrupt it
 	l, o = [], []

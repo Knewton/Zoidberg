@@ -46,6 +46,9 @@ balloons owned by Jane + 6
 
 ## Correct response
 20 balloons
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -87,12 +90,11 @@ I think this problem is about Mrs. Jones, her family, and her friends exchanging
 How many bananas did she buy in the beginning?
 
 ### Answer interpretation
-The answer is the unknown value of bananas owned by Mrs. Jones at the beginning of the problem.
+The answer is the unknown value of bananas gained by Mrs. Jones at the beginning of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-bananas owned by Mrs. Jones = 0
 bananas owned by Mrs. Jones + x
 
 ### Sentence 2
@@ -104,6 +106,9 @@ bananas owned by Mrs. Jones == 0
 
 ## Correct response
 9 bananas
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -151,6 +156,9 @@ jars owned by Tony - 16
 
 ## Correct response
 3 jars
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -167,7 +175,7 @@ Lucy has 8 dolls. Ethelle has 4 more dolls than her. How many dolls does Ethelle
     WRB    	JJ     	NNS    	VBZ    	NNP    	VB     	.      
 
 ## Problem inference
-I think this problem is about Lucy and Ethelle having dolls and asks a single question.
+I think this problem is about Lucy and Ethelle grouping dolls and asks a single question.
 
 ## Parsed problem
     Lucy              	has               	8                 	dolls             	.                 
@@ -199,6 +207,9 @@ dolls owned by Ethelle + 4
 
 ## Correct response
 12 dolls
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -215,7 +226,7 @@ Joey has 13 toy cars. Chandler has 6 toy cars. How many fewer toy cars does Chan
     WRB     	JJ      	JJR     	NN      	NNS     	VBZ     	NNP     	VB      	IN      	NNP     	.       
 
 ## Problem inference
-I think this problem is about Joey and Chandler having toy cars and asks a single question.
+I think this problem is about Joey and Chandler grouping toy cars and asks a single question.
 
 ## Parsed problem
     Joey              	has               	13                	toy cars          	.                 
@@ -246,6 +257,9 @@ toy cars owned by Chandler = 6
 
 ## Correct response
 7 fewer toy cars
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -315,6 +329,9 @@ apples owned by Marc - 3
 
 ## Correct response
 3 apples
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -351,7 +368,7 @@ I think this problem is about an increasing number of swimming fish in a pond an
 How many fish are swimming in the pond now?
 
 ### Answer interpretation
-The answer is the unknown value of fish swimming fish in a pond at the end of the problem.
+The answer is the unknown value of fish swimming in a pond at the end of the problem.
 
 ## Data extraction
 
@@ -363,6 +380,9 @@ swimming fish in a pond + 4
 
 ## Correct response
 12 fish
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -410,6 +430,9 @@ pieces of pizza owned by Michael - 2
 
 ## Correct response
 6 pieces of pizza
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -460,6 +483,9 @@ rocks owned by Pigpen == 0
 
 ## Correct response
 3 rocks
+
+***
+
 # Zoidberg Solution
 
 ## The problem
@@ -507,3 +533,55 @@ eggs owned by Mr. Lupis = 2
 
 ## Correct response
 2 more eggs
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Mitch has 3 cobs of corn. 
+Lisa has 2 cobs of corn. 
+How many cobs of corn do they have altogether?
+
+## Digested problem
+    Mitch     	has       	3         	cobs      	of        	corn      	.         
+    NN        	VBZ       	CD        	NNS       	IN        	NN        	.         
+
+    Lisa      	has       	2         	cobs      	of        	corn      	.         
+    NNP       	VBZ       	CD        	NNS       	IN        	NN        	.         
+
+    How       	many      	cobs      	of        	corn      	do        	they      	have      	altogether	?         
+    WRB       	JJ        	NNS       	IN        	NN        	VBP       	PRP       	VBP       	RB        	.         
+
+## Problem inference
+I think this problem is about Mitch and Lisa grouping cobs of corn and asks a single question.
+
+## Parsed problem
+    Mitch         	has           	3             	cobs of corn  	.             
+    context       	operator      	constant      	unit          	punctuation   
+
+    Lisa          	has           	2             	cobs of corn  	.             
+    context       	operator      	constant      	unit          	punctuation   
+
+    How many      	cobs of corn  	do            	Mitch and Lisa	have          	altogether    	?             
+    asking        	unit          	q_start       	context       	q_stop        	subordinate   	punctuation   
+
+
+## Question 1
+
+### Question text
+How many cobs of corn do they have altogether?
+
+### Answer interpretation
+The answer is the unknown value of cobs of corn owned by Mitch and Lisa added together.
+
+## Data extraction
+
+### Sentence 1
+cobs of corn owned by Mitch = 3
+
+### Sentence 2
+cobs of corn owned by Lisa = 2
+
+## Correct response
+5 cobs of corn

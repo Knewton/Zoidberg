@@ -40,12 +40,27 @@ class Problem(object):
 			"plurality": {
 				"singular": None,
 				"plural": None,
+				"regular": None
 			},
 			"gender": {
 				"masculine": None,
 				"feminine": None,
 				"neutral": None,
 				"mixed": None
+			}
+		}
+		self.adaptive_context = {}
+		self.all_contexts = {
+			"plurality": {
+				"singular": {},
+				"plural": {},
+				"regular": {}
+			},
+			"gender": {
+				"masculine": {},
+				"feminine": {},
+				"neutral": {},
+				"mixed": {}
 			}
 		}
 

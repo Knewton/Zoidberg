@@ -1,5 +1,13 @@
 #!/usr/bin/env python
 
+OPERATOR_STR = {
+	"eq": "owned by",
+	"ad": "gained by",
+	"mu": "gained by",
+	"su": "lost by",
+	"di": "lost by"
+}
+
 ANSWER_SYNTAX = {
 	"unknown": "unknown to me",
 	"expression": "value",
@@ -9,7 +17,9 @@ ANSWER_SYNTAX = {
 
 ANSWER_SUBORDINATE = {
 	"time_starting": "at the beginning of the problem",
-	"time_ending": "at the end of the problem"
+	"time_ending": "at the end of the problem",
+	"context_grouping": "added together",
+	"unit_grouping": "total up"
 }
 
 # A Zoidberg answer refers to the structure and syntax of what the correct
@@ -34,10 +44,13 @@ class Answer(object):
 		self.value = None
 		self.unit = None
 		self.context = None
+		self.context_subtype = None
 
 		self.last_unrefined_context = None
+		self.last_unrefined_context_subtype = None
 
 		self.actor = None
+		self.actor_subtype = None
 		self.action = None
 
 		self.execute()
@@ -76,7 +89,9 @@ class Answer(object):
 			if part == "pre_ind_plu":
 				if asking and self.last_unrefined_context:
 					self.actor = self.last_unrefined_context
+					self.actor_subtype = self.last_unrefined_context_subtype
 					self.last_unrefined_context = None
+					self.last_unrefined_context_subtype = None
 
 			# Specifying the acting is tantamount to ending the question
 			if part == "acting":
@@ -100,6 +115,7 @@ class Answer(object):
 
 			# The qstop ends asking and begins specifying
 			if part == "q_stop":
+				self.operator = p.brain.operator(val, str(self.query))
 				refining = True
 				specifying = True
 
@@ -107,8 +123,10 @@ class Answer(object):
 			if part == "context":
 				if refining:
 					self.context = val
+					self.context_subtype = subtype
 				else:
 					self.last_unrefined_context = val
+					self.last_unrefined_context_subtype = subtype
 
 			# Assume subordinate during specifying is answer condition
 			if part == "subordinate" and specifying:
@@ -160,14 +178,14 @@ class Answer(object):
 				i.append("the")
 			i.append(self.value)
 
-		if self.unit:
+		if self.unit and not self.actor:
 			i.append(self.unit)
 
 		if self.context:
 			if self.query.problem.inference.is_requirement_problem:
 				i.append("needed by {0}".format(self.context))
 			else:
-				i.append("owned by {0}".format(self.context))
+				i.append("{1} {0}".format(self.context, OPERATOR_STR[self.operator]))
 
 		if self.relative:
 			if self.comparator is not None:

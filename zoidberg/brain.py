@@ -2,6 +2,7 @@
 from os.path import isfile, realpath, expanduser
 from utilities import get_json, set_json
 import sys
+import json
 
 DEFAULT_PATH = "~/.zoidberg.brain.json"
 DEFAULT_BRAIN = {
@@ -34,7 +35,9 @@ OPERATORS = [
 SUBORDINATES = [
 	("time_starting", "Time: Beginning"),
 	("time_ending", "Time: Ending"),
-	("place_noun", "Place (pond, mall, home, work)")
+	("place_noun", "Place (pond, mall, home, work)"),
+	("context_grouping", "Context Grouping (Group by owners of units [total items owned by all])"),
+	("unit_grouping", "Unit Grouping (Group by units [total golfballs])")
 ]
 
 RELATIVE = [
@@ -94,9 +97,20 @@ RETAGS = [
 	("subordinates", "This indicates a point in time"),
 	("comparison_adj", "This indicates a comparison between things"),
 	("answer_syntax", "This frames the answer to the question"),
-	("nounlike", "This is a noun or pronoun"),
 	("numbers", "This is a cardinal number"),
-	("pre_ind_plu", "This is present indicitive plural (someone ->is<-, they ->are<-)")
+	("pre_ind_plu", "This is present indicitive plural (someone ->is<-, they ->are<-)"),
+
+	("noun", "Singular or mass noun"),
+	("noun_p", "Plural noun"),
+
+	("prop_noun", "Singular proper noun"),
+	("prop_noun_p", "Plural proper noun"),
+
+	("pers_pro", "Personal pronoun"),
+	("pos_pro", "Possessive pronoun"),
+
+	("wh_pro", "Wh-pronoun"),
+	("pos_wh_pro", "Possessive Wh-pronoun"),
 ]
 
 INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
@@ -128,8 +142,22 @@ def get_input(data, prompt, x, ref, brain, force_retag=False):
 			brain.comparison(x, ref)
 		elif item == "answer_syntax":
 			brain.answer_syntax(x, ref)
-		elif item == "nounlike":
-			brain.noun_like(x, ref)
+		elif item == "noun":
+			brain.noun_like(x, "NN", ref)
+		elif item == "noun_p":
+			brain.noun_like(x, "NNS", ref)
+		elif item == "prop_noun":
+			brain.noun_like(x, "NNP", ref)
+		elif item == "prop_noun_p":
+			brain.noun_like(x, "NNPS", ref)
+		elif item == "pers_pro":
+			brain.noun_like(x, "PRP", ref)
+		elif item == "pos_pro":
+			brain.noun_like(x, "PRP$", ref)
+		elif item == "wh_pro":
+			brain.noun_like(x, "WP", ref)
+		elif item == "pos_wh_pro":
+			brain.noun_like(x, "WP$", ref)
 		elif item == "numbers":
 			brain.number(x, ref)
 		elif item == "noise":
@@ -181,11 +209,27 @@ def input_answer_syntax(x, ref, brain):
 	print INPUT_STR.format("question", "", x, ref)
 	return get_input(ANSWERS, "'{0}' indicates: ".format(x), x, ref, brain)
 
-def input_plurality(x, ref, brain):
-	print INPUT_STR.format("plurality", "the pronoun ", x, ref)
+def input_plurality(p, ref, brain):
+	x, tag = p
+
+	pos = "improper noun"
+
+	if tag in ["PRP", "PRP$", "WP", "WP$"]:
+		pos = "pronoun"
+
+	if tag in ["NNP", "NNPS"]:
+		pos = "proper noun"
+		x = x.capitalize()
+
+	print INPUT_STR.format("plurality", "the {} ".format(pos), x, ref)
 	return get_input(PLURALITY, "'{0}' indicates: ".format(x), x, ref, brain)
 
-def input_gender(x, ref, brain):
+def input_gender(p, ref, brain):
+	x, tag = p
+
+	if tag in ["NNP", "NNPS"]:
+		x = x.capitalize()
+
 	print INPUT_STR.format("gender", "", x, ref)
 	return get_input(GENDERS, "'{0}' indicates: ".format(x), x, ref, brain)
 
@@ -233,6 +277,7 @@ class Brain(object):
 	def add(self, key, val, value):
 		key = str(key)
 		val = str(val)
+		o = None
 		if value is not None:
 			value = str(value)
 
@@ -240,6 +285,7 @@ class Brain(object):
 			self.raw[key] = {}
 		if not val in self.raw[key]:
 			self.raw[key][val] = value
+#			print json.dumps(self.raw, sort_keys=True, indent=4)
 		elif self.raw[key] == None:
 			# Retagged
 			return self.raw[self.raw["retagged"][val]][val]
@@ -256,8 +302,22 @@ class Brain(object):
 				tag = "COMP"
 			elif item == "answer_syntax":
 				tag = "ANSYX"
-			elif item == "nounlike":
+			elif item == "noun":
 				tag = "NN"
+			elif item == "noun_p":
+				tag = "NNS"
+			elif item == "prop_noun":
+				tag = "NNP"
+			elif item == "prop_noun_p":
+				tag = "NNPS"
+			elif item == "pers_pro":
+				tag = "PRP"
+			elif item == "pos_pro":
+				tag = "PRP$"
+			elif item == "wh_pro":
+				tag = "WP"
+			elif item == "pos_wh_pro":
+				tag = "WP$"
 			elif item == "noise":
 				tag = "DT"
 			elif item == "numbers":
@@ -270,16 +330,19 @@ class Brain(object):
 				tag = "!!!"
 		return (val, tag)
 
-	def proc(self, key, val, fn, ref):
+	def proc(self, key, val, fn, ref, exp=None):
 		value = None
-		if not key in self.raw or not val in self.raw[key]:
+		if exp is None:
+			exp = val
+		if not key in self.raw or not exp in self.raw[key]:
 			value = fn(val, ref, self)
-		return self.add(key, val, value)
+		return self.add(key, exp, value)
 
-	def subordinate(self, sub, ref):
+	def subordinate(self, p, ref):
+		sub, tag = p
 		subtype = self.proc("subordinates", sub, input_subordinate_type, ref)
 		if subtype == "place_noun":
-			self.noun_like(sub, ref)
+			self.noun_like(sub, tag, ref)
 		return subtype
 
 	def operator(self, verb, ref):
@@ -291,12 +354,15 @@ class Brain(object):
 	def answer_syntax(self, query, ref):
 		return self.proc("answer_syntax", query, input_answer_syntax, ref)
 
-	def noun_like(self, n, ref):
-		plurality = self.proc("plurality", n, input_plurality, ref)
+	def noun_like(self, n, tag, ref):
+		if tag in ["NNP", "NNPS"]:
+			n = n.capitalize()
+
+		plurality = self.proc("plurality", (n, tag), input_plurality, ref, n)
 		if plurality is None:
 			gender = None
 		else:
-			gender = self.proc("gender", n, input_gender, ref)
+			gender = self.proc("gender", (n, tag), input_gender, ref, n)
 		return (plurality, gender)
 
 	def determiner(self, n, ref):

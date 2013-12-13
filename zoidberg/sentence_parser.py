@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from utilities import uniq
+from utilities import uniq, oxfordComma
 
 class SentenceParser(object):
 	def __init__(self, sentence, problem, text):
@@ -98,7 +98,15 @@ class SentenceParser(object):
 	def resolve_context(self, subtype, val=None, compx=False):
 		p = self.problem
 		plurality, gender = subtype
+
 		if val is not None:
+			c_str = ""
+
+			if not isinstance(val, basestring):
+				c_str = oxfordComma(val)
+			else:
+				c_str = val
+
 			p.previous_contexts["plurality"][plurality] = \
 				p.last_contexts["plurality"][plurality]
 			p.previous_contexts["gender"][gender] = \
@@ -107,18 +115,27 @@ class SentenceParser(object):
 			data = (val, subtype)
 			p.last_contexts["plurality"][plurality] = data
 			p.last_contexts["gender"][gender] = data
+
+			p.all_contexts["plurality"][plurality][c_str] = data
+			p.all_contexts["gender"][gender][c_str] = data
+			return c_str
 		else:
+
+			pl_co, ge_co = None, None
 			if compx:
-				plurality_c = p.previous_contexts["plurality"][plurality]
-				gender_c = p.previous_contexts["gender"][gender]
+				pl_co = p.previous_contexts["plurality"]
+				ge_co = p.previous_contexts["gender"]
 			else:
-				plurality_c = p.last_contexts["plurality"][plurality]
-				gender_c = p.last_contexts["gender"][gender]
+				pl_co = p.last_contexts["plurality"]
+				ge_co = p.last_contexts["gender"]
+
+			plurality_c = pl_co[plurality]
+			gender_c = ge_co[gender]
 
 			if plurality_c is not None and gender_c is not None:
 				if (plurality_c[0] == gender_c[0] or
-					gender == "mixed" and plurality == "multiple" or
-					plurality == "multiple"):
+					gender == "mixed" and plurality == "plural" or
+					plurality == "plural"):
 					return plurality_c
 				else:
 					return gender_c
@@ -126,6 +143,37 @@ class SentenceParser(object):
 				return plurality_c
 			elif gender_c is not None:
 				return gender_c
+			else:
+				# NO matching context could be found; try an adapative context?
+				if plurality == "plural":
+					adaptive_context = []
+					if gender == "mixed":
+						adaptive_context.append("masculine")
+						adaptive_context.append("feminine")
+						adaptive_context.append("neutral")
+					elif gender == "masculine":
+						adaptive_context.append("masculine")
+					elif gender == "feminine":
+						adaptive_context.append("feminine")
+					elif gender == "neutral":
+						adaptive_context.append("neutral")
+
+					context = []
+					for cgroup in adaptive_context:
+						for pers, deets in p.all_contexts["gender"][cgroup].iteritems():
+							context.append(deets)
+
+					c_str = ""
+
+					if not isinstance(context, basestring):
+						c_str = oxfordComma(context)
+					else:
+						c_str = context
+
+					p.adaptive_context[c_str] = context
+					p.adaptive_context[c_str] = context
+
+					return (c_str, self.subtype)
 		return None
 
 	def __iter__(self):
@@ -135,8 +183,8 @@ class SentenceParser(object):
 		brain = self.problem.brain
 		text = self.sentence_text
 
-		if tag[:2] == "NN" or tag[:3] == "PRP": # Nouns and Pronouns
-			return brain.noun_like(word, text)
+		if tag[:2] in ["NN", "WP"] or tag[:3] == "PRP": # Nouns and Pronouns
+			return brain.noun_like(word, tag, text)
 		else:
 			return None
 
@@ -155,6 +203,9 @@ class SentenceParser(object):
 				print "Missing retag converter in the brain"
 				exit(1)
 
+			if tag in ["NNP", "NNPS"]:
+				word = word.capitalize()
+
 			if self.last_conjunction is not None:
 				self.conjunction_parts.append(word)
 
@@ -163,6 +214,7 @@ class SentenceParser(object):
 				if subtype[0] is None and subtype[1] is None:
 					subtype = None
 					tag = p.brain.retag(word, tag)
+					process(word, tag)
 					return (False, subtype, tag)
 				return (True, subtype, tag)
 
@@ -236,12 +288,12 @@ class SentenceParser(object):
 								self.units.append(unit)
 								self.track(unit, "unit", self.subtype)
 						else:
-							conjunction = (word, self.last_conjunction)
+							conjunction = ((word, tag), self.last_conjunction)
 							self.subordinate_strings[word] = " ".join(self.conjunction_parts)
 							self.conjunction_parts = []
 							self.conjunctions.append(conjunction)
 							did_something = True
-							self.track(conjunction, "subordinate", self.subtype)
+							self.track(conjunction[0], "subordinate", self.subtype)
 
 						self.last_conjunction = None
 					else:
@@ -277,15 +329,18 @@ class SentenceParser(object):
 				self.subtype = self.get_subtype(word, tag)
 
 			if tag == "SUB":
-				conjunction = (word, self.last_conjunction)
+				conjunction = ((word, tag), self.last_conjunction)
 				self.subordinate_strings[word] = " ".join(self.conjunction_parts)
 				self.conjunction_parts = []
 				self.conjunctions.append(conjunction)
 				did_something = True
-				self.track(conjunction, "subordinate", self.subtype)
+				self.track(conjunction[0], "subordinate", self.subtype)
 
 			if tag == "PRP":
 				c = self.resolve_context(self.subtype)
+				if c is None:
+					c = self.resolve_context(self.subtype, compx=True)
+
 				if c is not None:
 					# If we're setting a relative quantity and the contexts are
 					# the same we're not actually setting a relative quantity
@@ -434,11 +489,11 @@ class SentenceParser(object):
 					self.subordinate_strings[word] = " ".join(self.conjunction_parts)
 					self.conjunction_parts = []
 				else:
-					conjunction = (word, None)
+					conjunction = ((word, tag), None)
 					self.subordinate_strings[word] = word
 				self.conjunctions.append(conjunction)
 				did_something = True
-				self.track(conjunction, "subordinate", self.subtype)
+				self.track(conjunction[0], "subordinate", self.subtype)
 
 			# Anything about phrasing must come before the wh-determiner block
 			if tag == "JJ": # Adjective
@@ -528,7 +583,7 @@ class SentenceParser(object):
 		for o in self.conjunctions:
 			subordinate, conjunction = o
 			self.subordinates.append(
-				(subordinate, p.brain.subordinate(subordinate, text)))
+				(subordinate[0], p.brain.subordinate(subordinate, text)))
 		self.subordinates = uniq(self.subordinates)
 
 	def __str__(self):

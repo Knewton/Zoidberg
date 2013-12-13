@@ -11,7 +11,7 @@ OPERATOR_STR = {
 		"di": "losing"
 	},
 	"multiple_contexts": {
-		"eq": "having",
+		"eq": "grouping",
 		"ad": "exchanging",
 		"mu": "exchanging",
 		"su": "exchanging",
@@ -130,7 +130,8 @@ class Inference(object):
 		for sub in raw_subordinates:
 			word, subtype = sub
 			if subtype is not None and subtype[0:4] != "time":
-				self.subordinates.append(self.subordinate_strings[word])
+				if "grouping" not in subtype:
+					self.subordinates.append(self.subordinate_strings[word])
 		self.subordinates = uniq(self.subordinates)
 
 		format_operators = True

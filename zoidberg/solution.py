@@ -5,9 +5,19 @@ from sympy.core.power import Pow
 from sympy import Eq, Rational
 from sympy.solvers import solve
 
+OPERATOR_STR = {
+	"eq": "owned by",
+	"ad": "gained by",
+	"mu": "gained by",
+	"su": "lost by",
+	"di": "lost by",
+	"ans": "finally owned by"
+}
+
 OP_DISPLAY = {
 	"ans": "==",
 	"eq": "=",
+	"eqx": "=",
 	"ad": "+",
 	"mu": "*",
 	"su": "-",
@@ -27,11 +37,14 @@ class Solution(object):
 		self.problem = problem
 		self.last_index = 0
 
+		self.zeroes_out = False
+
 		self.last_container = None
 		self.last_action = None
 		self.last_actor = None
 
 		self.context = None
+		self.context_subtype = None
 		self.operator = None
 		self.constant = None
 		self.unit = None
@@ -49,8 +62,10 @@ class Solution(object):
 		self.middle_vars = []
 		self.ending_vars = []
 
+		self.varsfor = {}
 		self.used_vars = []
 		self.symbols = {}
+		self.work = {}
 		self.correct_responses = []
 
 		self.container = None
@@ -68,16 +83,16 @@ class Solution(object):
 		else:
 			self.middle_vars.append((var, eq))
 
-	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None):
-		#print "context:", context
-		#print "unit:", unit
+	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None, readonly=True):
 		if context is None or unit is None:
-			raise Exception
-			return (False, Symbol("BROKEN"), "BROKEN")
+			return (False, Symbol("BROKEN"), "BROKEN", "BROKEN")
 
 		s = [context, unit]
+		dcontainer = None
 		if container is not None and container != "_unknown_":
 			s.append(container)
+			if container in self.problem.inference.subordinate_strings:
+				dcontainer = self.problem.inference.subordinate_strings[container]
 
 		sym = " ".join(s)
 		first_time = sym not in self.symbols
@@ -92,9 +107,19 @@ class Solution(object):
 			symbol = 0
 			hindsight_inference = True
 
-		if constant is None:
+		just_defined = False
+		if constant is None and not readonly:
 			var = self.newvar()
+			self.varsfor[var] = (sym, operator)
+
+			k = "{0} {1} {2}".format(unit, OPERATOR_STR[operator], context)
+
+			if not k in self.work:
+				self.work[k] = []
+			self.work[k].append("= " + var)
+
 			constant = self.symbols[var]
+			just_defined = True
 			if hindsight_inference:
 				self.store_var(idx, var, constant)
 		else:
@@ -102,23 +127,52 @@ class Solution(object):
 
 		#print idx, sym, operator
 
+		if sym[0:1] == "@":
+			dsym = "{0} {1}".format(context[1:], unit)
+		else:
+			dsym = sym
+
+		if dcontainer is not None:
+			dsym += " " + dcontainer
+
+		if not dsym in self.work:
+			self.work[dsym] = []
+
 		if operator is not None and constant is not None:
-			if operator in ["eq", "re"]:
+			if operator in ["eq", "eqx", "re"]:
 				self.store_var(idx, sym, constant)
 				symbol = constant
+				if operator != "eqx":
+					self.work[dsym].append("= " + str(constant))
 			elif operator == "ad":
 				symbol += constant
+				if hindsight_inference:
+					self.work[dsym].append("= " + str(constant))
+				else:
+					self.work[dsym].append("+ " + str(constant))
 			elif operator == "su":
 				symbol -= constant
+				if hindsight_inference:
+					self.work[dsym].append("= " + str(constant))
+				else:
+					self.work[dsym].append("- " + str(constant))
 			elif operator == "mu":
 				symbol *= constant
+				if hindsight_inference:
+					self.work[dsym].append("= " + str(constant))
+				else:
+					self.work[dsym].append("* " + str(constant))
 			elif operator == "di":
 				symbol /= constant
+				if hindsight_inference:
+					self.work[dsym].append("= " + str(constant))
+				else:
+					self.work[dsym].append("/ " + str(constant))
 			else:
-				return (hindsight_inference, symbol, var)
+				return (hindsight_inference, symbol, var, sym)
 			self.symbols[sym] = symbol
 
-		return (hindsight_inference, symbol, var)
+		return (hindsight_inference, symbol, var, sym)
 
 	def reset_extractor(self):
 		if self.action is not None:
@@ -134,6 +188,7 @@ class Solution(object):
 		self.actor = None
 		self.action = None
 		self.context = None
+		self.context_subtype = None
 		self.operator = None
 		self.constant = None
 		self.unit = None
@@ -155,12 +210,15 @@ class Solution(object):
 		container = self.container
 		unit = self.unit
 		data = None
+		sym = None
 
 		if context is None:
 			context = "_unknown_"
 
 		if unit is None:
 			unit = "_unknown_"
+
+		sym = " ".join([context, unit])
 
 		k1, k2 = None, None
 		if actor and action:
@@ -206,13 +264,18 @@ class Solution(object):
 				data = self.data[context][unit]
 				k1 = context
 				k2 = unit
+				sym = " ".join([context, unit])
 
 		if data is not None:
 			if self.relative and self.comparator_context:
+				osym = sym
 				sym = " ".join([self.comparator_context, unit])
 				if operator == "eq":
 					operator = self.rel_mode
-					data.append(("eq", sym))
+					data.append(("eqx", sym))
+					if not osym in self.work:
+						self.work[osym] = []
+					self.work[osym].append("= " + str(sym))
 
 			data.append((operator, constant))
 			if zeroes_out:
@@ -262,9 +325,10 @@ class Solution(object):
 			# Sometimes one context will transfer to another. In those cases
 			# we only want to change the context to the primary one
 			did_set_context = False
-			zeroes_out = False
 			last_context = None
+			last_context_subtype = None
 			last_container = None
+			zeroes_out = False
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
 
@@ -272,7 +336,9 @@ class Solution(object):
 					if not did_set_context:
 						did_set_context = True
 						self.context = val
+						self.context_subtype = subtype
 					last_context = val
+					last_context_subtype = subtype
 
 				if part == "operator" and not self.operator:
 					self.operator = parser.operator[val]
@@ -287,6 +353,7 @@ class Solution(object):
 
 				if part == "solution_zero":
 					zeroes_out = True
+					self.zeroes_out = True
 
 				if part in "rel_less":
 					self.rel_mode = "su"
@@ -303,6 +370,7 @@ class Solution(object):
 					if last_context and not self.actor:
 						self.actor = last_context
 						last_context = None
+						last_context_subtype = None
 
 				if part == "acting":
 					if self.actor:
@@ -317,6 +385,7 @@ class Solution(object):
 				if part == "coordinating_conjunction":
 					#print "Restore context and container"
 					self.context = last_context
+					self.context_subtype = last_context_subtype
 					self.container = last_container
 
 				if self.has_all():
@@ -392,10 +461,10 @@ class Solution(object):
 
 							# Apply the operation to the symbol
 							if operator is not None:
-								inf, symbol, con = self.get_symbol(context,
-										unit, container, index, operator, constant)
-								if inf:
-									new_values.append(("eq", "0"))
+								inf, symbol, con, sym = self.get_symbol(context,
+										unit, container, index, operator, constant, False)
+							#	if inf:
+							#		new_values.append(("eq", "0"))
 							else:
 								con = constant
 							new_values.append((operator, con))
@@ -437,12 +506,13 @@ class Solution(object):
 
 		index = 0
 		for answer in q.answers:
+			needEqu = True
+			dispSym = None
 			if answer.actor and answer.action:
+				needEqu = False
 				# The answer in actor/action questions is the actor normally?
 				answer.unit = answer.actor
-				inf, equ, con = self.get_symbol("@" + answer.actor, answer.action, None, index)
-			else:
-				inf, equ, con = self.get_symbol(answer.context, answer.unit, None, index)
+				inf, equ, con, sym = self.get_symbol("@" + answer.actor, answer.action, None, index)
 
 			resp = None
 			dontSave = False
@@ -455,6 +525,9 @@ class Solution(object):
 					if sub == "time_ending":
 						l = len(self.ending_vars)
 
+						if needEqu:
+							inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, None, index)
+
 						if l == 1:
 							symbol = self.symbols[self.ending_vars[0]]
 							resp = (safe_solve(equ, symbol), answer.unit)
@@ -465,6 +538,8 @@ class Solution(object):
 								"Not sure; too many ending variables!")
 					elif sub == "time_starting":
 						l = len(self.beginning_vars)
+						if needEqu:
+							inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, None, index)
 						if l == 1:
 							name, symbol = self.beginning_vars[0]
 							resp = (safe_solve(equ, symbol), answer.unit)
@@ -473,28 +548,37 @@ class Solution(object):
 						else:
 							self.correct_responses.append(
 								"Not sure; too many starting variables!")
+					elif sub == "context_grouping":
+						ans = 0
+						syms = []
+						for c in self.problem.adaptive_context[answer.context]:
+							context, context_subtype = c
+							sinf, sequ, scon, ssym = self.get_symbol(context, answer.unit, None)
+							self.work[ssym].append("= " + " + ".join(syms))
+							syms.append(ssym)
+							ans += sequ
+						resp = (simple_solve(ans), answer.unit)
 					elif sub == "place_noun" or sub is None:
 						compContext = word
 						if answer.actor and answer.action:
-							inf, equ, con = self.get_symbol("@" + answer.actor, answer.action, word, index)
+							inf, equ, con, sym = self.get_symbol("@" + answer.actor, answer.action, word, index)
 						else:
-							inf, equ, con = self.get_symbol(answer.context, answer.unit, word, index)
+							inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, word, index)
 						resp = (simple_solve(equ), answer.unit)
 					else:
 						dontSave = True
 						self.correct_responses.append("No sure; unknown subordinate type {0} ({1})".format(sub, word))
 			else:
-				#print "solution debugging"
-				#print equ
-				#print answer.unit
-				#print index
+				if needEqu:
+					inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, None, index)
 				resp = (simple_solve(equ), answer.unit)
 
 			if answer.relative:
+				inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, None, index)
 				if answer.comparator is not None:
-					coinf, comp, conc = self.get_symbol(answer.comparator, answer.unit, compContext)
+					coinf, comp, conc, csym = self.get_symbol(answer.comparator, answer.unit, compContext)
 				else:
-					coinf, comp, conc = self.get_symbol(answer.context, answer.unit, None)
+					coinf, comp, conc, csym = self.get_symbol(answer.context, answer.unit, None)
 
 				r = None
 
@@ -505,14 +589,22 @@ class Solution(object):
 					# We will have already solved the equation by this point
 					r = r[0]
 
+				k = "Answer"
+				if not k in self.work:
+					self.work[k] = []
+
 				# ad(dition): how many more
 				if answer.rel_mode == "ad":
 					v = r - comp
 					unt = ["more"]
+					self.work[k].append("= " + sym +" - " + csym)
+					self.work[k].append("= " + str(equ) +" - " + str(comp))
 				# su(btraction) how many fewer
 				elif answer.rel_mode == "su":
 					v = comp - r
 					unt = ["fewer"]
+					self.work[k].append("= " + csym +" - " + sym)
+					self.work[k].append("= " + str(comp) +" - " + str(equ))
 
 				if answer.unit:
 					unt.append(answer.unit)
@@ -521,6 +613,9 @@ class Solution(object):
 
 			if not dontSave:
 				r, u = resp
+				#print r, u, resp
+				if self.zeroes_out:
+					self.work[sym].append("= 0")
 				add_response(r, u, index)
 
 			index += 1
@@ -577,10 +672,12 @@ class Solution(object):
 								i.append(OP_DISPLAY[operator])
 								i.append(display_constant)
 							elif context is not None and unit is not None:
+
 								i.append(unit)
 								if operator is not None and operator == "re":
 									i.append("needed by")
 								else:
+								#	i.append(OPERATOR_STR[operator])
 									i.append("owned by")
 
 #								if self.problem.inference.is_requirement_problem:
@@ -602,6 +699,20 @@ class Solution(object):
 					o.append("\n### Sentence {0}".format(index))
 					o.append("\n".join(s))
 			index += 1
+
+#		if len(self.work) > 0:
+#			o.append("\n## Show your work")
+#			ans = None
+#			if "Answer" in self.work:
+#				ans = self.work["Answer"]
+#				del self.work["Answer"]
+#
+#			for symbol, work in self.work.iteritems():
+#				if len(work) > 0:
+#					o.append("{0} {1}".format(symbol, " ".join(work)))
+#			if ans is not None:
+#				if len(ans) > 0:
+#					o.append("{0} {1}".format("Answer", " ".join(ans)))
 
 		if len(self.correct_responses) > 0:
 			o.append("\n## Correct response")
