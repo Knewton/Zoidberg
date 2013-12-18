@@ -22,7 +22,7 @@ class Problem(object):
 		self.longest_word = None
 		self.units_acting_as_context = {}
 
-		# Mrs. Jones
+		self.adaptive_context = {}
 		self.last_contexts = {
 			"plurality": {
 				"singular": None,
@@ -34,7 +34,8 @@ class Problem(object):
 				"feminine": None,
 				"neutral": None,
 				"mixed": None
-			}
+			},
+			"last": None
 		}
 		self.previous_contexts = {
 			"plurality": {
@@ -47,9 +48,9 @@ class Problem(object):
 				"feminine": None,
 				"neutral": None,
 				"mixed": None
-			}
+			},
+			"last": None
 		}
-		self.adaptive_context = {}
 		self.all_contexts = {
 			"plurality": {
 				"singular": {},
@@ -61,7 +62,8 @@ class Problem(object):
 				"feminine": {},
 				"neutral": {},
 				"mixed": {}
-			}
+			},
+			"last": None
 		}
 
 		# Engines

@@ -17,7 +17,8 @@ DEFAULT_BRAIN = {
 	"inclusive": {},
 	"relative": {},
 	"gerunds": {},
-	"numbers": {}
+	"numbers": {},
+	"variables": {}
 }
 
 # Various mathematical operators we know of
@@ -135,7 +136,7 @@ def get_input(data, prompt, x, ref, brain, force_retag=False):
 		# This sets us up to call any of the processors again for the
 		# retagged value
 		if item == "subordinates":
-			brain.subordinate(x, ref)
+			brain.subordinate((x, "UNKNOWN"), ref)
 		elif item == "operator_verbs":
 			brain.operator(x, ref)
 		elif item == "comparison_adj":
@@ -160,6 +161,8 @@ def get_input(data, prompt, x, ref, brain, force_retag=False):
 			brain.noun_like(x, "WP$", ref)
 		elif item == "numbers":
 			brain.number(x, ref)
+		elif item == "variable":
+			brain.variable(x, ref)
 		elif item == "noise":
 			brain.add("determiners", x, "noise")
 			# A false in the indicator means it's noise and can be ignored
@@ -248,6 +251,22 @@ def input_relative(x, ref, brain):
 def input_inclusive(x, ref, brain):
 	print "Is the group '{0}' inclusive of {1}?".format(x, ref)
 	return get_input(INCLUSIVE, "'{0}' is: ".format(x), x, ref, brain)
+
+def input_variable(x, ref, brain):
+	print INPUT_STR.format("variable quantity", "", x, ref)
+	prompt = "Please input the fixed numerical relationship of '{0}' as a decimal value (or 'd' for 'dyanamic'): ".format(x)
+	sys.stdin = open('/dev/tty')
+	r = raw_input(prompt)
+	try:
+		if r == "":
+			r = x
+		r = float(r) if "." in r else int(r)
+		return r
+	except ValueError:
+		if r == "d":
+			return "dynamic_variable"
+		else:
+			return input_variable(x, ref, brain)
 
 def input_number(x, ref, brain):
 	print INPUT_STR.format("numeric quantity", "", x, ref)
@@ -387,6 +406,9 @@ class Brain(object):
 
 	def number(self, n, ref):
 		return self.proc("numbers", n, input_number, ref)
+
+	def variable(self, n, ref):
+		return self.proc("variables", n, input_variable, ref)
 
 	def dump(self):
 		set_json(self.path, self.raw)

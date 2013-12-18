@@ -9,6 +9,9 @@ class SentenceParser(object):
 		self.framing_question = False
 		self.did_frame_question = False
 		self.acting = False
+		self.last_variable = None
+		self.last_variable_type = None
+		self.last_determiner = None
 		self.last_operator = None
 		self.last_operator_type = None
 		self.last_word = None
@@ -21,6 +24,7 @@ class SentenceParser(object):
 		self.last_noun_tag = None
 		self.last_subtype = None
 		self.last_conjunction = None
+		self.last_conjunction_tag = None
 		self.conjunction_parts = []
 		self.phrasing_question = False
 		self.subtype = None
@@ -107,12 +111,14 @@ class SentenceParser(object):
 			else:
 				c_str = val
 
+			p.previous_contexts["last"] = p.last_contexts["last"]
 			p.previous_contexts["plurality"][plurality] = \
 				p.last_contexts["plurality"][plurality]
 			p.previous_contexts["gender"][gender] = \
 				p.last_contexts["gender"][gender]
 
 			data = (val, subtype)
+			p.last_contexts["last"] = data
 			p.last_contexts["plurality"][plurality] = data
 			p.last_contexts["gender"][gender] = data
 
@@ -287,6 +293,21 @@ class SentenceParser(object):
 								self.last_unit_index = len(self.parsed)
 								self.units.append(unit)
 								self.track(unit, "unit", self.subtype)
+						elif tag in ["NN", "NNS"] and self.last_conjunction_tag in ["IN"]:
+							self.subtype = self.get_subtype(word, tag)
+							track, self.subtype, tag = do_track(self.subtype, tag)
+							did_something = True
+							if track:
+								if self.last_variable is not None:
+									unit = word
+									self.last_unit = unit
+									self.last_unit_tag = tag
+									self.last_unit_index = len(self.parsed)
+									self.units.append(unit)
+									c_unit = " ".join([word, "owned by", p.previous_contexts["last"][0]])
+									self.track((c_unit, word, p.previous_contexts["last"][0], p.last_contexts["last"][0]), "context_unit", self.subtype)
+								#else:
+								#	raise Exception("Account for me")
 						else:
 							conjunction = ((word, tag), self.last_conjunction)
 							self.subordinate_strings[word] = " ".join(self.conjunction_parts)
@@ -463,6 +484,7 @@ class SentenceParser(object):
 
 			if tag in ["IN", "TO"]:
 				self.last_conjunction = word
+				self.last_conjunction_tag = tag
 				self.conjunction_parts.append(word)
 				did_something = True
 				self.track(word, "conjunction", self.subtype)
@@ -472,6 +494,12 @@ class SentenceParser(object):
 				self.track(word, "punctuation", self.subtype)
 
 			if tag == "CD": # A cardinal number
+				if self.last_tag == "DT":
+					if self.last_determiner == "constant":
+						# should safely be able to ignore detemriner constant
+						self.parsed.pop()
+						self.last_determiner = None
+
 				if self.last_conjunction is not None:
 					self.conjunction_parts.pop()
 				did_something = True
@@ -480,7 +508,17 @@ class SentenceParser(object):
 			if tag == "DT": # A determiner (the)
 				did_something = True
 				dtype = p.brain.determiner(word, self.sentence_text)
-				self.track(word, dtype, self.subtype)
+				self.last_determiner = dtype
+				if dtype == "variable":
+					vtype = p.brain.variable(word, self.sentence_text)
+					self.last_variable =  word
+					self.last_variable_type = vtype
+					if vtype == "dynamic_variable":
+						self.track(word, vtype, self.subtype)
+					else:
+						self.track(vtype, "variable_relationship", self.subtype)
+				else:
+					self.track(word, dtype, self.subtype)
 
 			if tag == "RB": # An adverb, probably a subordinate?
 				if self.last_conjunction is not None:

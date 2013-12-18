@@ -71,17 +71,17 @@ Mrs. Jones bought some bananas. Her family ate 5 bananas. She gave the remaining
 I think this problem is about Mrs. Jones, her family, and her friends exchanging bananas and asks a single question.
 
 ## Parsed problem
-    Mrs. Jones     	bought         	some           	bananas        	.              
-    context        	operator       	variable       	unit           	punctuation    
+    Mrs. Jones      	bought          	some            	bananas         	.               
+    context         	operator        	dynamic_variable	unit            	punctuation     
 
-    her family     	ate            	5              	bananas        	.              
-    context        	operator       	constant       	unit           	punctuation    
+    her family      	ate             	5               	bananas         	.               
+    context         	operator        	constant        	unit            	punctuation     
 
-    Mrs. Jones     	gave           	the            	remaining      	4              	bananas        	to             	her friends    	.              
-    context        	operator       	noise          	solution_zero  	constant       	unit           	conjunction    	context        	punctuation    
+    Mrs. Jones      	gave            	the             	remaining       	4               	bananas         	to              	her friends     	.               
+    context         	operator        	noise           	solution_zero   	constant        	unit            	conjunction     	context         	punctuation     
 
-    How many       	bananas        	did            	Mrs. Jones     	buy            	in             	the            	beginning      	?              
-    asking         	unit           	q_start        	context        	q_stop         	conjunction    	noise          	subordinate    	punctuation    
+    How many        	bananas         	did             	Mrs. Jones      	buy             	in              	the             	beginning       	?               
+    asking          	unit            	q_start         	context         	q_stop          	conjunction     	noise           	subordinate     	punctuation     
 
 
 ## Question 1
@@ -349,17 +349,17 @@ How many fish are swimming in the pond now?
     WRB     	JJ      	JJ      	VBP     	VBG     	IN      	DT      	NN      	RB      	.       
 
 ## Problem inference
-I think this problem is about an increasing number of swimming fish in a pond and asks a single question.
+I think this problem is about an increasing number of swimming fish and asks a single question.
 
 ## Parsed problem
-    8          	fish       	are        	swimming   	in         	a          	pond       	.          
-    constant   	context    	pre_ind_plu	acting     	conjunction	constant   	subordinate	punctuation
+    8          	fish       	are        	swimming   	in         	a          	.          
+    constant   	context    	pre_ind_plu	acting     	conjunction	constant   	punctuation
 
     4          	more       	fish       	join       	fish       	.          
     constant   	rel_more   	context    	operator   	context    	punctuation
 
-    How many   	fish       	are        	swimming   	in         	the        	pond       	now        	?          
-    asking     	context    	pre_ind_plu	acting     	conjunction	noise      	subordinate	subordinate	punctuation
+    How many   	fish       	are        	swimming   	in         	the        	now        	?          
+    asking     	context    	pre_ind_plu	acting     	conjunction	noise      	subordinate	punctuation
 
 
 ## Question 1
@@ -368,15 +368,15 @@ I think this problem is about an increasing number of swimming fish in a pond an
 How many fish are swimming in the pond now?
 
 ### Answer interpretation
-The answer is the unknown value of fish swimming in a pond at the end of the problem.
+The answer is the unknown value of fish swimming at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-swimming fish in a pond = 8
+swimming fish = 8
 
 ### Sentence 2
-swimming fish in a pond + 4
+swimming fish + 4
 
 ## Correct response
 12 fish
@@ -455,7 +455,7 @@ I think this problem is about Pigpen and his friends exchanging rocks and asks a
 
 ## Parsed problem
     Pigpen                  	had                     	some                    	rocks                   	.                       
-    context                 	operator                	variable                	unit                    	punctuation             
+    context                 	operator                	dynamic_variable        	unit                    	punctuation             
 
     Pigpen                  	kept                    	3                       	rocks                   	for                     	Pigpen                  	and                     	gave                    	the                     	remaining               	8                       	rocks                   	to                      	his friends             	.                       
     context                 	operator                	constant                	unit                    	conjunction             	context                 	coordinating_conjunction	operator                	noise                   	solution_zero           	constant                	unit                    	conjunction             	context                 	punctuation             
@@ -585,3 +585,55 @@ cobs of corn owned by Lisa = 2
 
 ## Correct response
 5 cobs of corn
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Mickey has a dozen apples.
+Eric takes away half of the apples.
+How many apples does Mickey have now?
+
+## Digested problem
+    Mickey	has   	a     	dozen 	apples	.     
+    NNP   	VBZ   	DT    	NN    	NNS   	.     
+
+    Eric  	takes 	away  	half  	of    	the   	apples	.     
+    NNP   	VBZ   	RB    	DT    	IN    	DT    	NNS   	.     
+
+    How   	many  	apples	does  	Mickey	have  	now   	?     
+    WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	RB    	.     
+
+## Problem inference
+I think this problem is about Mickey and Eric exchanging apples and asks a single question.
+
+## Parsed problem
+    Mickey               	has                  	12                   	apples               	.                    
+    context              	operator             	constant             	unit                 	punctuation          
+
+    Eric                 	takes                	away                 	0.5                  	of                   	the                  	apples owned by Mickey	.                    
+    context              	operator             	noise                	variable_relationship	conjunction          	noise                	context_unit         	punctuation          
+
+    How many             	apples               	does                 	Mickey               	have                 	now                  	?                    
+    asking               	unit                 	q_start              	context              	q_stop               	subordinate          	punctuation          
+
+
+## Question 1
+
+### Question text
+How many apples does Mickey have now?
+
+### Answer interpretation
+The answer is the unknown value of apples owned by Mickey at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+apples owned by Mickey = 12
+
+### Sentence 2
+I don't know how to format this!
+
+## Correct response
+12 apples
