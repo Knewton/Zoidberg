@@ -33,7 +33,8 @@ class Problem(object):
 				"masculine": None,
 				"feminine": None,
 				"neutral": None,
-				"mixed": None
+				"mixed": None,
+				"ambiguous": None
 			},
 			"last": None
 		}
@@ -47,7 +48,8 @@ class Problem(object):
 				"masculine": None,
 				"feminine": None,
 				"neutral": None,
-				"mixed": None
+				"mixed": None,
+				"ambiguous": None
 			},
 			"last": None
 		}
@@ -61,7 +63,8 @@ class Problem(object):
 				"masculine": {},
 				"feminine": {},
 				"neutral": {},
-				"mixed": {}
+				"mixed": {},
+				"ambiguous": None
 			},
 			"last": None
 		}

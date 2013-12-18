@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sympy import Symbol, Function, Derivative
+from sympy import Symbol, Function, Derivative, simplify
 from sympy.core.power import Pow
 from sympy import Eq, Rational
 from sympy.solvers import solve
@@ -36,8 +36,10 @@ class Solution(object):
 	def __init__(self, problem):
 		self.problem = problem
 		self.last_index = 0
+		self.sig_figs = -1 # Don't need to use significant figures
 
 		self.zeroes_out = False
+		self.relational_var = None
 
 		self.last_container = None
 		self.last_action = None
@@ -47,7 +49,9 @@ class Solution(object):
 		self.context_subtype = None
 		self.operator = None
 		self.constant = None
+		self.variable_relationship = None
 		self.unit = None
+		self.context_unit = None
 		self.comparator_context = None
 		self.relative = False
 		self.rel_mode = None
@@ -83,7 +87,7 @@ class Solution(object):
 		else:
 			self.middle_vars.append((var, eq))
 
-	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None, readonly=True):
+	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None, readonly=True, conref=None):
 		if context is None or unit is None:
 			return (False, Symbol("BROKEN"), "BROKEN", "BROKEN")
 
@@ -138,32 +142,79 @@ class Solution(object):
 		if not dsym in self.work:
 			self.work[dsym] = []
 
+#		print "OTAY", sym, operator, constant
 		if operator is not None and constant is not None:
 			if operator in ["eq", "eqx", "re"]:
 				self.store_var(idx, sym, constant)
-				symbol = constant
+
+				if self.relational_var is None:
+#					print "HERE"
+					symbol = constant
+				else:
+					if conref:
+						self.symbols[conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
+#					print "THAR"
+					# some cases we may already have a relational value so we
+					# need to simply solve for the value already
+					symbol = symbol.subs(Symbol(self.relational_var), constant).evalf()
+
+				#print "setting symbol"
+				#raise Exception
 				if operator != "eqx":
 					self.work[dsym].append("= " + str(constant))
 			elif operator == "ad":
-				symbol += constant
+				if self.relational_var is None:
+					symbol += constant
+				else:
+					if conref:
+						self.symbols[conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
+
+					# some cases we may already have a relational value so we
+					# need to simply solve for the value already
+					symbol = symbol + constant.subs(Symbol(self.relational_var), symbol).evalf()
 				if hindsight_inference:
 					self.work[dsym].append("= " + str(constant))
 				else:
 					self.work[dsym].append("+ " + str(constant))
 			elif operator == "su":
-				symbol -= constant
+				if self.relational_var is None:
+					symbol -= constant
+				else:
+					if conref:
+						self.symbols[conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
+
+					# some cases we may already have a relational value so we
+					# need to simply solve for the value already
+					symbol = symbol - constant.subs(Symbol(self.relational_var), symbol).evalf()
+
 				if hindsight_inference:
 					self.work[dsym].append("= " + str(constant))
 				else:
 					self.work[dsym].append("- " + str(constant))
 			elif operator == "mu":
-				symbol *= constant
+				if self.relational_var is None:
+					symbol *= constant
+				else:
+					if conref:
+						self.symbols[conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
+
+					# some cases we may already have a relational value so we
+					# need to simply solve for the value already
+					symbol = symbol * constant.subs(Symbol(self.relational_var), symbol).evalf()
 				if hindsight_inference:
 					self.work[dsym].append("= " + str(constant))
 				else:
 					self.work[dsym].append("* " + str(constant))
 			elif operator == "di":
-				symbol /= constant
+				if self.relational_var is None:
+					symbol /= constant
+				else:
+					if conref:
+						self.symbols[conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
+
+					# some cases we may already have a relational value so we
+					# need to simply solve for the value already
+					symbol = symbol / constant.subs(Symbol(self.relational_var), symbol).evalf()
 				if hindsight_inference:
 					self.work[dsym].append("= " + str(constant))
 				else:
@@ -171,6 +222,7 @@ class Solution(object):
 			else:
 				return (hindsight_inference, symbol, var, sym)
 			self.symbols[sym] = symbol
+#			print self.symbols
 
 		return (hindsight_inference, symbol, var, sym)
 
@@ -191,7 +243,9 @@ class Solution(object):
 		self.context_subtype = None
 		self.operator = None
 		self.constant = None
+		self.variable_relationship = None
 		self.unit = None
+		self.context_unit = None
 		self.comparator_context = None
 		self.relative = False
 		self.rel_mode = None
@@ -207,10 +261,16 @@ class Solution(object):
 		context = self.context
 		operator = self.operator
 		constant = self.constant
+		context_var = None
 		container = self.container
 		unit = self.unit
+		context_unit = self.context_unit
+		var_r = self.variable_relationship
 		data = None
 		sym = None
+
+		if container is None:
+			container = "_unknown_"
 
 		if context is None:
 			context = "_unknown_"
@@ -218,7 +278,12 @@ class Solution(object):
 		if unit is None:
 			unit = "_unknown_"
 
-		sym = " ".join([context, unit])
+		if context_unit is None:
+			sym = " ".join([context, unit])
+		else:
+			sym = " ".join([context, context_unit[1]])
+
+		#print context_unit
 
 		k1, k2 = None, None
 		if actor and action:
@@ -255,16 +320,79 @@ class Solution(object):
 				k1 = actor
 				k2 = action
 			else:
-				if context not in self.data:
-					self.data[context] = {}
+				if context_unit is not None:
+					cu_context = context_unit[2]
+					cu_unit = context_unit[1]
 
-				if unit not in self.data[context]:
-					self.data[context][unit] = []
+					if cu_context not in self.data:
+						self.data[cu_context] = {}
 
-				data = self.data[context][unit]
-				k1 = context
-				k2 = unit
-				sym = " ".join([context, unit])
+					if cu_unit not in self.data[cu_context]:
+						self.data[cu_context][cu_unit] = []
+
+					if context not in self.data:
+						self.data[context] = {}
+
+					if cu_unit not in self.data[context]:
+						self.data[context][cu_unit] = []
+
+					data = self.data[cu_context][cu_unit]
+					k1 = cu_context
+					k2 = cu_unit
+					sym = " ".join([cu_context, cu_unit])
+
+					cu_data = self.data[context][cu_unit]
+					cu_k1 = context
+					cu_k2 = cu_unit
+
+					#print "Processing relative var"
+					#raise Exception
+
+					cinf, csymbol, ccon, cvar = self.get_symbol(cu_context,
+							cu_unit, container)
+					inf, symbol, con, var = self.get_symbol(context,
+							cu_unit, container)
+
+#					self.symbols[var] = self.symbols[cvar] * number(var_r)
+					self.symbols[var] = self.symbols[cvar] * number(var_r)
+#					self.symbols[cvar] = self.symbols[cvar] * (1 - number(var_r))
+
+#					print self.symbols
+
+					cu_data.append(("eq", cvar, " * ".join([cvar, var_r])))
+					context_var = var
+					constant = self.symbols[var]
+					context = cu_context
+
+					self.relational_var = cvar
+
+#					print "THIS", constant
+
+					if container is not None:
+						if self.containers is None:
+							self.containers = {}
+
+						if not container in self.containers:
+							self.containers[container] = {}
+
+						if not cu_k1 in self.containers[container]:
+							self.containers[container][cu_k1] = {}
+
+						self.containers[container][cu_k1][cu_k2] = cu_data
+				else:
+					if context not in self.data:
+						self.data[context] = {}
+
+					if unit not in self.data[context]:
+						self.data[context][unit] = []
+
+					if var_r is not None:
+						raise Exception("Handle me")
+
+					data = self.data[context][unit]
+					k1 = context
+					k2 = unit
+					sym = " ".join([context, unit])
 
 		if data is not None:
 			if self.relative and self.comparator_context:
@@ -272,23 +400,20 @@ class Solution(object):
 				sym = " ".join([self.comparator_context, unit])
 				if operator == "eq":
 					operator = self.rel_mode
-					data.append(("eqx", sym))
+					data.append(("eqx", sym, None))
 					if not osym in self.work:
 						self.work[osym] = []
 					self.work[osym].append("= " + str(sym))
 
-			data.append((operator, constant))
+			data.append((operator, constant, context_var))
 			if zeroes_out:
-				data.append(("ans", "0"))
+				data.append(("ans", "0", None))
 
 		# If nothing was done there's nothing to do
 		if len(data) == 0:
 			self.data = None
 			self.actor_data = None
 			self.containers = None
-
-		if container is None:
-			container = "_unknown_"
 
 		if container is not None:
 			if self.containers is None:
@@ -305,10 +430,12 @@ class Solution(object):
 		self.reset_extractor()
 
 	def has_any(self):
-		return self.container or self.context or self.operator or self.constant or self.unit
+		return self.container is not None or self.context is not None or self.operator is not None or self.constant is not None or self.unit is not None or self.context_unit is not None
 
 	def has_all(self):
-		a = self.container and self.context and self.operator and self.constant and self.unit
+		b = self.unit is not None or self.context_unit is not None
+		a = self.container is not None and self.context is not None and self.operator is not None and self.constant is not None and b
+
 		if self.relative:
 			if not self.comparator_context:
 				return False
@@ -348,8 +475,14 @@ class Solution(object):
 				if part == "constant" and not self.constant:
 					self.constant = val
 
+				if part == "variable_relationship":
+					self.variable_relationship = val
+
 				if part == "unit":
 					self.unit = val
+
+				if part == "context_unit":
+					self.context_unit = val
 
 				if part == "solution_zero":
 					zeroes_out = True
@@ -425,6 +558,10 @@ class Solution(object):
 			new_container = {}
 			for container in sd:
 				data = sd[container]
+#				print "==="
+#				print sd
+#				print self.symbols
+#				print "--"
 				new_data = {}
 				for context in data:
 					units = data[context]
@@ -451,23 +588,28 @@ class Solution(object):
 						new_values = []
 						for values in units[unit]:
 							data_index += 1
-							operator, constant = values
+							operator, constant, dc = values
 
+							symref = dc
 							if constant in self.symbols:
+								if symref is None:
+									symref = constant
 								constant = self.symbols[constant]
 							elif constant is not None:
-								# Convert and type the constant properly
-								constant = number(constant)
+								if isinstance(constant, basestring):
+									# Convert and type the constant properly
+									constant = number(constant)
 
 							# Apply the operation to the symbol
 							if operator is not None:
 								inf, symbol, con, sym = self.get_symbol(context,
-										unit, container, index, operator, constant, False)
+										unit, container, index, operator, constant, False, symref)
 							#	if inf:
 							#		new_values.append(("eq", "0"))
 							else:
 								con = constant
-							new_values.append((operator, con))
+							#	print "HERE THEN?", con, constant
+							new_values.append((operator, con, dc))
 						new_units[unit] = new_values
 					new_data[context] = new_units
 					last_context = context
@@ -484,9 +626,18 @@ class Solution(object):
 		i = p.inference
 		q = p.question
 
+		def format_response_value(val):
+			val = str(simplify(val))
+			if self.sig_figs == -1:
+				if "." in val:
+					val = str(float(val))
+					if val[-2:] == ".0":
+						val = val[:-2]
+			return val
+
 		def add_response(val, unit, idx):
 			for v in val:
-				i = [str(v)]
+				i = [format_response_value(v)]
 				if unit is not None:
 					i.append(unit)
 				self.correct_responses.insert(idx, " ".join(i))
@@ -496,12 +647,19 @@ class Solution(object):
 				return solve(*args)
 			except Exception as e:
 				print str(e)
-				return "??"
+				return None
 
-		def simple_solve(sym):
+		def simple_solve(sym, rel_var=None):
+			solve_for = sym
+			if self.relational_var is not None:
+				solve_for = self.symbols[self.relational_var]
+
+			did_match = False
 			for c in [Symbol, Function, Pow, Derivative]:
 				if isinstance(sym, c):
-					return safe_solve(sym, sym)
+					did_match = True
+					return safe_solve(sym, solve_for)
+
 			return [sym]
 
 		index = 0
@@ -611,6 +769,9 @@ class Solution(object):
 
 				resp = (simple_solve(v), " ".join(unt))
 
+			if resp[0] is None:
+				dontSave = True
+
 			if not dontSave:
 				r, u = resp
 				#print r, u, resp
@@ -632,11 +793,12 @@ class Solution(object):
 				for context in data:
 					for unit in data[context]:
 						for values in data[context][unit]:
-							operator, constant = values
+							operator, constant, dc = values
 							i = []
 
 							actor = None
 							action = None
+							context_unit = None
 
 							if context is not None and context[0:1] == "@":
 								actor = context[1:]
@@ -655,7 +817,9 @@ class Solution(object):
 							elif container in  self.problem.inference.subordinate_strings:
 								container = self.problem.inference.subordinate_strings[container]
 
-							display_constant = constant
+							display_constant = dc
+							if dc is None:
+								display_constant = constant
 							if display_constant is None:
 								display_constant = "<an unknown number>"
 

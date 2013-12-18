@@ -633,7 +633,8 @@ The answer is the unknown value of apples owned by Mickey at the end of the prob
 apples owned by Mickey = 12
 
 ### Sentence 2
-I don't know how to format this!
+apples owned by Mickey - Eric apples
+apples owned by Eric = Mickey apples * 0.5
 
 ## Correct response
-12 apples
+6 apples
