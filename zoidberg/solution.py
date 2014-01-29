@@ -38,6 +38,9 @@ class Solution(object):
 		self.last_index = 0
 		self.sig_figs = -1 # Don't need to use significant figures
 
+		self.did_combine_units = False
+		self.coordinated_container = None
+		self.coordinated = False
 		self.zeroes_out = False
 		self.relational_var = None
 
@@ -46,11 +49,13 @@ class Solution(object):
 		self.last_actor = None
 
 		self.context = None
+		self.ex_op = False
 		self.context_subtype = None
 		self.operator = None
 		self.constant = None
 		self.variable_relationship = None
 		self.unit = None
+		self.units = []
 		self.context_unit = None
 		self.comparator_context = None
 		self.relative = False
@@ -88,6 +93,8 @@ class Solution(object):
 			self.middle_vars.append((var, eq))
 
 	def get_symbol(self, context, unit, container, idx=-1, operator=None, constant=None, readonly=True, conref=None):
+		if context is None and unit is not None:
+			context = "_unknown_"
 		if context is None or unit is None:
 			return (False, Symbol("BROKEN"), "BROKEN", "BROKEN")
 
@@ -241,7 +248,8 @@ class Solution(object):
 		self.action = None
 		self.context = None
 		self.context_subtype = None
-		self.operator = None
+		if not self.ex_op:
+			self.operator = None
 		self.constant = None
 		self.variable_relationship = None
 		self.unit = None
@@ -268,6 +276,9 @@ class Solution(object):
 		var_r = self.variable_relationship
 		data = None
 		sym = None
+
+		if constant is None and self.ex_op:
+			operator = None
 
 		if container is None:
 			container = "_unknown_"
@@ -379,6 +390,7 @@ class Solution(object):
 							self.containers[container][cu_k1] = {}
 
 						self.containers[container][cu_k1][cu_k2] = cu_data
+						self.digest_unit_groups(container, cu_k1, cu_k2)
 				else:
 					if context not in self.data:
 						self.data[context] = {}
@@ -426,8 +438,58 @@ class Solution(object):
 				self.containers[container][k1] = {}
 
 			self.containers[container][k1][k2] = data
+			self.digest_unit_groups(container, k1, k2)
+
+		if self.coordinated:
+#			print self.coordinated_container, container
+			if self.coordinated_container[0] != container:
+				cc = self.coordinated_container
+				if not cc[1] in self.containers[container]:
+					self.containers[container][cc[1]] = {}
+				self.containers[container][cc[1]][cc[2]] = self.containers[cc[0]][cc[1]][cc[2]]
+				del self.containers[cc[0]][cc[1]][cc[2]]
+				self.digest_unit_groups(container, cc[1], cc[2], cc[0])
+#			print self.coordinated_container, container
 
 		self.reset_extractor()
+		return (container, k1, k2)
+
+	def digest_unit_groups(self, container, k1, k2, rmc=None):
+		data = None
+		if container in self.containers:
+			x = self.containers[container]
+			if k1 in x:
+				x = x[k1]
+				if k2 in x:
+					data = x[k2]
+		if data is not None:
+			if " " in k2:
+				self.did_combine_units = True
+				parts = k2.split(" ")
+
+				# The item is the last part of the unit
+				item = parts.pop()
+				for part in parts:
+					nu = " ".join([part, item])
+
+					if nu in self.containers[container][k1]:
+						ndata = []
+						# Format the data, changing any equivalence relationships
+						# to additive ones, assuming we're starting with a 0 group
+						# and then adding any numbers to it
+						for da in data:
+							x = da[0]
+							if x == "eq":
+								x = "ad"
+							ndata.append((x, da[1], da[2]))
+						self.containers[container][k1][nu] += ndata
+					else:
+						self.containers[container][k1][nu] = [] + data
+					if rmc is not None:
+						if rmc in self.containers:
+							if k1 in self.containers[rmc]:
+								if nu in self.containers[rmc][k1]:
+									del self.containers[rmc][k1][nu]
 
 	def has_any(self):
 		return self.container is not None or self.context is not None or self.operator is not None or self.constant is not None or self.unit is not None or self.context_unit is not None
@@ -449,6 +511,7 @@ class Solution(object):
 		self.last_index = len(i.sentences) - 1
 
 		for parser in i.sentences:
+			self.units = parser.units
 			# Sometimes one context will transfer to another. In those cases
 			# we only want to change the context to the primary one
 			did_set_context = False
@@ -456,6 +519,7 @@ class Solution(object):
 			last_context_subtype = None
 			last_container = None
 			zeroes_out = False
+			self.coordinated = False
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
 
@@ -466,6 +530,11 @@ class Solution(object):
 						self.context_subtype = subtype
 					last_context = val
 					last_context_subtype = subtype
+
+				# Exestential operator
+				if part == "exestential" and not self.operator:
+					self.ex_op = True
+					self.operator = "eq"
 
 				if part == "operator" and not self.operator:
 					self.operator = parser.operator[val]
@@ -516,7 +585,13 @@ class Solution(object):
 						last_container = self.container
 
 				if part == "coordinating_conjunction":
+					if self.has_any():
+						self.coordinated_container = self.generate_expression(zeroes_out)
+					else:
+						self.reset_extractor()
+
 					#print "Restore context and container"
+					self.coordinated = True
 					self.context = last_context
 					self.context_subtype = last_context_subtype
 					self.container = last_container
@@ -535,6 +610,8 @@ class Solution(object):
 				self.generate_expression(zeroes_out)
 			else:
 				self.reset_extractor()
+
+			#print "CONTOUT", self.containers
 
 			if self.containers is not None:
 				self.sentence_data.append(self.containers)
@@ -680,6 +757,15 @@ class Solution(object):
 				working_answer = None
 				for s in answer.subordinates:
 					word, sub = s
+
+					if sub == "context_grouping" and answer.context is None and self.problem.exestential:
+						# Exestential problems may not have contexts for things
+						# wonder about alltogetherness. This is a tough case
+						# to handle, so the solution is simply to ignore that
+						# we have a context grouping assignment and instead
+						# transit the subtype over to the 'unit_grouping' mode
+						sub = "unit_grouping"
+
 					if sub == "time_ending":
 						l = len(self.ending_vars)
 
@@ -706,6 +792,12 @@ class Solution(object):
 						else:
 							self.correct_responses.append(
 								"Not sure; too many starting variables!")
+					elif sub == "unit_grouping":
+						if not self.did_combine_units:
+							self.correct_responses.append("Not sure; don't know how to handle grouped units that aren't combined")
+						# As of now, units are grouped ahead of time, so this
+						# should be a virtual solution having already compiled
+						# the units ahead of time
 					elif sub == "context_grouping":
 						ans = 0
 						syms = []
@@ -718,14 +810,20 @@ class Solution(object):
 						resp = (simple_solve(ans), answer.unit)
 					elif sub == "place_noun" or sub is None:
 						compContext = word
-						if answer.actor and answer.action:
-							inf, equ, con, sym = self.get_symbol("@" + answer.actor, answer.action, word, index)
+						dispUnit = answer.unit
+						if answer.actor:
+							if answer.action:
+								inf, equ, con, sym = self.get_symbol("@" + answer.actor, answer.action, word, index)
+							else:
+								inf, equ, con, sym = self.get_symbol(answer.context, answer.actor, word, index)
+								dispUnit = answer.actor
 						else:
 							inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, word, index)
-						resp = (simple_solve(equ), answer.unit)
+						print inf, equ, con, sym
+						resp = (simple_solve(equ), dispUnit)
 					else:
 						dontSave = True
-						self.correct_responses.append("No sure; unknown subordinate type {0} ({1})".format(sub, word))
+						self.correct_responses.append("Not sure; unknown subordinate type {0} ({1})".format(sub, word))
 			else:
 				if needEqu:
 					inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, None, index)
@@ -765,7 +863,7 @@ class Solution(object):
 					self.work[k].append("= " + str(comp) +" - " + str(equ))
 
 				if answer.unit:
-					unt.append(answer.unit)
+					unt.insert(0, answer.unit)
 
 				resp = (simple_solve(v), " ".join(unt))
 
@@ -787,11 +885,15 @@ class Solution(object):
 		o.append("\n## Data extraction")
 		index = 1
 		for sd in self.sentence_data:
+			b = []
 			for container in sd:
 				data = sd[container]
 				s = []
 				for context in data:
 					for unit in data[context]:
+						if context is None:
+							context = "_unknown_"
+						#print context, unit, data
 						for values in data[context][unit]:
 							operator, constant, dc = values
 							i = []
@@ -847,6 +949,14 @@ class Solution(object):
 #								if self.problem.inference.is_requirement_problem:
 
 								i.append(context)
+
+								if container is not None:
+									i.append(container)
+
+								i.append(OP_DISPLAY[operator])
+								i.append(display_constant)
+							elif context is None and unit is not None and self.problem.exestential:
+								i.append(unit)
 
 								if container is not None:
 									i.append(container)

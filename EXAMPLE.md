@@ -251,12 +251,14 @@ The answer is the difference in value of toy cars owned by Chandler with respect
 
 ### Sentence 1
 toy cars owned by Joey = 13
+toy cars owned by Joey + 13
 
 ### Sentence 2
 toy cars owned by Chandler = 6
+toy cars owned by Chandler + 6
 
 ## Correct response
-7 fewer toy cars
+14 toy cars fewer
 
 ***
 
@@ -332,6 +334,7 @@ apples owned by Marc - 3
 
 ***
 
+False 8 None @fish swimming pond
 # Zoidberg Solution
 
 ## The problem
@@ -349,17 +352,17 @@ How many fish are swimming in the pond now?
     WRB     	JJ      	JJ      	VBP     	VBG     	IN      	DT      	NN      	RB      	.       
 
 ## Problem inference
-I think this problem is about an increasing number of swimming fish and asks a single question.
+I think this problem is about an increasing number of swimming fish in a pond and asks a single question.
 
 ## Parsed problem
-    8          	fish       	are        	swimming   	in         	a          	.          
-    constant   	context    	pre_ind_plu	acting     	conjunction	constant   	punctuation
+    8          	fish       	are        	swimming   	in         	a          	pond       	.          
+    constant   	context    	pre_ind_plu	acting     	conjunction	constant   	subordinate	punctuation
 
     4          	more       	fish       	join       	fish       	.          
     constant   	rel_more   	context    	operator   	context    	punctuation
 
-    How many   	fish       	are        	swimming   	in         	the        	now        	?          
-    asking     	context    	pre_ind_plu	acting     	conjunction	noise      	subordinate	punctuation
+    How many   	fish       	are        	swimming   	in         	the        	pond       	now        	?          
+    asking     	context    	pre_ind_plu	acting     	conjunction	noise      	subordinate	subordinate	punctuation
 
 
 ## Question 1
@@ -368,18 +371,18 @@ I think this problem is about an increasing number of swimming fish and asks a s
 How many fish are swimming in the pond now?
 
 ### Answer interpretation
-The answer is the unknown value of fish swimming at the end of the problem.
+The answer is the unknown value of fish swimming in a pond at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-swimming fish = 8
+swimming fish in a pond = 8
 
 ### Sentence 2
 swimming fish + 4
 
 ## Correct response
-12 fish
+8 fish
 
 ***
 
@@ -399,7 +402,7 @@ Michael had 8 pieces of pizza. He ate 2 pieces of pizza. How many pieces of pizz
     WRB    	JJ     	NNS    	IN     	NN     	VBD    	NNP    	VB     	VBN    	.      
 
 ## Problem inference
-I think this problem is about Michael losing pieces of pizza and asks a single question.
+I think this problem is about Michael losing pieces of pizza, pieces pizza, and of pizza and asks a single question.
 
 ## Parsed problem
     Michael        	had            	8              	pieces of pizza	.              
@@ -424,9 +427,13 @@ The answer is the unknown value of pieces of pizza owned by Michael at the end o
 
 ### Sentence 1
 pieces of pizza owned by Michael = 8
+of pizza owned by Michael = 8
+pieces pizza owned by Michael = 8
 
 ### Sentence 2
 pieces of pizza owned by Michael - 2
+of pizza owned by Michael - 2
+pieces pizza owned by Michael - 2
 
 ## Correct response
 6 pieces of pizza
@@ -479,13 +486,15 @@ rocks owned by Pigpen = x
 
 ### Sentence 2
 rocks owned by Pigpen - 3
+rocks owned by Pigpen - 8
 rocks owned by Pigpen == 0
 
 ## Correct response
-3 rocks
+11 rocks
 
 ***
 
+False 4 None Mr. Lupis eggs muffins
 # Zoidberg Solution
 
 ## The problem
@@ -532,7 +541,7 @@ eggs needed by Mr. Lupis to bake muffins == 4
 eggs owned by Mr. Lupis = 2
 
 ## Correct response
-2 more eggs
+2 eggs more
 
 ***
 
@@ -554,7 +563,7 @@ How many cobs of corn do they have altogether?
     WRB       	JJ        	NNS       	IN        	NN        	VBP       	PRP       	VBP       	RB        	.         
 
 ## Problem inference
-I think this problem is about Mitch and Lisa grouping cobs of corn and asks a single question.
+I think this problem is about Mitch and Lisa grouping cobs of corn, cobs corn, and of corn and asks a single question.
 
 ## Parsed problem
     Mitch         	has           	3             	cobs of corn  	.             
@@ -579,9 +588,13 @@ The answer is the unknown value of cobs of corn owned by Mitch and Lisa added to
 
 ### Sentence 1
 cobs of corn owned by Mitch = 3
+cobs corn owned by Mitch = 3
+of corn owned by Mitch = 3
 
 ### Sentence 2
 cobs of corn owned by Lisa = 2
+cobs corn owned by Lisa = 2
+of corn owned by Lisa = 2
 
 ## Correct response
 5 cobs of corn
@@ -638,3 +651,51 @@ apples owned by Eric = Mickey apples * 0.5
 
 ## Correct response
 6 apples
+
+***
+
+False 14 None _unknown_ christmas ornaments christmas tree
+# Zoidberg Solution
+
+## The problem
+There are 6 pink christmas ornaments and 8 blue christmas ornaments on the christmas tree.
+How many christmas ornaments are on the christmas tree altogether?
+
+## Digested problem
+    There     	are       	6         	pink      	christmas 	ornaments 	and       	8         	blue      	christmas 	ornaments 	on        	the       	christmas 	tree      	.         
+    EX        	VBP       	CD        	NN        	NNS       	NNS       	CC        	CD        	JJ        	NNS       	NNS       	IN        	DT        	NNS       	VBP       	.         
+
+    How       	many      	christmas 	ornaments 	are       	on        	the       	christmas 	tree      	altogether	?         
+    WRB       	JJ        	NNS       	NNS       	VBP       	IN        	DT        	NNS       	VBP       	RB        	.         
+
+## Problem inference
+I think this problem is about christmas ornaments pink christmas ornaments, blue christmas ornaments, pink ornaments, christmas ornaments, and blue ornaments on the christmas tree and asks a single question.
+
+## Parsed problem
+    There                   	are                     	6                       	pink christmas ornaments	and                     	8                       	blue christmas ornaments	on                      	the                     	christmas tree          	.                       
+    exestential             	pre_ind_plu             	constant                	unit                    	coordinating_conjunction	constant                	unit                    	conjunction             	noise                   	subordinate             	punctuation             
+
+    How many                	christmas ornaments     	are                     	on                      	the                     	christmas tree          	altogether              	?                       
+    asking                  	context                 	pre_ind_plu             	conjunction             	noise                   	subordinate             	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+How many christmas ornaments are on the christmas tree altogether?
+
+### Answer interpretation
+The answer is the unknown value of christmas ornaments on the christmas tree added together.
+
+## Data extraction
+
+### Sentence 1
+christmas ornaments on the christmas tree = 8
+christmas ornaments on the christmas tree + 6
+blue ornaments on the christmas tree = 8
+blue christmas ornaments on the christmas tree = 8
+pink ornaments on the christmas tree = 6
+pink christmas ornaments on the christmas tree = 6
+
+## Correct response
+14 christmas ornaments

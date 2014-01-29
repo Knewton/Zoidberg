@@ -1,6 +1,6 @@
 clear
 echo "" > EXAMPLE.md
-MAX_IDX=12
+MAX_IDX=13
 
 for i in $(seq 1 $MAX_IDX); do
     cat calibrations/$i.txt | zoidberg | tee -a EXAMPLE.md

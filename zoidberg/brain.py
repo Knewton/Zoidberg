@@ -8,6 +8,7 @@ DEFAULT_PATH = "~/.zoidberg.brain.json"
 DEFAULT_BRAIN = {
 	"operator_verbs": {},
 	"subordinates": {},
+	"exestential": {},
 	"comparison_adj": {},
 	"answer_syntax": {},
 	"plurality": {},
@@ -94,6 +95,7 @@ GENDERS = [
 
 RETAGS = [
 	("noise", "This is not relevant to the question and can be ignored"),
+	("exestential", "This is an exestential statement (there are, are there)"),
 	("operator_verbs", "This indicates a mathematical operation"),
 	("subordinates", "This indicates a point in time"),
 	("comparison_adj", "This indicates a comparison between things"),
@@ -163,6 +165,8 @@ def get_input(data, prompt, x, ref, brain, force_retag=False):
 			brain.number(x, ref)
 		elif item == "variable":
 			brain.variable(x, ref)
+		elif item == "exestential":
+			brain.add("exestential", x, "noise")
 		elif item == "noise":
 			brain.add("determiners", x, "noise")
 			# A false in the indicator means it's noise and can be ignored
@@ -339,6 +343,8 @@ class Brain(object):
 				tag = "WP$"
 			elif item == "noise":
 				tag = "DT"
+			elif item == "exestential":
+				tag = "EX"
 			elif item == "numbers":
 				tag = "CD"
 				val = str(self.raw["numbers"][val])
@@ -361,7 +367,12 @@ class Brain(object):
 		sub, tag = p
 		subtype = self.proc("subordinates", sub, input_subordinate_type, ref)
 		if subtype == "place_noun":
-			self.noun_like(sub, tag, ref)
+			# Sometimes composite nouns get passed in as subordinates. If we're
+			# working with a composite noun (something with a space "red car")
+			# we simply don't want to ask what it's about, because each of the
+			# constituent pieces should be already known
+			if " " not in sub:
+				self.noun_like(sub, tag, ref)
 		return subtype
 
 	def operator(self, verb, ref):

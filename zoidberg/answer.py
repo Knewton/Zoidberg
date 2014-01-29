@@ -129,11 +129,17 @@ class Answer(object):
 					self.last_unrefined_context_subtype = subtype
 
 			# Assume subordinate during specifying is answer condition
-			if part == "subordinate" and specifying:
-				subs = self.query.subordinates
-				self.subordinate = [s for s in subs if s[0] == val[0]]
-				if len(self.subordinate) > 0:
-					self.subordinates += self.subordinate
+			if part == "subordinate":
+				# If we have an actor but are not specifying in an exestential
+				# problem, then we can simply assume that specification is occurring
+				if not specifying and self.actor is not None and self.query.problem.exestential:
+					specifying = True
+
+				if specifying:
+					subs = self.query.subordinates
+					self.subordinate = [s for s in subs if s[0] == val[0]]
+					if len(self.subordinate) > 0:
+						self.subordinates += self.subordinate
 
 	def __str__(self):
 		o = []
@@ -171,7 +177,10 @@ class Answer(object):
 		i.append("the {0} {1} of".format(mode, syntax))
 
 		if self.actor:
-			i.append("{0} {1}".format(self.actor, self.action))
+			if self.action is not None:
+				i.append("{0} {1}".format(self.actor, self.action))
+			else:
+				i.append(self.actor)
 
 		if self.value:
 			if self.relative_value:

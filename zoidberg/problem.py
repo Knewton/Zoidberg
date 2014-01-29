@@ -22,6 +22,7 @@ class Problem(object):
 		self.longest_word = None
 		self.units_acting_as_context = {}
 
+		self.exestential = False
 		self.adaptive_context = {}
 		self.last_contexts = {
 			"plurality": {

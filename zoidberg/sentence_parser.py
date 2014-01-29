@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from utilities import uniq, oxfordComma
+from itertools import permutations, combinations
 
 class SentenceParser(object):
 	def __init__(self, sentence, problem, text):
@@ -15,10 +16,13 @@ class SentenceParser(object):
 		self.last_operator = None
 		self.last_operator_type = None
 		self.last_word = None
+		self.last_adjective = None
 		self.last_tag = None
 		self.last_unit = None
 		self.last_unit_tag = None
 		self.last_unit_index = None
+		self.last_adj_index = None
+		self.new_units_as_context = False
 		self.last_verb_tag = None
 		self.last_verb = -1
 		self.last_noun_tag = None
@@ -40,6 +44,11 @@ class SentenceParser(object):
 		self.sentence_text = text
 		self.question = False
 		self.longest_phrase = None
+
+		# Track any units/adjectives used to refine units to attempt to relate
+		# similar context group owners with their relevant chunks of subordinate
+		# contexts.
+		self.used_unit_adjectives = []
 
 		# The parsed sentence of chunked components
 		self.parsed = []
@@ -70,6 +79,16 @@ class SentenceParser(object):
 
 		self.execute()
 
+	def fix_unit(self, u):
+		if self.last_adjective is not None:
+			u = " ".join([self.last_adjective, u])
+			o = (u, self.last_adj_index)
+			self.last_adj_index = -1
+			self.last_adjective = None
+			return o
+		else:
+			return (u, len(self.parsed))
+
 	def track_longer(self, v):
 		l = len(v)
 		if self.longest_phrase is None or self.longest_phrase < l:
@@ -90,11 +109,11 @@ class SentenceParser(object):
 					val = (val, subtype)
 
 		tup = (val, attr, subtype)
-		if index is not None:
-			self.parsed[index] = tup
-		else:
+		if index is None or index == len(self.parsed):
 			index = len(self.parsed)
 			self.parsed.append(tup)
+		else:
+			self.parsed[index] = tup
 		self.track_longer(val)
 		self.track_longer(attr)
 		return index
@@ -278,7 +297,10 @@ class SentenceParser(object):
 							self.main_context = context
 							self.track(context, "context", self.subtype)
 				else:
+					do_reg_unit = True
 					if self.last_conjunction is not None:
+						do_reg_unit = False
+						do_conj_track = False
 						if tag == "NN" and self.last_tag in ["IN"]:
 							self.subtype = self.get_subtype(word, tag)
 							track, self.subtype, tag = do_track(self.subtype, tag)
@@ -291,8 +313,11 @@ class SentenceParser(object):
 								self.last_unit = unit
 								self.last_unit_tag = tag
 								self.last_unit_index = len(self.parsed)
+								unit, uidx = self.fix_unit(unit)
 								self.units.append(unit)
-								self.track(unit, "unit", self.subtype)
+								if self.new_units_as_context:
+									p.units_acting_as_context[unit] = True
+								self.track(unit, "unit", self.subtype, uidx)
 						elif tag in ["NN", "NNS"] and self.last_conjunction_tag in ["IN"]:
 							self.subtype = self.get_subtype(word, tag)
 							track, self.subtype, tag = do_track(self.subtype, tag)
@@ -303,37 +328,78 @@ class SentenceParser(object):
 									self.last_unit = unit
 									self.last_unit_tag = tag
 									self.last_unit_index = len(self.parsed)
+									unit, uidx = self.fix_unit(unit)
 									self.units.append(unit)
+									if self.new_units_as_context:
+										p.units_acting_as_context[unit] = True
 									c_unit = " ".join([word, "owned by", p.previous_contexts["last"][0]])
-									self.track((c_unit, word, p.previous_contexts["last"][0], p.last_contexts["last"][0]), "context_unit", self.subtype)
-								#else:
-								#	raise Exception("Account for me")
+									self.track((c_unit, word, p.previous_contexts["last"][0], p.last_contexts["last"][0]), "context_unit", self.subtype, uidx)
+								else:
+									do_conj_track = True
 						else:
-							conjunction = ((word, tag), self.last_conjunction)
-							self.subordinate_strings[word] = " ".join(self.conjunction_parts)
-							self.conjunction_parts = []
-							self.conjunctions.append(conjunction)
-							did_something = True
-							self.track(conjunction[0], "subordinate", self.subtype)
+							do_conj_track = True
 
-						self.last_conjunction = None
-					else:
+						do_unset_conj = True
+						if do_conj_track:
+							unit = word
+							if tag in ["NN", "NNS"] and self.last_tag in ["NN", "NNS"]:
+								if self.last_unit is None and self.last_context is not None:
+									self.last_context = None
+									lc = self.contexts.pop()
+									unit = " ".join([lc, word])
+								else:
+									unit = " ".join([self.last_unit, word])
+									self.units.pop()
+								self.used_unit_adjectives.append(self.last_word)
+								self.parsed.pop()
+
+							if word in self.used_unit_adjectives:
+								do_unset_conj = False
+								do_reg_unit = True
+							else:
+								self.used_unit_adjectives.append(word)
+								conjunction = ((unit, tag), self.last_conjunction)
+								self.subordinate_strings[unit] = " ".join(self.conjunction_parts)
+								self.conjunction_parts = []
+								self.conjunctions.append(conjunction)
+								did_something = True
+								self.track(conjunction[0], "subordinate", self.subtype)
+
+						if do_unset_conj:
+							self.last_conjunction = None
+
+					if do_reg_unit:
 						self.subtype = self.get_subtype(word, tag)
 						track, self.subtype, tag = do_track(self.subtype, tag)
 						did_something = True
 						if track:
 							unit = word
-							if tag == "NNS" and self.last_tag == "NN":
-								unit = " ".join([self.last_word, word])
-								self.units.pop()
+							if tag in ["NN", "NNS"] and self.last_tag in ["NN", "NNS"]:
+								# print self.last_word, self.last_tag
+								# print word, tag
+								# print self.parsed
+								# print "----"
+
+								if self.last_unit is None and self.last_context is not None:
+									self.last_context = None
+									lc = self.contexts.pop()
+									unit = " ".join([lc, word])
+								else:
+									unit = " ".join([self.last_unit, word])
+									self.units.pop()
+
+								self.used_unit_adjectives.append(self.last_word)
 								self.parsed.pop()
 
+							unit, uidx = self.fix_unit(unit)
 							if not unit in p.units_acting_as_context or not p.units_acting_as_context[unit]:
 								self.last_unit = unit
 								self.last_unit_tag = tag
 								self.last_unit_index = len(self.parsed)
 								self.units.append(unit)
-								self.track(unit, "unit", self.subtype)
+								if self.new_units_as_context:
+									p.units_acting_as_context[unit] = True
+								self.track(unit, "unit", self.subtype, uidx)
 							else:
 								context = unit
 								# @TODO: This needs to be a subroutine or something
@@ -341,10 +407,10 @@ class SentenceParser(object):
 								self.contexts.append(context)
 								if self.is_relative_quantity and not self.comparator_context and self.main_context:
 									self.comparator_context = context
-									self.track(context, "comparator_context", self.subtype)
+									self.track(context, "comparator_context", self.subtype, uidx)
 								else:
 									self.main_context = context
-									self.track(context, "context", self.subtype)
+									self.track(context, "context", self.subtype, uidx)
 
 			if not did_something and self.subtype == None:
 				self.subtype = self.get_subtype(word, tag)
@@ -493,6 +559,11 @@ class SentenceParser(object):
 				did_something = True
 				self.track(word, "punctuation", self.subtype)
 
+			if tag == "EX":
+				did_something = True
+				self.track(word, "exestential", self.subtype)
+				self.problem.exestential = True
+
 			if tag == "CD": # A cardinal number
 				if self.last_tag == "DT":
 					if self.last_determiner == "constant":
@@ -539,6 +610,17 @@ class SentenceParser(object):
 					self.parsed.pop()
 					did_something = True
 					self.track(" ".join([self.last_word, word]), "asking", self.subtype)
+				elif self.last_tag in ["JJ"]:
+					self.used_unit_adjectives.append(word)
+					did_something = True
+					self.last_adjective = " ".join([self.last_adjective, word])
+					self.track(self.last_adjective, "adjective", self.subtype, self.last_adjective_index)
+				else:
+					self.used_unit_adjectives.append(word)
+					did_something = True
+					self.last_adjective = word
+					self.last_adj_index = len(self.parsed)
+					self.track(word, "adjective", self.subtype)
 
 			if tag == "PIP":
 				did_something = True
@@ -566,6 +648,8 @@ class SentenceParser(object):
 					self.last_unit = None
 					self.last_unit_tag = None
 					self.last_unit_index = -1
+				elif not self.phrasing_question:
+					self.new_units_as_context = True
 
 			if tag in ["WRB", "WDT", "WP", "WP$"]: # Wh- determiner
 				self.question = True
@@ -617,11 +701,35 @@ class SentenceParser(object):
 
 		text = self.sentence_text
 
+		nunits = []
+		for unit in self.units:
+			acting_as_context = False
+			if unit in p.units_acting_as_context:
+				acting_as_context = p.units_acting_as_context[unit]
+
+			# Units can be complicated by adjectives which break up the unit
+			# into important subdivisions. However, these subdivisions may
+			# also be simple detractors and not relevant to the actual string
+			# match for the unit. As such, we split by any spaces and then
+			# compile all possible formulations of the unit
+
+			parts = unit.split(" ")
+
+			# The item is the last part of the unit
+			item = parts.pop()
+			for part in parts:
+				nu = " ".join([part, item])
+				nunits.append(nu)
+#				if acting_as_context:
+#					p.units_acting_as_context[nu] = True
+
+		self.units = uniq(self.units + nunits)
+
 		# Resolve the subordinates
 		for o in self.conjunctions:
 			subordinate, conjunction = o
-			self.subordinates.append(
-				(subordinate[0], p.brain.subordinate(subordinate, text)))
+			outp = p.brain.subordinate(subordinate, text)
+			self.subordinates.append((subordinate[0], outp))
 		self.subordinates = uniq(self.subordinates)
 
 	def __str__(self):
