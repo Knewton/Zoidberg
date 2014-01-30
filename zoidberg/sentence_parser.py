@@ -133,8 +133,6 @@ class SentenceParser(object):
 		p = self.problem
 		plurality, gender = subtype
 
-		#rint val, subtype, self.is_exchange
-
 		if val is not None:
 			c_str = ""
 
@@ -143,8 +141,8 @@ class SentenceParser(object):
 			else:
 				c_str = val
 
+			data = (val, subtype)
 			if not self.is_exchange:
-				data = (val, subtype)
 				p.previous_contexts["last"] = p.last_contexts["last"]
 				p.previous_contexts["plurality"][plurality] = \
 					p.last_contexts["plurality"][plurality]
@@ -157,6 +155,9 @@ class SentenceParser(object):
 
 				p.all_contexts["plurality"][plurality][c_str] = data
 				p.all_contexts["gender"][gender][c_str] = data
+			else:
+				p.all_targets["plurality"][plurality][c_str] = data
+				p.all_targets["gender"][gender][c_str] = data
 			return c_str
 		else:
 			pl_co, ge_co = None, None
@@ -170,7 +171,10 @@ class SentenceParser(object):
 			plurality_c = pl_co[plurality]
 			gender_c = ge_co[gender]
 
-			if plurality_c is not None and gender_c is not None:
+			be_adaptive = False
+			if plurality == "plural" and plurality_c is None and self.is_exchange:
+				be_adaptive = True
+			elif plurality_c is not None and gender_c is not None:
 				if (plurality_c[0] == gender_c[0] or
 					gender == "mixed" and plurality == "plural" or
 					plurality == "plural"):
@@ -184,6 +188,9 @@ class SentenceParser(object):
 			elif failTest:
 				return None
 			else:
+				be_adaptive = True
+
+			if be_adaptive:
 				# NO matching context could be found; try an adapative context?
 				if plurality == "plural":
 					adaptive_context = []
@@ -199,9 +206,14 @@ class SentenceParser(object):
 						adaptive_context.append("neutral")
 
 					context = []
-					for cgroup in adaptive_context:
-						for pers, deets in p.all_contexts["gender"][cgroup].iteritems():
-							context.append(deets)
+					if not self.is_exchange:
+						for cgroup in adaptive_context:
+							for pers, deets in p.all_contexts["gender"][cgroup].iteritems():
+								context.append(deets)
+					else:
+						for cgroup in adaptive_context:
+							for pers, deets in p.all_targets["gender"][cgroup].iteritems():
+								context.append(deets)
 
 					c_str = ""
 
@@ -533,6 +545,9 @@ class SentenceParser(object):
 						self.framing_question = False
 						self.did_frame_question = True
 						self.track(word, "q_stop", self.subtype)
+						op = p.brain.operator(word, self.sentence_text)
+						if op == "ex":
+							self.is_exchange = True
 				elif tag != "VBG":
 					if self.framing_question:
 						did_something = True
@@ -788,6 +803,12 @@ class SentenceParser(object):
 			self.subordinate_lookup[subordinate[0]] = outp
 			if len(self.subordinate_strings[subordinate[0]]) == 0:
 				self.subordinate_strings[subordinate[0]] = ANSWER_SUBORDINATE[outp]
+			if outp == "context_grouping":
+				csub = self.get_subtype(subordinate[0], subordinate[1])
+				if csub:
+					c = self.resolve_context(csub)
+					if c:
+						self.problem.subordinate_adaptive_contexts.append(c[0])
 		self.subordinates = uniq(self.subordinates)
 
 	def __str__(self):

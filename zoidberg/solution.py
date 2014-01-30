@@ -39,6 +39,7 @@ class Solution(object):
 		self.last_index = 0
 		self.sig_figs = -1 # Don't need to use significant figures
 
+		self.asking = True
 		self.symbol_answer = False
 		self.descriptive_units = []
 		self.did_combine_units = False
@@ -118,11 +119,13 @@ class Solution(object):
 			self.symbols[sym] = Symbol(sym)
 
 		symbol = self.symbols[sym]
-		if first_time and operator != "eq" and constant is None:
+		if first_time and operator != "eq":
 			# Make an assumption that if the first thing we're
 			# doing is an addition, that we started with 0 units
 			symbol = 0
 			hindsight_inference = True
+
+		#rint symbol, operator, readonly, constant, conref
 
 		just_defined = False
 		if constant is None and not readonly:
@@ -206,8 +209,11 @@ class Solution(object):
 					self.work[dsym].append("- " + str(constant))
 			elif operator == "ans":
 				self.symbol_answer = True
-				print symbol, constant, self.symbols
-				symbol = Eq(symbol, constant)
+				sx = Eq(symbol, constant)
+				if sx is False:
+					symbol = Eq(Symbol(sym) + symbol, constant)
+				else:
+					symbol = sx
 			elif operator == "ex":
 				raise Exception
 			elif operator == "mu":
@@ -241,7 +247,7 @@ class Solution(object):
 			else:
 				return (hindsight_inference, symbol, var, sym)
 			self.symbols[sym] = symbol
-#			rint self.symbols
+			#rint self.symbols
 
 		return (hindsight_inference, symbol, var, sym)
 
@@ -255,6 +261,7 @@ class Solution(object):
 		if self.container is not None:
 			self.last_container = self.container
 
+		self.asking = False
 		self.container = None
 		self.actor = None
 		self.action = None
@@ -291,6 +298,10 @@ class Solution(object):
 		var_r = self.variable_relationship
 		data = None
 		sym = None
+
+		if constant is None and operator is None and self.asking:
+			self.reset_extractor()
+			return None
 
 		if constant is None and self.ex_op:
 			operator = None
@@ -611,6 +622,9 @@ class Solution(object):
 					self.rel_mode = "ad"
 					self.relative = True
 
+				if part in "asking":
+					self.asking = True
+
 				if part == "comparator_context":
 					if self.can_target:
 						self.target = val[0]
@@ -868,12 +882,13 @@ class Solution(object):
 					elif sub == "context_grouping":
 						ans = 0
 						syms = []
-						for c in self.problem.adaptive_context[answer.context]:
-							context, context_subtype = c
-							sinf, sequ, scon, ssym = self.get_symbol(context, answer.unit, None)
-							self.work[ssym].append("= " + " + ".join(syms))
-							syms.append(ssym)
-							ans += sequ
+						if answer.context in self.problem.adaptive_context:
+							for c in self.problem.adaptive_context[answer.context]:
+								context, context_subtype = c
+								sinf, sequ, scon, ssym = self.get_symbol(context, answer.unit, None)
+								self.work[ssym].append("= " + " + ".join(syms))
+								syms.append(ssym)
+								ans += sequ
 						resp = (simple_solve(ans), answer.unit)
 					elif sub == "place_noun" or sub is None:
 						compContext = word
@@ -934,7 +949,7 @@ class Solution(object):
 				#	unt.insert(0, answer.unit)
 
 				#resp = (simple_solve(v), " ".join(unt))
-				resp = (simple_solve(v), unit)
+				resp = (simple_solve(v), answer.unit)
 
 			if resp[0] is None:
 				dontSave = True

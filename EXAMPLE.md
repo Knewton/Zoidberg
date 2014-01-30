@@ -49,7 +49,6 @@ balloons owned by Jane + 6
 
 ***
 
-x - 9 0 {'x': x, 'Mrs. Jones bananas': x - 9}
 # Zoidberg Solution
 
 ## The problem
@@ -213,6 +212,55 @@ dolls owned by Ethelle + 4
 
 ***
 
+# Zoidberg Solution
+
+## The problem
+Joey has 13 toy cars. Chandler has 6 toy cars. How many fewer toy cars does Chandler have than Joey?
+
+## Digested problem
+    Joey    	has     	13      	toy     	cars    	.       
+    NNP     	VBZ     	CD      	NN      	NNS     	.       
+
+    Chandler	has     	6       	toy     	cars    	.       
+    NNP     	VBZ     	CD      	NN      	NNS     	.       
+
+    How     	many    	fewer   	toy     	cars    	does    	Chandler	have    	than    	Joey    	?       
+    WRB     	JJ      	JJR     	NN      	NNS     	VBZ     	NNP     	VB      	IN      	NNP     	.       
+
+## Problem inference
+I think this problem is about Joey and Chandler grouping toy cars and asks a single question.
+
+## Parsed problem
+    Joey              	has               	13                	toy cars          	.                 
+    context           	operator          	constant          	unit              	punctuation       
+
+    Chandler          	has               	6                 	toy cars          	.                 
+    context           	operator          	constant          	unit              	punctuation       
+
+    How many          	fewer             	toy cars          	does              	Chandler          	have              	than              	Joey              	?                 
+    asking            	rel_less          	unit              	q_start           	context           	q_stop            	conjunction       	comparator_context	punctuation       
+
+
+## Question 1
+
+### Question text
+How many fewer toy cars does Chandler have than Joey?
+
+### Answer interpretation
+The answer is the difference in value of toy cars owned by Chandler with respect to Joey.
+
+## Data extraction
+
+### Sentence 1
+toy cars owned by Joey = 13
+toy cars owned by Joey + 13
+
+### Sentence 2
+toy cars owned by Chandler = 6
+toy cars owned by Chandler + 6
+
+## Correct response
+14 toy cars
 
 ***
 
@@ -391,7 +439,6 @@ pieces of pizza owned by Michael - 2
 
 ***
 
-x - 11 0 {'x': x, 'Pigpen rocks': x - 11}
 # Zoidberg Solution
 
 ## The problem
@@ -447,6 +494,53 @@ rocks owned by Pigpen's friends + 8
 
 ***
 
+# Zoidberg Solution
+
+## The problem
+Mr. Lupis needs 4 eggs to bake 13 muffins. He has only 2 eggs. How many more eggs does he need to bake the muffins?
+
+## Digested problem
+    Mr.    	Lupis  	needs  	4      	eggs   	to     	bake   	13     	muffins	.      
+    NNP    	NNP    	VBZ    	CD     	NNS    	TO     	VB     	CD     	NNS    	.      
+
+    He     	has    	only   	2      	eggs   	.      
+    PRP    	VBZ    	RB     	CD     	NNS    	.      
+
+    How    	many   	more   	eggs   	does   	he     	need   	to     	bake   	the    	muffins	?      
+    WRB    	JJ     	RBR    	NNS    	VBZ    	PRP    	VBP    	TO     	VB     	DT     	NNS    	.      
+
+## Problem inference
+I think this problem is about Mr. Lupis eggs and asks a single question.
+
+## Parsed problem
+    Mr. Lupis  	needs      	4          	eggs       	to         	bake       	13         	muffins    	.          
+    context    	operator   	constant   	unit       	conjunction	operator   	constant   	subordinate	punctuation
+
+    Mr. Lupis  	has        	only       	2          	eggs       	.          
+    context    	operator   	noise      	constant   	unit       	punctuation
+
+    How many   	more       	eggs       	does       	Mr. Lupis  	need       	to         	bake       	the        	muffins    	?          
+    asking     	rel_more   	unit       	q_start    	context    	q_stop     	conjunction	operator   	noise      	subordinate	punctuation
+
+
+## Question 1
+
+### Question text
+How many more eggs does he need to bake the muffins?
+
+### Answer interpretation
+The answer is the increase in value of eggs needed by Mr. Lupis to bake muffins.
+
+## Data extraction
+
+### Sentence 1
+eggs needed by Mr. Lupis to bake muffins == 4
+
+### Sentence 2
+eggs owned by Mr. Lupis = 2
+
+## Correct response
+2 eggs
 
 ***
 
@@ -708,7 +802,6 @@ doughnuts owned by Bennett + 4
 
 ***
 
-Charlie bottles - 4 8 {'Charlie bottles': Charlie bottles - 4, 'Mac bottles': Mac bottles + 4}
 # Zoidberg Solution
 
 ## The problem
@@ -885,3 +978,77 @@ dolls owned by Troy + 3
 
 ### Response 2
 7 dolls
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Dad gives Richard 7 feathers.
+Dad gives William 4 feathers.
+How many feathers does Dad give to the two boys?
+How many more feathers does Richard have than William?
+
+## Digested problem
+    Dad     	gives   	Richard 	7       	feathers	.       
+    NNP     	VBZ     	NNP     	CD      	NNS     	.       
+
+    Dad     	gives   	William 	4       	feathers	.       
+    NNP     	VBZ     	NNP     	CD      	NNS     	.       
+
+    How     	many    	feathers	does    	Dad     	give    	to      	the     	two     	boys    	?       
+    WRB     	JJ      	NNS     	VBZ     	NNP     	VB      	TO      	DT      	CD      	NNS     	.       
+
+    How     	many    	more    	feathers	does    	Richard 	have    	than    	William 	?       
+    WRB     	JJ      	RBR     	NNS     	VBZ     	NNP     	VB      	IN      	NNP     	.       
+
+## Problem inference
+I think this problem is about Dad, Richard, and William feathers and asks multiple questions.
+
+## Parsed problem
+    Dad               	gives             	Richard           	7                 	feathers          	.                 
+    context           	operator          	context           	constant          	unit              	punctuation       
+
+    Dad               	gives             	William           	4                 	feathers          	.                 
+    context           	operator          	context           	constant          	unit              	punctuation       
+
+    How many          	feathers          	does              	Dad               	give              	to                	the               	two               	boys              	?                 
+    asking            	unit              	q_start           	context           	q_stop            	conjunction       	noise             	constant          	subordinate       	punctuation       
+
+    How many          	more              	feathers          	does              	Richard           	have              	than              	William           	?                 
+    asking            	rel_more          	unit              	q_start           	context           	q_stop            	conjunction       	comparator_context	punctuation       
+
+
+## Question 1
+
+### Question text
+How many feathers does Dad give to the two boys?
+
+### Answer interpretation
+The answer is the unknown value of feathers given to William and Richard added together.
+
+## Question 2
+
+### Question text
+How many more feathers does Richard have than William?
+
+### Answer interpretation
+The answer is the increase in value of feathers owned by Richard with respect to William.
+
+## Data extraction
+
+### Sentence 1
+feathers owned by Dad - 7
+feathers owned by Richard + 7
+
+### Sentence 2
+feathers owned by William + 4
+feathers owned by Dad - 4
+
+## Correct response
+
+### Response 1
+11 feathers
+
+### Response 2
+3 feathers

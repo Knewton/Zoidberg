@@ -4,6 +4,7 @@ OPERATOR_STR = {
 	"eq": "owned by",
 	"ad": "gained by",
 	"mu": "gained by",
+	"ex": "given to",
 	"su": "lost by",
 	"di": "lost by"
 }
@@ -130,9 +131,15 @@ class Answer(object):
 
 			# Assume subordinate during specifying is answer condition
 			if part == "subordinate":
+				stype = self.query.subordinate_lookup[val[0]]
+				if stype == "context_grouping":
+					if len(self.query.problem.subordinate_adaptive_contexts) > 0:
+						sac = self.query.problem.subordinate_adaptive_contexts[0]
+						self.context = sac
+						self.context_subtype = subtype
+				elif not specifying and self.actor is not None and self.query.problem.exestential:
 				# If we have an actor but are not specifying in an exestential
 				# problem, then we can simply assume that specification is occurring
-				if not specifying and self.actor is not None and self.query.problem.exestential:
 					specifying = True
 
 				if specifying:

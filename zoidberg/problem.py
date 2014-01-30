@@ -44,6 +44,7 @@ class Problem(object):
 			},
 			"last": None
 		}
+		self.subordinate_adaptive_contexts = []
 		self.previous_contexts = {
 			"plurality": {
 				"singular": None,
@@ -55,6 +56,21 @@ class Problem(object):
 				"feminine": None,
 				"neutral": None,
 				"mixed": None,
+				"ambiguous": None
+			},
+			"last": None
+		}
+		self.all_targets = {
+			"plurality": {
+				"singular": {},
+				"plural": {},
+				"regular": {}
+			},
+			"gender": {
+				"masculine": {},
+				"feminine": {},
+				"neutral": {},
+				"mixed": {},
 				"ambiguous": None
 			},
 			"last": None
