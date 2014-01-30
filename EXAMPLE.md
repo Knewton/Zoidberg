@@ -746,3 +746,56 @@ pieces of chocolate owned by Sara + 4
 
 ## Correct response
 12 pieces of chocolate
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Alex has 7 doughnuts.
+Bennett has 4 doughnuts more than him.
+How many doughnuts does Bennett have?
+
+## Digested problem
+    Alex     	has      	7        	doughnuts	.        
+    NNP      	VBZ      	CD       	NNS      	.        
+
+    Bennett  	has      	4        	doughnuts	more     	than     	him      	.        
+    NNP      	VBZ      	CD       	NNS      	JJR      	IN       	PRP      	.        
+
+    How      	many     	doughnuts	does     	Bennett  	have     	?        
+    WRB      	JJ       	NNS      	VBZ      	NNP      	VB       	.        
+
+## Problem inference
+I think this problem is about Alex and Bennett grouping doughnuts and asks a single question.
+
+## Parsed problem
+    Alex              	has               	7                 	doughnuts         	.                 
+    context           	operator          	constant          	unit              	punctuation       
+
+    Bennett           	has               	4                 	doughnuts         	more              	than              	Alex              	.                 
+    context           	operator          	constant          	unit              	rel_more          	conjunction       	comparator_context	punctuation       
+
+    How many          	doughnuts         	does              	Bennett           	have              	?                 
+    asking            	unit              	q_start           	context           	q_stop            	punctuation       
+
+
+## Question 1
+
+### Question text
+How many doughnuts does Bennett have?
+
+### Answer interpretation
+The answer is the unknown value of doughnuts owned by Bennett.
+
+## Data extraction
+
+### Sentence 1
+doughnuts owned by Alex = 7
+
+### Sentence 2
+doughnuts owned by Bennett = 7
+doughnuts owned by Bennett + 4
+
+## Correct response
+11 doughnuts

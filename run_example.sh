@@ -1,6 +1,6 @@
 clear
 echo "" > EXAMPLE.md
-MAX_IDX=14
+MAX_IDX=15
 
 for i in $(seq 1 $MAX_IDX); do
     cat calibrations/$i.txt | zoidberg | tee -a EXAMPLE.md
@@ -8,3 +8,5 @@ for i in $(seq 1 $MAX_IDX); do
         echo -e "\n***\n" | tee -a EXAMPLE.md
     fi
 done
+
+cp ~/.zoidberg.brain.json example.brain.json

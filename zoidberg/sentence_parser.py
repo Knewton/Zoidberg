@@ -122,7 +122,7 @@ class SentenceParser(object):
 		self.track_longer(attr)
 		return index
 
-	def resolve_context(self, subtype, val=None, compx=False):
+	def resolve_context(self, subtype, val=None, compx=False, failTest=False):
 		p = self.problem
 		plurality, gender = subtype
 
@@ -172,6 +172,8 @@ class SentenceParser(object):
 				return plurality_c
 			elif gender_c is not None:
 				return gender_c
+			elif failTest:
+				return None
 			else:
 				# NO matching context could be found; try an adapative context?
 				if plurality == "plural":
@@ -385,10 +387,10 @@ class SentenceParser(object):
 						if track:
 							unit = word
 							if tag in ["NN", "NNS"] and self.last_tag in ["NN", "NNS"]:
-								# print self.last_word, self.last_tag
-								# print word, tag
-								# print self.parsed
-								# print "----"
+								# rint self.last_word, self.last_tag
+								# rint word, tag
+								# rint self.parsed
+								# rint "----"
 
 								if self.last_unit is None and self.last_context is not None:
 									self.last_context = None
@@ -444,7 +446,11 @@ class SentenceParser(object):
 					# the same we're not actually setting a relative quantity
 					# we are simply indicating a mathematical operand
 					if self.is_relative_quantity and c[0] == self.last_context:
-						self.is_relative_quantity = False
+						c2 = self.resolve_context(self.subtype, compx=True, failTest=True)
+						if c2 is not None and c2[0] != self.last_context:
+							c = c2
+						else:
+							self.is_relative_quantity = False
 					did_something = True
 					if self.is_relative_quantity and not self.comparator_context and self.main_context:
 						self.comparator_context = c[0]
@@ -700,7 +706,7 @@ class SentenceParser(object):
 				did_something = True
 
 			if not did_something:
-				#print "Answer Unknown", word, tag
+				#rint "Answer Unknown", word, tag
 				p.brain.unknown(word, tag, self.subtype, self.sentence_text)
 				process(word, tag)
 
