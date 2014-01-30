@@ -30,7 +30,8 @@ OPERATORS = [
 	("mu", "Multiplication"),
 	("di", "Division"),
 	("re", "Requires (the total we need to answer)"),
-	("co", "Convert (change one unit into another)")
+	("co", "Convert (change one unit into another)"),
+	("ex", "Exchange (give units from one context to another)")
 ]
 
 # Various types of supported subordinace

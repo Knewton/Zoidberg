@@ -7,7 +7,10 @@ from query import Query
 from solution import Solution
 
 class Problem(object):
-	def __init__(self, text, brain_path=None):
+	def __init__(self, text, brain_path=None, file_name=None):
+
+		self.file_name = file_name
+
 		# Problem text
 		self.text = text
 
@@ -21,6 +24,8 @@ class Problem(object):
 		self.all_words = None
 		self.longest_word = None
 		self.units_acting_as_context = {}
+		self.descriptive_units = []
+		self.refined_units = {}
 
 		self.exestential = False
 		self.adaptive_context = {}
@@ -130,6 +135,9 @@ class Problem(object):
 		o = []
 
 		o.append("# Zoidberg Solution")
+
+		if self.file_name:
+			o.append("File: {0}".format(self.file_name))
 
 		o.append("\n## The problem")
 		o.append(self.text)

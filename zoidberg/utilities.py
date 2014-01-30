@@ -8,6 +8,12 @@ from types import ListType
 from shutil import copyfile
 from json import dumps, loads
 
+def ownerize(s):
+	if s[-1] == "s":
+		return s + "'"
+	else:
+		return s + "'s"
+
 def oxfordComma(inp):
 	o = [] + inp
 	outstr = ""

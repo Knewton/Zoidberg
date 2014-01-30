@@ -23,7 +23,8 @@ OP_DISPLAY = {
 	"su": "-",
 	"di": "/",
 	"re": "==",
-	"co": "->"
+	"co": "=>",
+	"ex": "->"
 }
 
 def number(s):
@@ -38,6 +39,7 @@ class Solution(object):
 		self.last_index = 0
 		self.sig_figs = -1 # Don't need to use significant figures
 
+		self.descriptive_units = []
 		self.did_combine_units = False
 		self.coordinated_container = None
 		self.coordinated = False
@@ -49,8 +51,11 @@ class Solution(object):
 		self.last_actor = None
 
 		self.context = None
+		self.target = None
+		self.can_target = False
 		self.ex_op = False
 		self.context_subtype = None
+		self.target_subtype = None
 		self.operator = None
 		self.constant = None
 		self.variable_relationship = None
@@ -136,7 +141,7 @@ class Solution(object):
 		else:
 			var = str(constant)
 
-		#print idx, sym, operator
+		#rint idx, sym, operator
 
 		if sym[0:1] == "@":
 			dsym = "{0} {1}".format(context[1:], unit)
@@ -149,23 +154,23 @@ class Solution(object):
 		if not dsym in self.work:
 			self.work[dsym] = []
 
-#		print "OTAY", sym, operator, constant
+#		rint "OTAY", sym, operator, constant
 		if operator is not None and constant is not None:
 			if operator in ["eq", "eqx", "re"]:
 				self.store_var(idx, sym, constant)
 
 				if self.relational_var is None:
-#					print "HERE"
+#					rint "HERE"
 					symbol = constant
 				else:
 					if conref:
 						self.symbols[conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
-#					print "THAR"
+#					rint "THAR"
 					# some cases we may already have a relational value so we
 					# need to simply solve for the value already
 					symbol = symbol.subs(Symbol(self.relational_var), constant).evalf()
 
-				#print "setting symbol"
+				#rint "setting symbol"
 				#raise Exception
 				if operator != "eqx":
 					self.work[dsym].append("= " + str(constant))
@@ -198,6 +203,8 @@ class Solution(object):
 					self.work[dsym].append("= " + str(constant))
 				else:
 					self.work[dsym].append("- " + str(constant))
+			elif operator == "ex":
+				raise Exception
 			elif operator == "mu":
 				if self.relational_var is None:
 					symbol *= constant
@@ -229,7 +236,7 @@ class Solution(object):
 			else:
 				return (hindsight_inference, symbol, var, sym)
 			self.symbols[sym] = symbol
-#			print self.symbols
+#			rint self.symbols
 
 		return (hindsight_inference, symbol, var, sym)
 
@@ -248,6 +255,8 @@ class Solution(object):
 		self.action = None
 		self.context = None
 		self.context_subtype = None
+		self.target = None
+		self.target_subtype = None
 		if not self.ex_op:
 			self.operator = None
 		self.constant = None
@@ -267,6 +276,7 @@ class Solution(object):
 		actor = "@{0}".format(self.actor)
 		action = self.action
 		context = self.context
+		target = self.target
 		operator = self.operator
 		constant = self.constant
 		context_var = None
@@ -294,7 +304,7 @@ class Solution(object):
 		else:
 			sym = " ".join([context, context_unit[1]])
 
-		#print context_unit
+		#rint context_unit
 
 		k1, k2 = None, None
 		if actor and action:
@@ -356,7 +366,7 @@ class Solution(object):
 					cu_k1 = context
 					cu_k2 = cu_unit
 
-					#print "Processing relative var"
+					#rint "Processing relative var"
 					#raise Exception
 
 					cinf, csymbol, ccon, cvar = self.get_symbol(cu_context,
@@ -368,7 +378,7 @@ class Solution(object):
 					self.symbols[var] = self.symbols[cvar] * number(var_r)
 #					self.symbols[cvar] = self.symbols[cvar] * (1 - number(var_r))
 
-#					print self.symbols
+#					rint self.symbols
 
 					cu_data.append(("eq", cvar, " * ".join([cvar, var_r])))
 					context_var = var
@@ -377,7 +387,7 @@ class Solution(object):
 
 					self.relational_var = cvar
 
-#					print "THIS", constant
+#					rint "THIS", constant
 
 					if container is not None:
 						if self.containers is None:
@@ -417,7 +427,23 @@ class Solution(object):
 						self.work[osym] = []
 					self.work[osym].append("= " + str(sym))
 
+			if target:
+				if self.containers is None:
+					self.containers = {}
+				if not container in self.containers:
+					self.containers[container] = {}
+				if not target in self.containers[container]:
+					self.containers[container][target] = {}
+				if not unit in self.containers[container][target]:
+					self.containers[container][target][unit] = []
+				self.containers[container][target][unit].append(("ad", constant, context_var))
+
+			# we subtract from the context owner and give to the target
+			if operator == "ex":
+				operator = "su"
+
 			data.append((operator, constant, context_var))
+
 			if zeroes_out:
 				data.append(("ans", "0", None))
 
@@ -441,7 +467,7 @@ class Solution(object):
 			self.digest_unit_groups(container, k1, k2)
 
 		if self.coordinated:
-#			print self.coordinated_container, container
+#			rint self.coordinated_container, container
 			if self.coordinated_container[0] != container:
 				cc = self.coordinated_container
 				if not cc[1] in self.containers[container]:
@@ -449,7 +475,7 @@ class Solution(object):
 				self.containers[container][cc[1]][cc[2]] = self.containers[cc[0]][cc[1]][cc[2]]
 				del self.containers[cc[0]][cc[1]][cc[2]]
 				self.digest_unit_groups(container, cc[1], cc[2], cc[0])
-#			print self.coordinated_container, container
+#			rint self.coordinated_container, container
 
 		self.reset_extractor()
 		return (container, k1, k2)
@@ -463,33 +489,34 @@ class Solution(object):
 				if k2 in x:
 					data = x[k2]
 		if data is not None:
-			if " " in k2:
-				self.did_combine_units = True
-				parts = k2.split(" ")
+			if not k2 in self.descriptive_units:
+				if " " in k2:
+					self.did_combine_units = True
+					parts = k2.split(" ")
 
-				# The item is the last part of the unit
-				item = parts.pop()
-				for part in parts:
-					nu = " ".join([part, item])
+					# The item is the last part of the unit
+					item = parts.pop()
+					for part in parts:
+						nu = " ".join([part, item])
 
-					if nu in self.containers[container][k1]:
-						ndata = []
-						# Format the data, changing any equivalence relationships
-						# to additive ones, assuming we're starting with a 0 group
-						# and then adding any numbers to it
-						for da in data:
-							x = da[0]
-							if x == "eq":
-								x = "ad"
-							ndata.append((x, da[1], da[2]))
-						self.containers[container][k1][nu] += ndata
-					else:
-						self.containers[container][k1][nu] = [] + data
-					if rmc is not None:
-						if rmc in self.containers:
-							if k1 in self.containers[rmc]:
-								if nu in self.containers[rmc][k1]:
-									del self.containers[rmc][k1][nu]
+						if nu in self.containers[container][k1]:
+							ndata = []
+							# Format the data, changing any equivalence relationships
+							# to additive ones, assuming we're starting with a 0 group
+							# and then adding any numbers to it
+							for da in data:
+								x = da[0]
+								if x == "eq":
+									x = "ad"
+								ndata.append((x, da[1], da[2]))
+							self.containers[container][k1][nu] += ndata
+						else:
+							self.containers[container][k1][nu] = [] + data
+						if rmc is not None:
+							if rmc in self.containers:
+								if k1 in self.containers[rmc]:
+									if nu in self.containers[rmc][k1]:
+										del self.containers[rmc][k1][nu]
 
 	def has_any(self):
 		return self.container is not None or self.context is not None or self.operator is not None or self.constant is not None or self.unit is not None or self.context_unit is not None
@@ -512,11 +539,14 @@ class Solution(object):
 
 		for parser in i.sentences:
 			self.units = parser.units
+			self.descriptive_units = parser.problem.descriptive_units
 			# Sometimes one context will transfer to another. In those cases
 			# we only want to change the context to the primary one
 			did_set_context = False
 			last_context = None
 			last_context_subtype = None
+			last_target = None
+			last_target_subtype = None
 			last_container = None
 			zeroes_out = False
 			self.coordinated = False
@@ -528,6 +558,11 @@ class Solution(object):
 						did_set_context = True
 						self.context = val
 						self.context_subtype = subtype
+					elif self.can_target:
+						self.target = val
+						self.target_subtype = subtype
+						last_target = val
+						last_target_subtype = subtype
 					last_context = val
 					last_context_subtype = subtype
 
@@ -540,6 +575,8 @@ class Solution(object):
 					self.operator = parser.operator[val]
 					if self.operator == "co":
 						self.operator = None
+					if self.operator == "ex":
+						self.can_target = True
 
 				if part == "constant" and not self.constant:
 					self.constant = val
@@ -566,7 +603,13 @@ class Solution(object):
 					self.relative = True
 
 				if part == "comparator_context":
-					self.comparator_context = val[0]
+					if self.can_target:
+						self.target = val[0]
+						self.target_subtype = subtype
+						last_target = val[0]
+						last_target_subtype = subtype
+					else:
+						self.comparator_context = val[0]
 
 				if part == "pre_ind_plu":
 					if last_context and not self.actor:
@@ -590,28 +633,28 @@ class Solution(object):
 					else:
 						self.reset_extractor()
 
-					#print "Restore context and container"
+					#rint "Restore context and container"
 					self.coordinated = True
 					self.context = last_context
 					self.context_subtype = last_context_subtype
 					self.container = last_container
 
 				if self.has_all():
-					#print "Here and", zeroes_out
+					#rint "Here and", zeroes_out
 					self.generate_expression(zeroes_out)
 
 				# @TODO: DEBUG
-				#print val
-				#print part
-				#print subtype
-				#print "----"
+				#rint val
+				#rint part
+				#rint subtype
+				#rint "----"
 
 			if self.has_any():
 				self.generate_expression(zeroes_out)
 			else:
 				self.reset_extractor()
 
-			#print "CONTOUT", self.containers
+			#rint "CONTOUT", self.containers
 
 			if self.containers is not None:
 				self.sentence_data.append(self.containers)
@@ -635,11 +678,12 @@ class Solution(object):
 			new_container = {}
 			for container in sd:
 				data = sd[container]
-#				print "==="
-#				print sd
-#				print self.symbols
-#				print "--"
+#				rint "==="
+#				rint sd
+#				rint self.symbols
+#				rint "--"
 				new_data = {}
+				#rint data
 				for context in data:
 					units = data[context]
 
@@ -685,7 +729,7 @@ class Solution(object):
 							#		new_values.append(("eq", "0"))
 							else:
 								con = constant
-							#	print "HERE THEN?", con, constant
+							#	rint "HERE THEN?", con, constant
 							new_values.append((operator, con, dc))
 						new_units[unit] = new_values
 					new_data[context] = new_units
@@ -694,7 +738,7 @@ class Solution(object):
 			index += 1
 			new_sentence_data.append(new_container)
 		self.sentence_data = new_sentence_data
-#		print self.sentence_data
+#		rint self.sentence_data
 
 	def compute_correct(self):
 		self.compute()
@@ -819,7 +863,7 @@ class Solution(object):
 								dispUnit = answer.actor
 						else:
 							inf, equ, con, sym = self.get_symbol(answer.context, answer.unit, word, index)
-						print inf, equ, con, sym
+						#rint inf, equ, con, sym
 						resp = (simple_solve(equ), dispUnit)
 					else:
 						dontSave = True
@@ -872,7 +916,7 @@ class Solution(object):
 
 			if not dontSave:
 				r, u = resp
-				#print r, u, resp
+				#rint r, u, resp
 				if self.zeroes_out:
 					self.work[sym].append("= 0")
 				add_response(r, u, index)
@@ -893,7 +937,7 @@ class Solution(object):
 					for unit in data[context]:
 						if context is None:
 							context = "_unknown_"
-						#print context, unit, data
+						#rint context, unit, data
 						for values in data[context][unit]:
 							operator, constant, dc = values
 							i = []
@@ -901,6 +945,7 @@ class Solution(object):
 							actor = None
 							action = None
 							context_unit = None
+							target = None
 
 							if context is not None and context[0:1] == "@":
 								actor = context[1:]
@@ -936,6 +981,9 @@ class Solution(object):
 									i.append(container)
 
 								i.append(OP_DISPLAY[operator])
+								if target:
+									i.append(target)
+									i.append("=")
 								i.append(display_constant)
 							elif context is not None and unit is not None:
 
@@ -954,6 +1002,11 @@ class Solution(object):
 									i.append(container)
 
 								i.append(OP_DISPLAY[operator])
+
+								if target:
+									i.append(target)
+									i.append("=")
+
 								i.append(display_constant)
 							elif context is None and unit is not None and self.problem.exestential:
 								i.append(unit)
@@ -962,6 +1015,10 @@ class Solution(object):
 									i.append(container)
 
 								i.append(OP_DISPLAY[operator])
+								if target:
+									i.append(target)
+									i.append("=")
+
 								i.append(display_constant)
 							else:
 								did_something = False

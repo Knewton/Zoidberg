@@ -17,7 +17,7 @@ def argparse():
 def main():
 	args = argparse().parse_args()
 
-	p = Problem(args.input.read(), args.brain)
+	p = Problem(args.input.read(), args.brain, args.input.name)
 	p.solve()
 	args.output.write(str(p) + "\n")
 

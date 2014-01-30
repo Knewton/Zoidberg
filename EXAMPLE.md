@@ -68,20 +68,20 @@ Mrs. Jones bought some bananas. Her family ate 5 bananas. She gave the remaining
     WRB      	JJ       	NNS      	VBD      	PRP      	VB       	IN       	DT       	NN       	.        
 
 ## Problem inference
-I think this problem is about Mrs. Jones, her family, and her friends exchanging bananas and asks a single question.
+I think this problem is about Mrs. Jones, Mrs. Jones' family, and Mrs. Jones' friends exchanging bananas and asks a single question.
 
 ## Parsed problem
-    Mrs. Jones      	bought          	some            	bananas         	.               
-    context         	operator        	dynamic_variable	unit            	punctuation     
+    Mrs. Jones         	bought             	some               	bananas            	.                  
+    context            	operator           	dynamic_variable   	unit               	punctuation        
 
-    her family      	ate             	5               	bananas         	.               
-    context         	operator        	constant        	unit            	punctuation     
+    Mrs. Jones' family 	ate                	5                  	bananas            	.                  
+    context            	operator           	constant           	unit               	punctuation        
 
-    Mrs. Jones      	gave            	the             	remaining       	4               	bananas         	to              	her friends     	.               
-    context         	operator        	noise           	solution_zero   	constant        	unit            	conjunction     	context         	punctuation     
+    Mrs. Jones         	gave               	the                	remaining          	4                  	bananas            	to                 	Mrs. Jones' friends	.                  
+    context            	operator           	noise              	solution_zero      	constant           	unit               	conjunction        	context            	punctuation        
 
-    How many        	bananas         	did             	Mrs. Jones      	buy             	in              	the             	beginning       	?               
-    asking          	unit            	q_start         	context         	q_stop          	conjunction     	noise           	subordinate     	punctuation     
+    How many           	bananas            	did                	Mrs. Jones         	buy                	in                 	the                	beginning          	?                  
+    asking             	unit               	q_start            	context            	q_stop             	conjunction        	noise              	subordinate        	punctuation        
 
 
 ## Question 1
@@ -103,6 +103,7 @@ bananas owned by Mrs. Jones - 5
 ### Sentence 3
 bananas owned by Mrs. Jones - 4
 bananas owned by Mrs. Jones == 0
+bananas owned by Mrs. Jones' friends + 4
 
 ## Correct response
 9 bananas
@@ -125,13 +126,13 @@ Tony has 19 jars. He gives 16 jars to his sister. How many jars does he have now
     WRB   	JJ    	NNS   	VBZ   	PRP   	VB    	RB    	.     
 
 ## Problem inference
-I think this problem is about Tony and his sister exchanging jars and asks a single question.
+I think this problem is about Tony and Tony's sister jars and asks a single question.
 
 ## Parsed problem
     Tony           	has            	19             	jars           	.              
     context        	operator       	constant       	unit           	punctuation    
 
-    Tony           	gives          	16             	jars           	to             	his sister     	.              
+    Tony           	gives          	16             	jars           	to             	Tony's sister  	.              
     context        	operator       	constant       	unit           	conjunction    	context        	punctuation    
 
     How many       	jars           	does           	Tony           	have           	now            	?              
@@ -153,6 +154,7 @@ jars owned by Tony = 19
 
 ### Sentence 2
 jars owned by Tony - 16
+jars owned by Tony's sister + 16
 
 ## Correct response
 3 jars
@@ -324,9 +326,11 @@ apples owned by Marc = 10
 apples owned by Marc - 2
 
 ### Sentence 3
+apples owned by Jim + 2
 apples owned by Marc - 2
 
 ### Sentence 4
+apples owned by Julia + 3
 apples owned by Marc - 3
 
 ## Correct response
@@ -334,7 +338,6 @@ apples owned by Marc - 3
 
 ***
 
-False 8 None @fish swimming pond
 # Zoidberg Solution
 
 ## The problem
@@ -402,7 +405,7 @@ Michael had 8 pieces of pizza. He ate 2 pieces of pizza. How many pieces of pizz
     WRB    	JJ     	NNS    	IN     	NN     	VBD    	NNP    	VB     	VBN    	.      
 
 ## Problem inference
-I think this problem is about Michael losing pieces of pizza, pieces pizza, and of pizza and asks a single question.
+I think this problem is about Michael losing pieces of pizza and asks a single question.
 
 ## Parsed problem
     Michael        	had            	8              	pieces of pizza	.              
@@ -427,13 +430,9 @@ The answer is the unknown value of pieces of pizza owned by Michael at the end o
 
 ### Sentence 1
 pieces of pizza owned by Michael = 8
-of pizza owned by Michael = 8
-pieces pizza owned by Michael = 8
 
 ### Sentence 2
 pieces of pizza owned by Michael - 2
-of pizza owned by Michael - 2
-pieces pizza owned by Michael - 2
 
 ## Correct response
 6 pieces of pizza
@@ -458,13 +457,13 @@ How many rocks did he have in the beginning?
     WRB      	JJ       	NNS      	VBD      	PRP      	VBP      	IN       	DT       	NN       	.        
 
 ## Problem inference
-I think this problem is about Pigpen and his friends exchanging rocks and asks a single question.
+I think this problem is about Pigpen and Pigpen's friends exchanging rocks and asks a single question.
 
 ## Parsed problem
     Pigpen                  	had                     	some                    	rocks                   	.                       
     context                 	operator                	dynamic_variable        	unit                    	punctuation             
 
-    Pigpen                  	kept                    	3                       	rocks                   	for                     	Pigpen                  	and                     	gave                    	the                     	remaining               	8                       	rocks                   	to                      	his friends             	.                       
+    Pigpen                  	kept                    	3                       	rocks                   	for                     	Pigpen                  	and                     	gave                    	the                     	remaining               	8                       	rocks                   	to                      	Pigpen's friends        	.                       
     context                 	operator                	constant                	unit                    	conjunction             	context                 	coordinating_conjunction	operator                	noise                   	solution_zero           	constant                	unit                    	conjunction             	context                 	punctuation             
 
     How many                	rocks                   	did                     	Pigpen                  	have                    	in                      	the                     	beginning               	?                       
@@ -488,13 +487,13 @@ rocks owned by Pigpen = x
 rocks owned by Pigpen - 3
 rocks owned by Pigpen - 8
 rocks owned by Pigpen == 0
+rocks owned by Pigpen's friends + 8
 
 ## Correct response
 11 rocks
 
 ***
 
-False 4 None Mr. Lupis eggs muffins
 # Zoidberg Solution
 
 ## The problem
@@ -563,7 +562,7 @@ How many cobs of corn do they have altogether?
     WRB       	JJ        	NNS       	IN        	NN        	VBP       	PRP       	VBP       	RB        	.         
 
 ## Problem inference
-I think this problem is about Mitch and Lisa grouping cobs of corn, cobs corn, and of corn and asks a single question.
+I think this problem is about Mitch and Lisa grouping cobs of corn and asks a single question.
 
 ## Parsed problem
     Mitch         	has           	3             	cobs of corn  	.             
@@ -588,13 +587,9 @@ The answer is the unknown value of cobs of corn owned by Mitch and Lisa added to
 
 ### Sentence 1
 cobs of corn owned by Mitch = 3
-cobs corn owned by Mitch = 3
-of corn owned by Mitch = 3
 
 ### Sentence 2
 cobs of corn owned by Lisa = 2
-cobs corn owned by Lisa = 2
-of corn owned by Lisa = 2
 
 ## Correct response
 5 cobs of corn
@@ -654,7 +649,6 @@ apples owned by Eric = Mickey apples * 0.5
 
 ***
 
-False 14 None _unknown_ christmas ornaments christmas tree
 # Zoidberg Solution
 
 ## The problem
@@ -699,3 +693,56 @@ pink christmas ornaments on the christmas tree = 6
 
 ## Correct response
 14 christmas ornaments
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Sara has 8 pieces of chocolate.
+Her mother gives her 4 more pieces.
+How many pieces of chocolate does Sara have now?
+
+## Digested problem
+    Sara     	has      	8        	pieces   	of       	chocolate	.        
+    NNP      	VBZ      	CD       	NNS      	IN       	JJ       	.        
+
+    Her      	mother   	gives    	her      	4        	more     	pieces   	.        
+    PRP$     	NN       	VBZ      	PRP$     	CD       	JJR      	NNS      	.        
+
+    How      	many     	pieces   	of       	chocolate	does     	Sara     	have     	now      	?        
+    WRB      	JJ       	NNS      	IN       	JJ       	VBZ      	NNP      	VB       	RB       	.        
+
+## Problem inference
+I think this problem is about Sara and Sara's mother pieces of chocolate and pieces and asks a single question.
+
+## Parsed problem
+    Sara               	has                	8                  	pieces of chocolate	.                  
+    context            	operator           	constant           	unit               	punctuation        
+
+    Sara's mother      	gives              	Sara               	4                  	more               	pieces of chocolate	.                  
+    context            	operator           	comparator_context 	constant           	rel_more           	unit               	punctuation        
+
+    How many           	pieces of chocolate	does               	Sara               	have               	now                	?                  
+    asking             	unit               	q_start            	context            	q_stop             	subordinate        	punctuation        
+
+
+## Question 1
+
+### Question text
+How many pieces of chocolate does Sara have now?
+
+### Answer interpretation
+The answer is the unknown value of pieces of chocolate owned by Sara at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+pieces of chocolate owned by Sara = 8
+
+### Sentence 2
+pieces of chocolate owned by Sara's mother - 4
+pieces of chocolate owned by Sara + 4
+
+## Correct response
+12 pieces of chocolate
