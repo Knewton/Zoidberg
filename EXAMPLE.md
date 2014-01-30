@@ -812,3 +812,76 @@ newspapers owned by Archie + 7
 
 ## Correct response
 13 newspapers
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Hellen has 2 dolls.
+Troy has 3 more dolls than her.
+How many dolls does Troy have?
+How many dolls do they have altogether?
+
+## Digested problem
+    Hellen    	has       	2         	dolls     	.         
+    NNP       	VBZ       	CD        	NNS       	.         
+
+    Troy      	has       	3         	more      	dolls     	than      	her       	.         
+    NNP       	VBZ       	CD        	JJR       	NNS       	IN        	PRP$      	.         
+
+    How       	many      	dolls     	does      	Troy      	have      	?         
+    WRB       	JJ        	NNS       	VBZ       	NNP       	VB        	.         
+
+    How       	many      	dolls     	do        	they      	have      	altogether	?         
+    WRB       	JJ        	NNS       	VBP       	PRP       	VBP       	RB        	.         
+
+## Problem inference
+I think this problem is about Hellen and Troy grouping dolls and asks multiple questions.
+
+## Parsed problem
+    Hellen            	has               	2                 	dolls             	.                 
+    context           	operator          	constant          	unit              	punctuation       
+
+    Troy              	has               	3                 	more              	dolls             	than              	Hellen            	.                 
+    context           	operator          	constant          	rel_more          	unit              	conjunction       	comparator_context	punctuation       
+
+    How many          	dolls             	does              	Troy              	have              	?                 
+    asking            	unit              	q_start           	context           	q_stop            	punctuation       
+
+    How many          	dolls             	do                	Troy and Hellen   	have              	altogether        	?                 
+    asking            	unit              	q_start           	context           	q_stop            	subordinate       	punctuation       
+
+
+## Question 1
+
+### Question text
+How many dolls does Troy have?
+
+### Answer interpretation
+The answer is the unknown value of dolls owned by Troy.
+
+## Question 2
+
+### Question text
+How many dolls do they have altogether?
+
+### Answer interpretation
+The answer is the unknown value of dolls owned by Troy and Hellen added together.
+
+## Data extraction
+
+### Sentence 1
+dolls owned by Hellen = 2
+
+### Sentence 2
+dolls owned by Troy = 2
+dolls owned by Troy + 3
+
+## Correct response
+
+### Response 1
+5 dolls
+
+### Response 2
+7 dolls
