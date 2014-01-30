@@ -49,6 +49,7 @@ balloons owned by Jane + 6
 
 ***
 
+x - 9 0 {'x': x, 'Mrs. Jones bananas': x - 9}
 # Zoidberg Solution
 
 ## The problem
@@ -212,55 +213,6 @@ dolls owned by Ethelle + 4
 
 ***
 
-# Zoidberg Solution
-
-## The problem
-Joey has 13 toy cars. Chandler has 6 toy cars. How many fewer toy cars does Chandler have than Joey?
-
-## Digested problem
-    Joey    	has     	13      	toy     	cars    	.       
-    NNP     	VBZ     	CD      	NN      	NNS     	.       
-
-    Chandler	has     	6       	toy     	cars    	.       
-    NNP     	VBZ     	CD      	NN      	NNS     	.       
-
-    How     	many    	fewer   	toy     	cars    	does    	Chandler	have    	than    	Joey    	?       
-    WRB     	JJ      	JJR     	NN      	NNS     	VBZ     	NNP     	VB      	IN      	NNP     	.       
-
-## Problem inference
-I think this problem is about Joey and Chandler grouping toy cars and asks a single question.
-
-## Parsed problem
-    Joey              	has               	13                	toy cars          	.                 
-    context           	operator          	constant          	unit              	punctuation       
-
-    Chandler          	has               	6                 	toy cars          	.                 
-    context           	operator          	constant          	unit              	punctuation       
-
-    How many          	fewer             	toy cars          	does              	Chandler          	have              	than              	Joey              	?                 
-    asking            	rel_less          	unit              	q_start           	context           	q_stop            	conjunction       	comparator_context	punctuation       
-
-
-## Question 1
-
-### Question text
-How many fewer toy cars does Chandler have than Joey?
-
-### Answer interpretation
-The answer is the difference in value of toy cars owned by Chandler with respect to Joey.
-
-## Data extraction
-
-### Sentence 1
-toy cars owned by Joey = 13
-toy cars owned by Joey + 13
-
-### Sentence 2
-toy cars owned by Chandler = 6
-toy cars owned by Chandler + 6
-
-## Correct response
-14 toy cars fewer
 
 ***
 
@@ -439,6 +391,7 @@ pieces of pizza owned by Michael - 2
 
 ***
 
+x - 11 0 {'x': x, 'Pigpen rocks': x - 11}
 # Zoidberg Solution
 
 ## The problem
@@ -494,53 +447,6 @@ rocks owned by Pigpen's friends + 8
 
 ***
 
-# Zoidberg Solution
-
-## The problem
-Mr. Lupis needs 4 eggs to bake 13 muffins. He has only 2 eggs. How many more eggs does he need to bake the muffins?
-
-## Digested problem
-    Mr.    	Lupis  	needs  	4      	eggs   	to     	bake   	13     	muffins	.      
-    NNP    	NNP    	VBZ    	CD     	NNS    	TO     	VB     	CD     	NNS    	.      
-
-    He     	has    	only   	2      	eggs   	.      
-    PRP    	VBZ    	RB     	CD     	NNS    	.      
-
-    How    	many   	more   	eggs   	does   	he     	need   	to     	bake   	the    	muffins	?      
-    WRB    	JJ     	RBR    	NNS    	VBZ    	PRP    	VBP    	TO     	VB     	DT     	NNS    	.      
-
-## Problem inference
-I think this problem is about Mr. Lupis eggs and asks a single question.
-
-## Parsed problem
-    Mr. Lupis  	needs      	4          	eggs       	to         	bake       	13         	muffins    	.          
-    context    	operator   	constant   	unit       	conjunction	operator   	constant   	subordinate	punctuation
-
-    Mr. Lupis  	has        	only       	2          	eggs       	.          
-    context    	operator   	noise      	constant   	unit       	punctuation
-
-    How many   	more       	eggs       	does       	Mr. Lupis  	need       	to         	bake       	the        	muffins    	?          
-    asking     	rel_more   	unit       	q_start    	context    	q_stop     	conjunction	operator   	noise      	subordinate	punctuation
-
-
-## Question 1
-
-### Question text
-How many more eggs does he need to bake the muffins?
-
-### Answer interpretation
-The answer is the increase in value of eggs needed by Mr. Lupis to bake muffins.
-
-## Data extraction
-
-### Sentence 1
-eggs needed by Mr. Lupis to bake muffins == 4
-
-### Sentence 2
-eggs owned by Mr. Lupis = 2
-
-## Correct response
-2 eggs more
 
 ***
 
@@ -799,3 +705,57 @@ doughnuts owned by Bennett + 4
 
 ## Correct response
 11 doughnuts
+
+***
+
+Charlie bottles - 4 8 {'Charlie bottles': Charlie bottles - 4, 'Mac bottles': Mac bottles + 4}
+# Zoidberg Solution
+
+## The problem
+Charlie gave 4 bottles to Mac.
+He has 8 bottles left.
+How many bottles did Charlie have in the beginning?
+
+## Digested problem
+    Charlie  	gave     	4        	bottles  	to       	Mac      	.        
+    NNP      	VBD      	CD       	NNS      	TO       	NNP      	.        
+
+    He       	has      	8        	bottles  	left     	.        
+    PRP      	VBZ      	CD       	NNS      	VBN      	.        
+
+    How      	many     	bottles  	did      	Charlie  	have     	in       	the      	beginning	?        
+    WRB      	JJ       	NNS      	VBD      	NNP      	VB       	IN       	DT       	NN       	.        
+
+## Problem inference
+I think this problem is about Charlie and Mac bottles and asks a single question.
+
+## Parsed problem
+    Charlie    	gave       	4          	bottles    	to         	Mac        	.          
+    context    	operator   	constant   	unit       	conjunction	context    	punctuation
+
+    Charlie    	has        	8          	bottles    	left       	.          
+    context    	operator   	constant   	unit       	subordinate	punctuation
+
+    How many   	bottles    	did        	Charlie    	have       	in         	the        	beginning  	?          
+    asking     	unit       	q_start    	context    	q_stop     	conjunction	noise      	subordinate	punctuation
+
+
+## Question 1
+
+### Question text
+How many bottles did Charlie have in the beginning?
+
+### Answer interpretation
+The answer is the unknown value of bottles owned by Charlie at the beginning of the problem.
+
+## Data extraction
+
+### Sentence 1
+bottles owned by Charlie - 4
+bottles owned by Mac + 4
+
+### Sentence 2
+bottles owned by Charlie == 8
+
+## Correct response
+12 bottles

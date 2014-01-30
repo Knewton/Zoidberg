@@ -39,6 +39,7 @@ class Solution(object):
 		self.last_index = 0
 		self.sig_figs = -1 # Don't need to use significant figures
 
+		self.symbol_answer = False
 		self.descriptive_units = []
 		self.did_combine_units = False
 		self.coordinated_container = None
@@ -203,6 +204,10 @@ class Solution(object):
 					self.work[dsym].append("= " + str(constant))
 				else:
 					self.work[dsym].append("- " + str(constant))
+			elif operator == "ans":
+				self.symbol_answer = True
+				print symbol, constant, self.symbols
+				symbol = Eq(symbol, constant)
 			elif operator == "ex":
 				raise Exception
 			elif operator == "mu":
@@ -267,7 +272,7 @@ class Solution(object):
 		self.relative = False
 		self.rel_mode = None
 
-	def generate_expression(self, zeroes_out=False):
+	def generate_expression(self, zeroes_out=False, answer_out=False):
 		if self.data is None:
 			self.data = {}
 		if self.actor_data is None:
@@ -442,10 +447,13 @@ class Solution(object):
 			if operator == "ex":
 				operator = "su"
 
-			data.append((operator, constant, context_var))
+			if not answer_out:
+				data.append((operator, constant, context_var))
 
 			if zeroes_out:
 				data.append(("ans", "0", None))
+			if answer_out:
+				data.append(("ans", constant, None))
 
 		# If nothing was done there's nothing to do
 		if len(data) == 0:
@@ -549,6 +557,7 @@ class Solution(object):
 			last_target_subtype = None
 			last_container = None
 			zeroes_out = False
+			answer_out = False
 			self.coordinated = False
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
@@ -623,13 +632,17 @@ class Solution(object):
 
 				if part == "subordinate":
 					if val[1] is not None:
-						# If we have a conjunction we have an container
-						self.container = val[0]
-						last_container = self.container
+						stype = parser.subordinate_lookup[val[0]]
+						if self.constant is not None and stype == "time_ending":
+							answer_out = True
+						else:
+							# If we have a conjunction we have an container
+							self.container = val[0]
+							last_container = self.container
 
 				if part == "coordinating_conjunction":
 					if self.has_any():
-						self.coordinated_container = self.generate_expression(zeroes_out)
+						self.coordinated_container = self.generate_expression(zeroes_out, answer_out)
 					else:
 						self.reset_extractor()
 
@@ -641,7 +654,7 @@ class Solution(object):
 
 				if self.has_all():
 					#rint "Here and", zeroes_out
-					self.generate_expression(zeroes_out)
+					self.generate_expression(zeroes_out, answer_out)
 
 				# @TODO: DEBUG
 				#rint val
@@ -650,7 +663,7 @@ class Solution(object):
 				#rint "----"
 
 			if self.has_any():
-				self.generate_expression(zeroes_out)
+				self.generate_expression(zeroes_out, answer_out)
 			else:
 				self.reset_extractor()
 
@@ -797,6 +810,10 @@ class Solution(object):
 			dontSave = False
 			compContext = None
 
+			#rint self.symbols
+			#rint self.ending_vars
+			#rint self.beginning_vars
+
 			if len(answer.subordinates) > 0:
 				working_answer = None
 				for s in answer.subordinates:
@@ -820,7 +837,10 @@ class Solution(object):
 							symbol = self.symbols[self.ending_vars[0]]
 							resp = (safe_solve(equ, symbol), answer.unit)
 						elif l == 0:
-							resp = (simple_solve(equ), answer.unit)
+							if self.symbol_answer and sym:
+								resp = (safe_solve(equ, Symbol(sym)), answer.unit)
+							else:
+								resp = (simple_solve(equ), answer.unit)
 						else:
 							self.correct_responses.append(
 								"Not sure; too many ending variables!")
@@ -832,7 +852,10 @@ class Solution(object):
 							name, symbol = self.beginning_vars[0]
 							resp = (safe_solve(equ, symbol), answer.unit)
 						elif l == 0:
-							resp = (simple_solve(equ), answer.unit)
+							if self.symbol_answer and sym:
+								resp = (safe_solve(equ, Symbol(sym)), answer.unit)
+							else:
+								resp = (simple_solve(equ), answer.unit)
 						else:
 							self.correct_responses.append(
 								"Not sure; too many starting variables!")
@@ -906,10 +929,12 @@ class Solution(object):
 					self.work[k].append("= " + csym +" - " + sym)
 					self.work[k].append("= " + str(comp) +" - " + str(equ))
 
-				if answer.unit:
-					unt.insert(0, answer.unit)
+				# putting more and less in the answer is questionable
+				#if answer.unit:
+				#	unt.insert(0, answer.unit)
 
-				resp = (simple_solve(v), " ".join(unt))
+				#resp = (simple_solve(v), " ".join(unt))
+				resp = (simple_solve(v), unit)
 
 			if resp[0] is None:
 				dontSave = True
@@ -961,7 +986,7 @@ class Solution(object):
 
 							if container is None or container == "_unknown_":
 								container = None
-							elif container in  self.problem.inference.subordinate_strings:
+							elif container in self.problem.inference.subordinate_strings:
 								container = self.problem.inference.subordinate_strings[container]
 
 							display_constant = dc
@@ -998,7 +1023,7 @@ class Solution(object):
 
 								i.append(context)
 
-								if container is not None:
+								if container is not None and container:
 									i.append(container)
 
 								i.append(OP_DISPLAY[operator])

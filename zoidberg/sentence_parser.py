@@ -3,11 +3,18 @@
 from utilities import uniq, oxfordComma, ownerize
 from itertools import permutations, combinations
 
+ANSWER_SUBORDINATE = {
+	"time_starting": "at the start",
+	"time_ending": "at the end"
+}
+
 class SentenceParser(object):
 	def __init__(self, sentence, problem, text):
 		# Descriptive units are those which do not get parsed even if they
 		# contain spaces. These are things like "pieces of chocolate" as
 		# opposed to "blue christmas ornaments"
+		self.subordinate_lookup = {}
+		self.is_exchange = False
 		self.unit_idx = {}
 		self.index = 0
 		self.is_about_requirements = False
@@ -126,6 +133,8 @@ class SentenceParser(object):
 		p = self.problem
 		plurality, gender = subtype
 
+		#rint val, subtype, self.is_exchange
+
 		if val is not None:
 			c_str = ""
 
@@ -134,22 +143,22 @@ class SentenceParser(object):
 			else:
 				c_str = val
 
-			p.previous_contexts["last"] = p.last_contexts["last"]
-			p.previous_contexts["plurality"][plurality] = \
-				p.last_contexts["plurality"][plurality]
-			p.previous_contexts["gender"][gender] = \
-				p.last_contexts["gender"][gender]
+			if not self.is_exchange:
+				data = (val, subtype)
+				p.previous_contexts["last"] = p.last_contexts["last"]
+				p.previous_contexts["plurality"][plurality] = \
+					p.last_contexts["plurality"][plurality]
+				p.previous_contexts["gender"][gender] = \
+					p.last_contexts["gender"][gender]
 
-			data = (val, subtype)
-			p.last_contexts["last"] = data
-			p.last_contexts["plurality"][plurality] = data
-			p.last_contexts["gender"][gender] = data
+				p.last_contexts["last"] = data
+				p.last_contexts["plurality"][plurality] = data
+				p.last_contexts["gender"][gender] = data
 
-			p.all_contexts["plurality"][plurality][c_str] = data
-			p.all_contexts["gender"][gender][c_str] = data
+				p.all_contexts["plurality"][plurality][c_str] = data
+				p.all_contexts["gender"][gender][c_str] = data
 			return c_str
 		else:
-
 			pl_co, ge_co = None, None
 			if compx:
 				pl_co = p.previous_contexts["plurality"]
@@ -544,6 +553,8 @@ class SentenceParser(object):
 							if op not in [None, False]: # Retagged
 								if op == "re":
 									self.is_about_requirements = True
+								if op == "ex":
+									self.is_exchange = True
 								self.last_verb_tag = tag
 								self.last_verb = len(self.parsed)
 								self.last_operator = word
@@ -774,6 +785,9 @@ class SentenceParser(object):
 			subordinate, conjunction = o
 			outp = p.brain.subordinate(subordinate, text)
 			self.subordinates.append((subordinate[0], outp))
+			self.subordinate_lookup[subordinate[0]] = outp
+			if len(self.subordinate_strings[subordinate[0]]) == 0:
+				self.subordinate_strings[subordinate[0]] = ANSWER_SUBORDINATE[outp]
 		self.subordinates = uniq(self.subordinates)
 
 	def __str__(self):
