@@ -759,3 +759,56 @@ bottles owned by Charlie == 8
 
 ## Correct response
 12 bottles
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Meathead has 6 newspapers.
+Archie has 7 newspapers more than him.
+How many newspapers does Archie have?
+
+## Digested problem
+    Meathead  	has       	6         	newspapers	.         
+    NNP       	VBZ       	CD        	NNS       	.         
+
+    Archie    	has       	7         	newspapers	more      	than      	him       	.         
+    NNP       	VBZ       	CD        	NNS       	JJR       	IN        	PRP       	.         
+
+    How       	many      	newspapers	does      	Archie    	have      	?         
+    WRB       	JJ        	NNS       	VBZ       	NNP       	VB        	.         
+
+## Problem inference
+I think this problem is about Meathead and Archie grouping newspapers and asks a single question.
+
+## Parsed problem
+    Meathead          	has               	6                 	newspapers        	.                 
+    context           	operator          	constant          	unit              	punctuation       
+
+    Archie            	has               	7                 	newspapers        	more              	than              	Meathead          	.                 
+    context           	operator          	constant          	unit              	rel_more          	conjunction       	comparator_context	punctuation       
+
+    How many          	newspapers        	does              	Archie            	have              	?                 
+    asking            	unit              	q_start           	context           	q_stop            	punctuation       
+
+
+## Question 1
+
+### Question text
+How many newspapers does Archie have?
+
+### Answer interpretation
+The answer is the unknown value of newspapers owned by Archie.
+
+## Data extraction
+
+### Sentence 1
+newspapers owned by Meathead = 6
+
+### Sentence 2
+newspapers owned by Archie = 6
+newspapers owned by Archie + 7
+
+## Correct response
+13 newspapers
