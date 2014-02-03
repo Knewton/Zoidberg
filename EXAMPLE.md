@@ -1105,3 +1105,370 @@ years owned by Lee - 3
 
 ## Correct response
 3 years
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Sam has 12 bags. 
+He buys 8 more bags. 
+How many bags does he have in all?
+
+## Digested problem
+    Sam 	has 	12  	bags	.   
+    NNP 	VBZ 	CD  	NNS 	.   
+
+    He  	buys	8   	more	bags	.   
+    PRP 	VBZ 	CD  	JJR 	NNS 	.   
+
+    How 	many	bags	does	he  	have	in  	all 	?   
+    WRB 	JJ  	NNS 	VBZ 	PRP 	VB  	IN  	DT  	.   
+
+## Problem inference
+I think this problem is about Sam getting bags and asks a single question.
+
+## Parsed problem
+    Sam             	has             	12              	bags            	.               
+    context         	operator        	constant        	unit            	punctuation     
+
+    Sam             	buys            	8               	more            	bags            	.               
+    context         	operator        	constant        	rel_more        	unit            	punctuation     
+
+    How many        	bags            	does            	Sam             	have            	in              	all             	?               
+    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+
+
+## Question 1
+
+### Question text
+How many bags does he have in all?
+
+### Answer interpretation
+The answer is the unknown value of bags owned by Sam.
+
+## Data extraction
+
+### Sentence 1
+bags owned by Sam = 12
+
+### Sentence 2
+bags owned by Sam + 8
+
+## Correct response
+20 bags
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Paul has 10 books. 
+Paul gives his sister 7 books. 
+How many books does Paul have left?
+
+## Digested problem
+    Paul  	has   	10    	books 	.     
+    NNP   	VBZ   	CD    	NNS   	.     
+
+    Paul  	gives 	his   	sister	7     	books 	.     
+    NNP   	VBZ   	PRP$  	NN    	CD    	NNS   	.     
+
+    How   	many  	books 	does  	Paul  	have  	left  	?     
+    WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	VBN   	.     
+
+## Problem inference
+I think this problem is about Paul and Paul's sister books and asks a single question.
+
+## Parsed problem
+    Paul           	has            	10             	books          	.              
+    context        	operator       	constant       	unit           	punctuation    
+
+    Paul           	gives          	Paul's sister  	7              	books          	.              
+    context        	operator       	context        	constant       	unit           	punctuation    
+
+    How many       	books          	does           	Paul           	have           	left           	?              
+    asking         	unit           	q_start        	context        	q_stop         	subordinate    	punctuation    
+
+
+## Question 1
+
+### Question text
+How many books does Paul have left?
+
+### Answer interpretation
+The answer is the unknown value of books owned by Paul at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+books owned by Paul = 10
+
+### Sentence 2
+books owned by Paul - 7
+books owned by Paul's sister + 7
+
+## Correct response
+3 books
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Paul has 6 cups. 
+He buys 11 more cups. 
+How many cups does he have in all?
+
+## Digested problem
+    Paul	has 	6   	cups	.   
+    NNP 	VBZ 	CD  	NNS 	.   
+
+    He  	buys	11  	more	cups	.   
+    PRP 	VBZ 	CD  	JJR 	NNS 	.   
+
+    How 	many	cups	does	he  	have	in  	all 	?   
+    WRB 	JJ  	NNS 	VBZ 	PRP 	VB  	IN  	DT  	.   
+
+## Problem inference
+I think this problem is about Paul getting cups and asks a single question.
+
+## Parsed problem
+    Paul            	has             	6               	cups            	.               
+    context         	operator        	constant        	unit            	punctuation     
+
+    Paul            	buys            	11              	more            	cups            	.               
+    context         	operator        	constant        	rel_more        	unit            	punctuation     
+
+    How many        	cups            	does            	Paul            	have            	in              	all             	?               
+    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+
+
+## Question 1
+
+### Question text
+How many cups does he have in all?
+
+### Answer interpretation
+The answer is the unknown value of cups owned by Paul.
+
+## Data extraction
+
+### Sentence 1
+cups owned by Paul = 6
+
+### Sentence 2
+cups owned by Paul + 11
+
+## Correct response
+17 cups
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Sidd has 10 books. 
+He buys 11 more books. 
+How many books does he have in all?
+
+
+## Digested problem
+    Sidd 	has  	10   	books	.    
+    NNP  	VBZ  	CD   	NNS  	.    
+
+    He   	buys 	11   	more 	books	.    
+    PRP  	VBZ  	CD   	JJR  	NNS  	.    
+
+    How  	many 	books	does 	he   	have 	in   	all  	?    
+    WRB  	JJ   	NNS  	VBZ  	PRP  	VB   	IN   	DT   	.    
+
+## Problem inference
+I think this problem is about Sidd getting books and asks a single question.
+
+## Parsed problem
+    Sidd            	has             	10              	books           	.               
+    context         	operator        	constant        	unit            	punctuation     
+
+    Sidd            	buys            	11              	more            	books           	.               
+    context         	operator        	constant        	rel_more        	unit            	punctuation     
+
+    How many        	books           	does            	Sidd            	have            	in              	all             	?               
+    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+
+
+## Question 1
+
+### Question text
+How many books does he have in all?
+
+### Answer interpretation
+The answer is the unknown value of books owned by Sidd.
+
+## Data extraction
+
+### Sentence 1
+books owned by Sidd = 10
+
+### Sentence 2
+books owned by Sidd + 11
+
+## Correct response
+21 books
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Lee has 10 blocks. 
+He buys 2 more blocks. 
+How many blocks does he have in all?
+
+## Digested problem
+    Lee   	has   	10    	blocks	.     
+    NNP   	VBZ   	CD    	NNS   	.     
+
+    He    	buys  	2     	more  	blocks	.     
+    PRP   	VBZ   	CD    	JJR   	NNS   	.     
+
+    How   	many  	blocks	does  	he    	have  	in    	all   	?     
+    WRB   	JJ    	NNS   	VBZ   	PRP   	VB    	IN    	DT    	.     
+
+## Problem inference
+I think this problem is about Lee getting blocks and asks a single question.
+
+## Parsed problem
+    Lee             	has             	10              	blocks          	.               
+    context         	operator        	constant        	unit            	punctuation     
+
+    Lee             	buys            	2               	more            	blocks          	.               
+    context         	operator        	constant        	rel_more        	unit            	punctuation     
+
+    How many        	blocks          	does            	Lee             	have            	in              	all             	?               
+    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+
+
+## Question 1
+
+### Question text
+How many blocks does he have in all?
+
+### Answer interpretation
+The answer is the unknown value of blocks owned by Lee.
+
+## Data extraction
+
+### Sentence 1
+blocks owned by Lee = 10
+
+### Sentence 2
+blocks owned by Lee + 2
+
+## Correct response
+12 blocks
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Tom has 5 bags. 
+Tom gives his sister 4 bags. 
+How many bags does Tom have left?
+
+## Digested problem
+    Tom   	has   	5     	bags  	.     
+    NNP   	VBZ   	CD    	NNS   	.     
+
+    Tom   	gives 	his   	sister	4     	bags  	.     
+    NNP   	VBZ   	PRP$  	NN    	CD    	NNS   	.     
+
+    How   	many  	bags  	does  	Tom   	have  	left  	?     
+    WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	VBN   	.     
+
+## Problem inference
+I think this problem is about Tom and Tom's sister bags and asks a single question.
+
+## Parsed problem
+    Tom            	has            	5              	bags           	.              
+    context        	operator       	constant       	unit           	punctuation    
+
+    Tom            	gives          	Tom's sister   	4              	bags           	.              
+    context        	operator       	context        	constant       	unit           	punctuation    
+
+    How many       	bags           	does           	Tom            	have           	left           	?              
+    asking         	unit           	q_start        	context        	q_stop         	subordinate    	punctuation    
+
+
+## Question 1
+
+### Question text
+How many bags does Tom have left?
+
+### Answer interpretation
+The answer is the unknown value of bags owned by Tom at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+bags owned by Tom = 5
+
+### Sentence 2
+bags owned by Tom's sister + 4
+bags owned by Tom - 4
+
+## Correct response
+1 bags
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Tom has 5 books. 
+Sidd has 8 books. 
+How many books do they have altogether?
+
+## Digested problem
+    Tom       	has       	5         	books     	.         
+    NNP       	VBZ       	CD        	NNS       	.         
+
+    Sidd      	has       	8         	books     	.         
+    NNP       	VBZ       	CD        	NNS       	.         
+
+    How       	many      	books     	do        	they      	have      	altogether	?         
+    WRB       	JJ        	NNS       	VBP       	PRP       	VBP       	RB        	.         
+
+## Problem inference
+I think this problem is about Tom and Sidd grouping books and asks a single question.
+
+## Parsed problem
+    Tom         	has         	5           	books       	.           
+    context     	operator    	constant    	unit        	punctuation 
+
+    Sidd        	has         	8           	books       	.           
+    context     	operator    	constant    	unit        	punctuation 
+
+    How many    	books       	do          	Sidd and Tom	have        	altogether  	?           
+    asking      	unit        	q_start     	context     	q_stop      	subordinate 	punctuation 
+
+
+## Question 1
+
+### Question text
+How many books do they have altogether?
+
+### Answer interpretation
+The answer is the unknown value of books owned by Sidd and Tom added together.
+
+## Data extraction
+
+### Sentence 1
+books owned by Tom = 5
+
+### Sentence 2
+books owned by Sidd = 8
+
+## Correct response
+13 books

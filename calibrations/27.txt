@@ -1,0 +1,3 @@
+Tom has 5 books. 
+Sidd has 8 books. 
+How many books do they have altogether?

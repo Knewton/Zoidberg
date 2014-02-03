@@ -1,0 +1,3 @@
+Lee has 10 blocks. 
+He buys 2 more blocks. 
+How many blocks does he have in all?
