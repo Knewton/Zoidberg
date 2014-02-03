@@ -1,0 +1,3 @@
+Tom is 6 years old. 
+Lee is 3 years younger than Tom. 
+How old is Lee?

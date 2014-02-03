@@ -26,6 +26,7 @@ class Problem(object):
 		self.units_acting_as_context = {}
 		self.descriptive_units = []
 		self.refined_units = {}
+		self.units = []
 
 		self.exestential = False
 		self.adaptive_context = {}
@@ -71,7 +72,7 @@ class Problem(object):
 				"feminine": {},
 				"neutral": {},
 				"mixed": {},
-				"ambiguous": None
+				"ambiguous": {}
 			},
 			"last": None
 		}
@@ -86,7 +87,7 @@ class Problem(object):
 				"feminine": {},
 				"neutral": {},
 				"mixed": {},
-				"ambiguous": None
+				"ambiguous": {}
 			},
 			"last": None
 		}

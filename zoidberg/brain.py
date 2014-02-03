@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from os.path import isfile, realpath, expanduser
-from utilities import get_json, set_json
+from utilities import get_json, set_json, uniq
 import sys
 import json
 
@@ -19,7 +19,10 @@ DEFAULT_BRAIN = {
 	"relative": {},
 	"gerunds": {},
 	"numbers": {},
-	"variables": {}
+	"variables": {},
+	"connotation_tags": {},
+	"tag_list": [],
+	"tag_units": {}
 }
 
 # Various mathematical operators we know of
@@ -77,7 +80,8 @@ COMPARISONS = [
 ANSWERS = [
 	("expression", "Answer is the solution to an expression (4 cars)"),
 	("unit", "Answer is the unit of the solution to an expression (cars)"),
-	("context", "Answer is the owner of the solution to an expression (Joe)")
+	("context", "Answer is the owner of the solution to an expression (Joe)"),
+	("expression_connotation", "Answer is the solution to an expression AND connotes the unit (how old = X years)")
 ]
 
 PLURALITY = [
@@ -118,8 +122,32 @@ RETAGS = [
 ]
 
 INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
+TAG_STR = "What tag does {0}'{1}' connote?"
 
-def get_input(data, prompt, x, ref, brain, force_retag=False):
+def get_tag(x, brain):
+	msg = "\t{0}. {1}"
+	sys.stdin = open('/dev/tty')
+	if not "tag_list" in brain.raw:
+		brain.raw["tag_list"] = []
+	data = brain.raw["tag_list"]
+
+	i = 0
+	print "\t0. Enter a new tag."
+	for k in data:
+		i += 1
+		print msg.format(i, k[1])
+
+	r = int(raw_input("The tag: "))
+
+	if r == 0:
+		t = raw_input("Please enter tag: ")
+		data.append(t)
+
+	if r < 0 or r > len(data):
+		return get_tag(x, brain)
+	return data[r - 1]
+
+def get_input(data, prompt, x, ref, brain, force_retag=False, for_tag=False):
 	msg = "\t{0}. {1}"
 	sys.stdin = open('/dev/tty')
 
@@ -216,6 +244,10 @@ def input_comparison_type(x, ref, brain):
 def input_answer_syntax(x, ref, brain):
 	print INPUT_STR.format("question", "", x, ref)
 	return get_input(ANSWERS, "'{0}' indicates: ".format(x), x, ref, brain)
+
+def input_connotation_tag(x, ref, brain):
+	print TAG_STR.format("", x)
+	return get_tag(x, brain)
 
 def input_plurality(p, ref, brain):
 	x, tag = p
@@ -384,6 +416,37 @@ class Brain(object):
 
 	def answer_syntax(self, query, ref):
 		return self.proc("answer_syntax", query, input_answer_syntax, ref)
+
+	def connotation(self, query, ref):
+		return self.proc("connotation_tags", query, input_connotation_tag, ref)
+
+	def connotation_unit(self, tag, units):
+		possible_units = []
+		connoted_unit = None
+		if "tag_units" not in self.raw:
+			self.raw["tag_units"] = {}
+		if not tag in self.raw["tag_units"]:
+			self.raw["tag_units"][tag] = []
+		unit_tag_list = self.raw["tag_units"][tag]
+
+		if len(units) == 1:
+			# Make an assumption that this tag and unit are related
+			connoted_unit = units[0]
+			if not connoted_unit in unit_tag_list:
+				# Track this assumption for later
+				unit_tag_list.append(connoted_unit)
+		else:
+			raise Exception("I don't know how to handle this; could need multiple tags")
+			possible_units = unit_tag_list
+
+		if len(possible_units) > 0 and connoted_unit is None:
+			relevant_units = list(set(possible_units).intersection(set(units)))
+			if len(relevant_units) == 1:
+				connoted_unit = relevant_units[0]
+			else:
+				raise Exception("I don't know how to handle this! Help me!")
+
+		return connoted_unit
 
 	def noun_like(self, n, tag, ref):
 		if tag in ["NNP", "NNPS"]:

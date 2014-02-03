@@ -810,6 +810,8 @@ class SentenceParser(object):
 					if c:
 						self.problem.subordinate_adaptive_contexts.append(c[0])
 		self.subordinates = uniq(self.subordinates)
+		self.problem.units += self.units
+		self.problem.units = uniq(self.problem.units)
 
 	def __str__(self):
 		return self.sentence_text

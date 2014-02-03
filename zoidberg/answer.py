@@ -13,7 +13,8 @@ ANSWER_SYNTAX = {
 	"unknown": "unknown to me",
 	"expression": "value",
 	"unit": "unit",
-	"context": "owner"
+	"context": "owner",
+	"expression_connotation": "value"
 }
 
 ANSWER_SUBORDINATE = {
@@ -40,6 +41,7 @@ class Answer(object):
 		self.rel_mode = None
 		self.comparator = None
 		self.subordinates = []
+		self.operator = None
 
 		self.relative_value = False
 		self.value = None
@@ -53,6 +55,8 @@ class Answer(object):
 		self.actor = None
 		self.actor_subtype = None
 		self.action = None
+
+		self.connotation_tag = None
 
 		self.execute()
 
@@ -76,6 +80,10 @@ class Answer(object):
 			if part == "asking":
 				self.syntax = p.brain.answer_syntax(val, str(self.query))
 				asking = True
+				if self.syntax == "expression_connotation":
+					tag = p.brain.connotation(val, str(self.query))
+					self.connotation_tag = tag
+					self.unit = p.brain.connotation_unit(tag, p.units)
 
 			if part == "rel_less":
 				if asking:
@@ -200,8 +208,11 @@ class Answer(object):
 		if self.context:
 			if self.query.problem.inference.is_requirement_problem:
 				i.append("needed by {0}".format(self.context))
-			else:
+			elif self.operator is not None:
 				i.append("{1} {0}".format(self.context, OPERATOR_STR[self.operator]))
+			else:
+				# Assume equals failing all else?
+				i.append("{1} {0}".format(self.context, OPERATOR_STR["eq"]))
 
 		if self.relative:
 			if self.comparator is not None:

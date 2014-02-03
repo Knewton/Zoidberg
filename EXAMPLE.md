@@ -1052,3 +1052,56 @@ feathers owned by Dad - 4
 
 ### Response 2
 3 feathers
+
+***
+
+# Zoidberg Solution
+
+## The problem
+Tom is 6 years old. 
+Lee is 3 years younger than Tom. 
+How old is Lee?
+
+## Digested problem
+    Tom    	is     	6      	years  	old    	.      
+    NNP    	VBZ    	CD     	NNS    	JJ     	.      
+
+    Lee    	is     	3      	years  	younger	than   	Tom    	.      
+    NNP    	VBZ    	CD     	NNS    	JJR    	IN     	NNP    	.      
+
+    How    	old    	is     	Lee    	?      
+    WRB    	JJ     	VBZ    	NNP    	.      
+
+## Problem inference
+I think this problem is about Tom and Lee grouping years and asks a single question.
+
+## Parsed problem
+    Tom               	is                	6                 	years             	old               	.                 
+    context           	operator          	constant          	unit              	adjective         	punctuation       
+
+    Lee               	is                	3                 	years             	younger           	than              	Tom               	.                 
+    context           	operator          	constant          	unit              	rel_less          	conjunction       	comparator_context	punctuation       
+
+    How old           	is                	Lee               	?                 
+    asking            	q_start           	context           	punctuation       
+
+
+## Question 1
+
+### Question text
+How old is Lee?
+
+### Answer interpretation
+The answer is the unknown value of years owned by Lee.
+
+## Data extraction
+
+### Sentence 1
+years owned by Tom = 6
+
+### Sentence 2
+years owned by Lee = 6
+years owned by Lee - 3
+
+## Correct response
+3 years
