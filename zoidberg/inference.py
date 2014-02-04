@@ -185,6 +185,6 @@ class Inference(object):
 			o.append("I have literally no idea what's going on here.")
 
 		o.append("\n## Parsed problem")
-		output_tuples(self.sentences, o, self.longest_phrase)
+		output_tuples(self.sentences, o, self.longest_phrase, self.problem.brain)
 
 		return "\n".join(o)

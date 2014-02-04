@@ -14,6 +14,7 @@ class SentenceParser(object):
 		# contain spaces. These are things like "pieces of chocolate" as
 		# opposed to "blue christmas ornaments"
 		self.subordinate_lookup = {}
+		self.context_subtypes = {}
 		self.is_exchange = False
 		self.unit_idx = {}
 		self.index = 0
@@ -113,7 +114,7 @@ class SentenceParser(object):
 		if attr == "comparator_context":
 			if subtype is not None:
 				conval = self.resolve_context(subtype, None, True)
-				if conv:
+				if conv and conval:
 					val = conval
 				else:
 					# Set the subtype for PRP comparator contexts
@@ -132,6 +133,7 @@ class SentenceParser(object):
 	def resolve_context(self, subtype, val=None, compx=False, failTest=False):
 		p = self.problem
 		plurality, gender = subtype
+		is_self = (plurality == "self" or gender == "self")
 
 		if val is not None:
 			c_str = ""
@@ -143,15 +145,16 @@ class SentenceParser(object):
 
 			data = (val, subtype)
 			if not self.is_exchange:
-				p.previous_contexts["last"] = p.last_contexts["last"]
-				p.previous_contexts["plurality"][plurality] = \
-					p.last_contexts["plurality"][plurality]
-				p.previous_contexts["gender"][gender] = \
-					p.last_contexts["gender"][gender]
+				if not is_self:
+					p.previous_contexts["last"] = p.last_contexts["last"]
+					p.previous_contexts["plurality"][plurality] = \
+						p.last_contexts["plurality"][plurality]
+					p.previous_contexts["gender"][gender] = \
+						p.last_contexts["gender"][gender]
 
-				p.last_contexts["last"] = data
-				p.last_contexts["plurality"][plurality] = data
-				p.last_contexts["gender"][gender] = data
+					p.last_contexts["last"] = data
+					p.last_contexts["plurality"][plurality] = data
+					p.last_contexts["gender"][gender] = data
 
 				p.all_contexts["plurality"][plurality][c_str] = data
 				p.all_contexts["gender"][gender][c_str] = data
@@ -323,6 +326,7 @@ class SentenceParser(object):
 						else:
 							self.main_context = context
 							self.track(context, "context", self.subtype)
+						self.context_subtypes[context] = self.subtype
 				else:
 					do_reg_unit = True
 					if self.last_conjunction is not None:
@@ -436,6 +440,8 @@ class SentenceParser(object):
 								self.track(unit, "unit", self.subtype, uidx)
 							else:
 								context = unit
+								if self.subtype[0] == "self":
+									context = self.problem.brain.self_reflexive(context, True)
 								# @TODO: This needs to be a subroutine or something
 								self.last_context = context
 								self.contexts.append(context)
@@ -445,6 +451,7 @@ class SentenceParser(object):
 								else:
 									self.main_context = context
 									self.track(context, "context", self.subtype, uidx)
+								self.context_subtypes[context] = self.subtype
 
 			if not did_something and self.subtype == None:
 				self.subtype = self.get_subtype(word, tag)
@@ -458,38 +465,61 @@ class SentenceParser(object):
 				self.track(conjunction[0], "subordinate", self.subtype)
 
 			if tag == "PRP":
-				c = self.resolve_context(self.subtype)
-				if c is None:
-					c = self.resolve_context(self.subtype, compx=True)
-
-				if c is not None:
-					# If we're setting a relative quantity and the contexts are
-					# the same we're not actually setting a relative quantity
-					# we are simply indicating a mathematical operand
-					if self.is_relative_quantity and c[0] == self.last_context:
-						c2 = self.resolve_context(self.subtype, compx=True, failTest=True)
-						if c2 is not None and c2[0] != self.last_context:
-							c = c2
-						else:
-							self.is_relative_quantity = False
+				if self.subtype and (self.subtype[0] == "self" or self.subtype[1] == "self"):
+					context = word
+					if self.subtype[0] == "self":
+						context = self.problem.brain.self_reflexive(context, True)
+					self.last_context = context
+					self.contexts.append(context)
 					did_something = True
 					if self.is_relative_quantity and not self.comparator_context and self.main_context:
-						self.comparator_context = c[0]
-						self.track(c[0], "comparator_context", self.subtype, conv=True)
+						self.comparator_context = context
+						self.track(context, "comparator_context", self.subtype)
 					else:
-						self.main_context = c[0]
-						self.track(c[0], "context", self.subtype)
-					# Unset hanging conjunctions when we set a context
-					self.last_conjunction = None
+						self.main_context = context
+						self.track(context, "context", self.subtype)
+					self.context_subtypes[context] = self.subtype
+				else:
+					c = self.resolve_context(self.subtype)
+					if c is None:
+						c = self.resolve_context(self.subtype, compx=True)
+
+					if c is not None:
+						# If we're setting a relative quantity and the contexts are
+						# the same we're not actually setting a relative quantity
+						# we are simply indicating a mathematical operand
+						if self.is_relative_quantity and c[0] == self.last_context:
+							c2 = self.resolve_context(self.subtype, compx=True, failTest=True)
+							if c2 is not None and c2[0] != self.last_context:
+								c = c2
+							else:
+								self.is_relative_quantity = False
+						did_something = True
+						if self.is_relative_quantity and not self.comparator_context and self.main_context:
+							self.comparator_context = c[0]
+							self.track(c[0], "comparator_context", self.subtype, conv=True)
+						else:
+							self.main_context = c[0]
+							self.track(c[0], "context", self.subtype)
+						self.context_subtypes[c[0]] = self.subtype
+						# Unset hanging conjunctions when we set a context
+						self.last_conjunction = None
 
 			if tag == "PRP$":
 				if self.last_conjunction is not None:
 					if self.is_relative_quantity and not self.comparator_context and self.main_context:
-						did_something = True
-						self.comparator_context = word
-						self.track(word, "comparator_context", self.subtype, conv=True)
-						self.last_conjunction = None
-						self.conjunction_parts = []
+						c = self.resolve_context(self.subtype)
+						ms = self.context_subtypes[self.main_context]
+						if (not c or self.main_context != c[0]) and (not ms or self.subtype[0] != ms[0]):
+							context = word
+							if self.subtype[0] == "self":
+								context = self.problem.brain.self_reflexive(context, True)
+							did_something = True
+							self.comparator_context = context
+							self.track(word, "comparator_context", self.subtype, conv=True)
+							self.last_conjunction = None
+							self.conjunction_parts = []
+							self.context_subtypes[word] = self.subtype
 
 				if not did_something:
 					did_something = True
@@ -499,6 +529,9 @@ class SentenceParser(object):
 					if conval:
 						term, st = conval
 						term = ownerize(term)
+					if self.subtype[0] == "self":
+						term = self.problem.brain.self_reflexive(term, True)
+
 					self.partial_context = term
 					self.partial_subtype = st
 					self.last_partial_context = self.track(term, "partial_context", st)
@@ -518,6 +551,8 @@ class SentenceParser(object):
 						self.subtype = (self.subtype[0], old[1])
 				else:
 					context = word
+					if self.subtype[0] == "self":
+						context = self.problem.brain.self_reflexive(context, True)
 				self.last_context = context
 				self.contexts.append(context)
 				did_something = True
@@ -527,6 +562,7 @@ class SentenceParser(object):
 				else:
 					self.main_context = context
 					self.track(context, "context", self.subtype)
+				self.context_subtypes[context] = self.subtype
 
 			if tag[:2] == "VB":
 				if tag == "VB":
@@ -708,6 +744,7 @@ class SentenceParser(object):
 					else:
 						self.main_context = context
 						self.track(context, "context", self.subtype, self.last_unit_index)
+					self.context_subtypes[context] = self.subtype
 
 					# @TODO: This needs a much better tracking system
 					self.last_unit = None

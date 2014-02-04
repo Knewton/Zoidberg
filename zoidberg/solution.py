@@ -573,6 +573,9 @@ class Solution(object):
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
 
+				if subtype and subtype[0] == "self":
+					val = self.problem.brain.self_reflexive(val, True)
+
 				if part == "context":
 					if not did_set_context:
 						did_set_context = True
@@ -665,6 +668,7 @@ class Solution(object):
 					self.context = last_context
 					self.context_subtype = last_context_subtype
 					self.container = last_container
+					did_set_context = False
 
 				if self.has_all():
 					#rint "Here and", zeroes_out

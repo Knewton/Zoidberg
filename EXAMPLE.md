@@ -485,12 +485,11 @@ rocks owned by Pigpen = x
 
 ### Sentence 2
 rocks owned by Pigpen - 3
-rocks owned by Pigpen - 8
-rocks owned by Pigpen == 0
-rocks owned by Pigpen's friends + 8
+rocks owned by Pigpen's friends - 8
+rocks owned by Pigpen's friends == 0
 
 ## Correct response
-11 rocks
+3 rocks
 
 ***
 
@@ -1472,3 +1471,46 @@ books owned by Sidd = 8
 
 ## Correct response
 13 books
+
+***
+
+# Zoidberg Solution
+
+## The problem
+You have 7 balloons and your friend has 5 balloons. 
+How many more balloons do you have than your friend? 
+
+## Digested problem
+    You     	have    	7       	balloons	and     	your    	friend  	has     	5       	balloons	.       
+    PRP     	VBP     	CD      	NNS     	CC      	PRP$    	NN      	VBZ     	CD      	NNS     	.       
+
+    How     	many    	more    	balloons	do      	you     	have    	than    	your    	friend  	?       
+    WRB     	JJ      	RBR     	NNS     	VBP     	PRP     	VB      	IN      	PRP$    	NN      	.       
+
+## Problem inference
+I think this problem is about me and my friend grouping balloons and asks a single question.
+
+## Parsed problem
+    I                       	have                    	7                       	balloons                	and                     	my friend               	has                     	5                       	balloons                	.                       
+    context                 	operator                	constant                	unit                    	coordinating_conjunction	context                 	operator                	constant                	unit                    	punctuation             
+
+    How many                	more                    	balloons                	do                      	I                       	have                    	than                    	my friend               	?                       
+    asking                  	rel_more                	unit                    	q_start                 	context                 	q_stop                  	conjunction             	comparator_context      	punctuation             
+
+
+## Question 1
+
+### Question text
+How many more balloons do you have than your friend?
+
+### Answer interpretation
+The answer is the increase in value of balloons owned by me with respect to my friend.
+
+## Data extraction
+
+### Sentence 1
+balloons owned by me = 7
+balloons owned by my friend = 5
+
+## Correct response
+2 balloons

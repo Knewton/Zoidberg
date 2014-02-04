@@ -22,7 +22,23 @@ DEFAULT_BRAIN = {
 	"variables": {},
 	"connotation_tags": {},
 	"tag_list": [],
-	"tag_units": {}
+	"tag_units": {},
+}
+
+# hardcoded taught the concept of self
+SELF_REFLEXIVE = {
+	"you": "I",
+	"me": "I",
+	"I": "I",
+	"i": "I",
+	"your": "my"
+}
+INDIRECT_SELF_REFLEXIVE = {
+	"you": "me",
+	"I": "me",
+	"i": "me",
+	"your": "my",
+	"me": "me"
 }
 
 # Various mathematical operators we know of
@@ -87,7 +103,8 @@ ANSWERS = [
 PLURALITY = [
 	("singular", "Refers to a single (balloon, she)"),
 	("plural", "Refers to a plural (balloons, they)"),
-	("regular", "Refers to a regular plural (fish, sheep)")
+	("regular", "Refers to a regular plural (fish, sheep)"),
+	("self", "Refers to you, Zoidberg!")
 ]
 
 GENDERS = [
@@ -95,7 +112,8 @@ GENDERS = [
 	("feminine", "Refers to a female gender"),
 	("neutral", "Refers to a non-gendered entity"),
 	("mixed", "Refers to a mixture of/ambiguous genders (a group of )"),
-	("ambiguous", "Refers to a man or woman but is not clear enough to know")
+	("ambiguous", "Refers to a man or woman but is not clear enough to know"),
+	("self", "Refers to you, Zoidberg!")
 ]
 
 RETAGS = [
@@ -487,4 +505,14 @@ class Brain(object):
 
 	def dump(self):
 		set_json(self.path, self.raw)
+
+	def self_reflexive(self, val, indirect=False):
+		if indirect:
+			x = INDIRECT_SELF_REFLEXIVE
+		else:
+			x = SELF_REFLEXIVE
+		if not val in x:
+			raise Exception("Need to handle this reflexive self: " + val)
+		else:
+			return x[val]
 

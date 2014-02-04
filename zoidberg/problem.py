@@ -34,6 +34,7 @@ class Problem(object):
 			"plurality": {
 				"singular": None,
 				"plural": None,
+				"self": None,
 				"regular": None
 			},
 			"gender": {
@@ -41,6 +42,7 @@ class Problem(object):
 				"feminine": None,
 				"neutral": None,
 				"mixed": None,
+				"self": None,
 				"ambiguous": None
 			},
 			"last": None
@@ -50,6 +52,7 @@ class Problem(object):
 			"plurality": {
 				"singular": None,
 				"plural": None,
+				"self": None,
 				"regular": None
 			},
 			"gender": {
@@ -57,6 +60,7 @@ class Problem(object):
 				"feminine": None,
 				"neutral": None,
 				"mixed": None,
+				"self": None,
 				"ambiguous": None
 			},
 			"last": None
@@ -65,6 +69,7 @@ class Problem(object):
 			"plurality": {
 				"singular": {},
 				"plural": {},
+				"self": {},
 				"regular": {}
 			},
 			"gender": {
@@ -72,6 +77,7 @@ class Problem(object):
 				"feminine": {},
 				"neutral": {},
 				"mixed": {},
+				"self": {},
 				"ambiguous": {}
 			},
 			"last": None
@@ -80,9 +86,11 @@ class Problem(object):
 			"plurality": {
 				"singular": {},
 				"plural": {},
+				"self": {},
 				"regular": {}
 			},
 			"gender": {
+				"self": {},
 				"masculine": {},
 				"feminine": {},
 				"neutral": {},
@@ -160,7 +168,7 @@ class Problem(object):
 		o.append(self.text)
 
 		o.append("## Digested problem")
-		output_tuples(self.sentence_tags, o, self.longest_word)
+		output_tuples(self.sentence_tags, o, self.longest_word, self.brain)
 
 		if self.inference is not None:
 			o.append(str(self.inference))

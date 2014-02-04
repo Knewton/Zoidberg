@@ -178,13 +178,19 @@ def unpackage(file_path, package_type=None):
 def uniq(l):
 	return list(sorted(set(l), key=l.index))
 
-def output_tuples(src, o, l, frmt=False):
+def output_tuples(src, o, l, b, frmt=False):
 	for tuples in src:
 		words, tags = [], []
 		index = 0
 		for tup in tuples:
 			word = tup[0]
 			tag = tup[1]
+			if len(tup) == 3:
+				subtype = tup[2]
+			else:
+				subtype = None
+			if subtype and subtype[0] == "self":
+				word = b.self_reflexive(word)
 
 			# Sometimes our values are packed in tuples
 			if not isinstance(word, basestring):

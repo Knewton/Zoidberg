@@ -157,6 +157,10 @@ class Answer(object):
 						self.subordinates += self.subordinate
 
 	def __str__(self):
+
+		if self.context_subtype and self.context_subtype[0] == "self":
+			self.context = self.query.problem.brain.self_reflexive(self.context, True)
+
 		o = []
 
 		o.append("\n### Question text")
