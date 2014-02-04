@@ -1610,3 +1610,48 @@ cookies owned by me - 2
 
 ## Correct response
 5 cookies
+
+***
+
+# Zoidberg Solution
+
+## The problem
+You have collected 7 crickets. 
+How many more crickets do you need to collect to have 11 crickets? 
+
+## Digested problem
+    You      	have     	collected	7        	crickets 	.        
+    PRP      	VBP      	VBN      	CD       	NNS      	.        
+
+    How      	many     	more     	crickets 	do       	you      	need     	to       	collect  	to       	have     	11       	crickets 	?        
+    WRB      	JJ       	RBR      	NNS      	VBP      	PRP      	VBP      	TO       	VB       	TO       	VB       	CD       	NNS      	.        
+
+## Problem inference
+I think this problem is about me getting crickets to collect to to have crickets and asks a single question.
+
+## Parsed problem
+    I          	have       	collected  	7          	crickets   	.          
+    context    	operator   	operator   	constant   	unit       	punctuation
+
+    How many   	more       	crickets   	do         	I          	need       	to         	collect    	to         	have       	11         	crickets   	?          
+    asking     	rel_more   	unit       	q_start    	context    	q_stop     	conjunction	q_start    	conjunction	q_stop     	constant   	subordinate	punctuation
+
+
+## Question 1
+
+### Question text
+How many more crickets do you need to collect to have 11 crickets?
+
+### Answer interpretation
+The answer is the increase in value of crickets owned by me needed to equal the specified value.
+
+## Data extraction
+
+### Sentence 1
+crickets owned by me = 7
+
+### Sentence 2
+crickets owned by me == 11
+
+## Correct response
+4 crickets

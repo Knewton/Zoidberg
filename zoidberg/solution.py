@@ -39,6 +39,7 @@ class Solution(object):
 		self.last_index = 0
 		self.sig_figs = -1 # Don't need to use significant figures
 
+		self.answer_out = False
 		self.asking = True
 		self.symbol_answer = False
 		self.descriptive_units = []
@@ -650,8 +651,9 @@ class Solution(object):
 				if part in ["subordinate", "subordinate_inferred"]:
 					if val[1] is not None:
 						stype = parser.subordinate_lookup[val[0]]
-						if self.constant is not None and stype == "time_ending":
+						if self.constant is not None and stype in ["time_ending", "unit_requirement"]:
 							answer_out = True
+							self.answer_out = True
 						else:
 							# If we have a conjunction we have an container
 							self.container = val[0]
@@ -894,6 +896,9 @@ class Solution(object):
 								syms.append(ssym)
 								ans += sequ
 						resp = (simple_solve(ans), answer.unit)
+					elif sub == "unit_requirement":
+						pass
+						# This should get handled in the formal logic elsewhere
 					elif sub == "place_noun" or sub is None:
 						compContext = word
 						dispUnit = answer.unit
@@ -935,25 +940,28 @@ class Solution(object):
 				if not k in self.work:
 					self.work[k] = []
 
-				# ad(dition): how many more
-				if answer.rel_mode == "ad":
-					v = r - comp
-					unt = ["more"]
-					self.work[k].append("= " + sym +" - " + csym)
-					self.work[k].append("= " + str(equ) +" - " + str(comp))
-				# su(btraction) how many fewer
-				elif answer.rel_mode == "su":
-					v = comp - r
-					unt = ["fewer"]
-					self.work[k].append("= " + csym +" - " + sym)
-					self.work[k].append("= " + str(comp) +" - " + str(equ))
+				if self.symbol_answer and csym:
+					resp = (safe_solve(equ, Symbol(csym)), answer.unit)
+				else:
+					# ad(dition): how many more
+					if answer.rel_mode == "ad":
+						v = r - comp
+						unt = ["more"]
+						self.work[k].append("= " + sym +" - " + csym)
+						self.work[k].append("= " + str(equ) +" - " + str(comp))
+					# su(btraction) how many fewer
+					elif answer.rel_mode == "su":
+						v = comp - r
+						unt = ["fewer"]
+						self.work[k].append("= " + csym +" - " + sym)
+						self.work[k].append("= " + str(comp) +" - " + str(equ))
 
-				# putting more and less in the answer is questionable
-				#if answer.unit:
-				#	unt.insert(0, answer.unit)
+					# putting more and less in the answer is questionable
+					#if answer.unit:
+					#	unt.insert(0, answer.unit)
 
-				#resp = (simple_solve(v), " ".join(unt))
-				resp = (simple_solve(v), answer.unit)
+					#resp = (simple_solve(v), " ".join(unt))
+					resp = (simple_solve(v), answer.unit)
 
 			if resp[0] is None:
 				dontSave = True

@@ -59,7 +59,8 @@ SUBORDINATES = [
 	("time_ending", "Time: Ending"),
 	("place_noun", "Place (pond, mall, home, work)"),
 	("context_grouping", "Context Grouping (Group by owners of units [total items owned by all])"),
-	("unit_grouping", "Unit Grouping (Group by units [total golfballs])")
+	("unit_grouping", "Unit Grouping (Group by units [total golfballs])"),
+	("unit_requirement", "Unit Requirement (Specifies the total in a missing number problem)")
 ]
 
 RELATIVE = [

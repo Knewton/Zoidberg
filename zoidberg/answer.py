@@ -21,7 +21,8 @@ ANSWER_SUBORDINATE = {
 	"time_starting": "at the beginning of the problem",
 	"time_ending": "at the end of the problem",
 	"context_grouping": "added together",
-	"unit_grouping": "total up"
+	"unit_grouping": "total up",
+	"unit_requirement": "needed to equal the specified value"
 }
 
 # A Zoidberg answer refers to the structure and syntax of what the correct
