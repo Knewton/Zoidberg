@@ -647,7 +647,7 @@ class Solution(object):
 					if self.actor:
 						self.action = val
 
-				if part == "subordinate":
+				if part in ["subordinate", "subordinate_inferred"]:
 					if val[1] is not None:
 						stype = parser.subordinate_lookup[val[0]]
 						if self.constant is not None and stype == "time_ending":

@@ -88,6 +88,7 @@ class SentenceParser(object):
 		self.conjunctions = []
 		self.subordinates = []
 		self.subordinate_strings = {}
+		self.subordinate_subtypes = {}
 
 		self.execute()
 
@@ -107,6 +108,9 @@ class SentenceParser(object):
 			self.longest_phrase = l
 
 	def track(self, val, attr, subtype=None, index=None, conv=False):
+		if attr == "subordinate":
+			self.subordinate_subtypes[val[0]] = subtype
+
 		if attr == "context":
 			if subtype is not None:
 				self.resolve_context(subtype, val)
@@ -648,7 +652,7 @@ class SentenceParser(object):
 				self.track(word, "exestential", self.subtype)
 				self.problem.exestential = True
 
-			if tag == "CD": # A cardinal number
+			if tag in ["CD", "LS"]: # A cardinal number
 				if self.last_tag == "DT":
 					if self.last_determiner == "constant":
 						# should safely be able to ignore detemriner constant
@@ -849,6 +853,17 @@ class SentenceParser(object):
 		self.subordinates = uniq(self.subordinates)
 		self.problem.units += self.units
 		self.problem.units = uniq(self.problem.units)
+
+		if len(self.subordinates) > 0:
+			if not self.main_context in self.problem.context_subordinates:
+				self.problem.context_subordinates[self.main_context] = (self.subordinates, self.subordinate_strings, self.subordinate_subtypes, self.subordinate_lookup)
+		elif self.main_context in self.problem.context_subordinates:
+			# This is an inferred context
+			self.subordinates, self.subordinate_strings, self.subordinate_subtypes, self.subordinate_lookup = self.problem.context_subordinates[self.main_context]
+			for sub in self.subordinates:
+				subord, subt = sub
+				self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
+		print self.parsed
 
 	def __str__(self):
 		return self.sentence_text

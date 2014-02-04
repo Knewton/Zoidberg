@@ -138,7 +138,7 @@ class Answer(object):
 					self.last_unrefined_context_subtype = subtype
 
 			# Assume subordinate during specifying is answer condition
-			if part == "subordinate":
+			if part in ["subordinate", "subordinate_inferred"]:
 				stype = self.query.subordinate_lookup[val[0]]
 				if stype == "context_grouping":
 					if len(self.query.problem.subordinate_adaptive_contexts) > 0:
