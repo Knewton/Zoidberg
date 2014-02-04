@@ -222,6 +222,9 @@ class SentenceParser(object):
 							for pers, deets in p.all_targets["gender"][cgroup].iteritems():
 								context.append(deets)
 
+					if len(context) == 0:
+						return None
+
 					c_str = ""
 
 					if not isinstance(context, basestring):
@@ -508,6 +511,20 @@ class SentenceParser(object):
 						self.context_subtypes[c[0]] = self.subtype
 						# Unset hanging conjunctions when we set a context
 						self.last_conjunction = None
+					else:
+						if self.last_tag in ["IN"]:
+							# remove the "of" in "of them"
+							self.parsed.pop()
+						# Assume this is a unit
+						unit, uidx = self.fix_unit(self.last_unit)
+						self.last_unit = unit
+						self.last_unit_tag = self.last_unit_tag
+						self.last_unit_index = len(self.parsed)
+						self.units.append(unit)
+						self.unit_idx[unit] = self.last_unit_index
+						if self.new_units_as_context:
+							p.units_acting_as_context[unit] = True
+						self.track(unit, "unit", self.subtype, uidx)
 
 			if tag == "PRP$":
 				if self.last_conjunction is not None:
@@ -863,7 +880,6 @@ class SentenceParser(object):
 			for sub in self.subordinates:
 				subord, subt = sub
 				self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
-		print self.parsed
 
 	def __str__(self):
 		return self.sentence_text

@@ -1,7 +1,4 @@
 
-[('Jane', 'context', (u'singular', u'feminine')), ('has', 'operator', None), ('14', 'constant', None), ('balloons', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Jane', 'context', (u'singular', u'feminine')), ('buys', 'operator', None), ('another', u'noise', None), ('6', 'constant', None), ('balloons', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('balloons', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Jane', 'context', (u'singular', u'feminine')), ('have', 'q_stop', None), (('now', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -52,10 +49,6 @@ balloons owned by Jane + 6
 
 ***
 
-[('Mrs. Jones', 'context', (u'singular', u'feminine')), ('bought', 'operator', None), ('some', u'dynamic_variable', None), ('bananas', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[("Mrs. Jones' family", 'context', (u'plural', u'mixed')), ('ate', 'operator', None), ('5', 'constant', None), ('bananas', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Mrs. Jones', 'context', (u'singular', u'feminine')), ('gave', 'operator', None), ('the', u'noise', None), ('remaining', u'solution_zero', None), ('4', 'constant', None), ('bananas', 'unit', (u'plural', u'neutral')), ('to', 'conjunction', None), ("Mrs. Jones' friends", 'context', (u'plural', u'mixed')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('bananas', 'unit', (u'plural', u'neutral')), ('did', 'q_start', None), ('Mrs. Jones', 'context', (u'singular', u'feminine')), ('buy', 'q_stop', None), ('in', 'conjunction', None), ('the', u'noise', None), (('beginning', 'SUB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -117,9 +110,6 @@ bananas owned by Mrs. Jones' friends + 4
 
 ***
 
-[('Tony', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('19', 'constant', None), ('jars', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Tony', 'context', (u'singular', u'masculine')), ('gives', 'operator', None), ('16', 'constant', None), ('jars', 'unit', (u'plural', u'neutral')), ('to', 'conjunction', None), ("Tony's sister", 'context', (u'singular', u'feminine')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('jars', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Tony', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), (('now', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -171,9 +161,6 @@ jars owned by Tony's sister + 16
 
 ***
 
-[('Lucy', 'context', (u'singular', u'feminine')), ('has', 'operator', None), ('8', 'constant', None), ('dolls', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Ethelle', 'context', (u'singular', u'feminine')), ('has', 'operator', None), ('4', 'constant', None), ('more', u'rel_more', None), ('dolls', 'unit', (u'plural', u'neutral')), ('than', 'conjunction', None), (('Lucy', (u'singular', u'feminine')), 'comparator_context', (u'singular', u'feminine')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('dolls', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Ethelle', 'context', (u'singular', u'feminine')), ('have', 'q_stop', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -225,9 +212,6 @@ dolls owned by Ethelle + 4
 
 ***
 
-[('Joey', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('13', 'constant', None), ('toy cars', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Chandler', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('6', 'constant', None), ('toy cars', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('fewer', u'rel_less', None), ('toy cars', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Chandler', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('than', 'conjunction', None), (('Joey', (u'singular', u'masculine')), 'comparator_context', (u'singular', u'masculine')), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -280,11 +264,6 @@ toy cars owned by Chandler + 6
 
 ***
 
-[('Marc', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('10', 'constant', None), ('apples', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Marc', 'context', (u'singular', u'masculine')), ('throws', 'operator', None), ('2', 'constant', None), ('apples', 'unit', (u'plural', u'neutral')), ('away', u'noise', None), ('.', 'punctuation', None)]
-[('Marc', 'context', (u'singular', u'masculine')), ('gives', 'operator', None), ('2', 'constant', None), ('apples', 'unit', (u'plural', u'neutral')), ('to', 'conjunction', None), ('Jim', 'context', (u'singular', u'masculine')), ('.', 'punctuation', None)]
-[('Marc', 'context', (u'singular', u'masculine')), ('gives', 'operator', None), ('3', 'constant', None), ('apples', 'unit', (u'plural', u'neutral')), ('to', 'conjunction', None), ('Julia', 'context', (u'singular', u'feminine')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('apples', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Marc', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), (('now', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -359,9 +338,6 @@ apples owned by Marc - 3
 
 ***
 
-[('8', 'constant', None), ('fish', 'context', None), ('are', 'pre_ind_plu', None), ('swimming', u'acting', None), ('in', 'conjunction', None), ('a', u'constant', None), (('pond', 'NN'), 'subordinate', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('4', 'constant', None), ('more', u'rel_more', None), ('fish', 'context', (u'regular', u'mixed')), ('join', 'operator', None), ('fish', 'context', (u'plural', u'mixed')), ('.', 'punctuation', None), (('pond', u'place_noun'), 'subordinate_inferred', (u'singular', u'neutral'))]
-[('how many', 'asking', None), ('fish', 'context', (u'regular', u'mixed')), ('are', 'pre_ind_plu', None), ('swimming', u'acting', None), ('in', 'conjunction', None), ('the', u'noise', None), (('pond', 'NN'), 'subordinate', (u'singular', u'neutral')), (('now', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -413,9 +389,6 @@ swimming fish in a pond + 4
 
 ***
 
-[('Michael', 'context', (u'singular', u'masculine')), ('had', 'operator', None), ('8', 'constant', None), ('pieces of pizza', 'unit', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('Michael', 'context', (u'singular', u'masculine')), ('ate', 'operator', None), ('2', 'constant', None), ('pieces of pizza', 'unit', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('pieces of pizza', 'unit', (u'singular', u'neutral')), ('did', 'q_start', None), ('Michael', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), (('left', 'SUB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -466,9 +439,6 @@ pieces of pizza owned by Michael - 2
 
 ***
 
-[('Pigpen', 'context', (u'singular', u'masculine')), ('had', 'operator', None), ('some', u'dynamic_variable', None), ('rocks', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Pigpen', 'context', (u'singular', u'masculine')), ('kept', 'operator', None), ('3', 'constant', None), ('rocks', 'unit', (u'plural', u'neutral')), ('for', 'conjunction', None), ('Pigpen', 'context', (u'singular', u'masculine')), ('and', 'coordinating_conjunction', None), ('gave', 'operator', None), ('the', u'noise', None), ('remaining', u'solution_zero', None), ('8', 'constant', None), ('rocks', 'unit', (u'plural', u'neutral')), ('to', 'conjunction', None), ("Pigpen's friends", 'context', (u'plural', u'mixed')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('rocks', 'unit', (u'plural', u'neutral')), ('did', 'q_start', None), ('Pigpen', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('in', 'conjunction', None), ('the', u'noise', None), (('beginning', 'SUB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -523,9 +493,6 @@ rocks owned by Pigpen's friends == 0
 
 ***
 
-[('Mr. Lupis', 'context', (u'singular', u'masculine')), ('needs', 'operator', None), ('4', 'constant', None), ('eggs', 'unit', (u'plural', u'neutral')), ('to', 'conjunction', None), ('bake', 'operator', None), ('13', 'constant', None), (('muffins', 'NNS'), 'subordinate', None), ('.', 'punctuation', None)]
-[('Mr. Lupis', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('only', u'noise', None), ('2', 'constant', None), ('eggs', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None), (('muffins', None), 'subordinate_inferred', None)]
-[('how many', 'asking', None), ('more', u'rel_more', None), ('eggs', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Mr. Lupis', 'context', (u'singular', u'masculine')), ('need', 'q_stop', None), ('to', 'conjunction', None), ('bake', 'operator', None), ('the', u'noise', None), (('muffins', 'NNS'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -576,9 +543,6 @@ eggs owned by Mr. Lupis = 2
 
 ***
 
-[('Mitch', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('3', 'constant', None), ('cobs of corn', 'unit', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('Lisa', 'context', (u'singular', u'feminine')), ('has', 'operator', None), ('2', 'constant', None), ('cobs of corn', 'unit', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('cobs of corn', 'unit', (u'singular', u'neutral')), ('do', 'q_start', None), ('Mitch and Lisa', 'context', (u'plural', u'mixed')), ('have', 'q_stop', None), (('altogether', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -631,9 +595,6 @@ cobs of corn owned by Lisa = 2
 
 ***
 
-[('Mickey', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('12', 'constant', None), ('apples', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Eric', 'context', (u'singular', u'masculine')), ('takes', 'operator', None), ('away', u'noise', None), (u'0.5', 'variable_relationship', None), ('of', 'conjunction', None), ('the', u'noise', None), (('apples owned by Mickey', 'apples', 'Mickey', 'Eric'), 'context_unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('apples', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Mickey', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), (('now', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -687,8 +648,6 @@ apples owned by Eric = Mickey apples * 0.5
 
 ***
 
-[('there', 'exestential', None), ('are', 'pre_ind_plu', None), ('6', 'constant', None), ('pink christmas ornaments', 'unit', (u'plural', u'neutral')), ('and', 'coordinating_conjunction', None), ('8', 'constant', None), ('blue christmas ornaments', 'unit', (u'plural', u'neutral')), ('on', 'conjunction', None), ('the', u'noise', None), (('christmas tree', 'NN'), 'subordinate', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('christmas ornaments', 'context', None), ('are', 'pre_ind_plu', None), ('on', 'conjunction', None), ('the', u'noise', None), (('christmas tree', 'NN'), 'subordinate', (u'singular', u'neutral')), (('altogether', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -736,9 +695,6 @@ pink christmas ornaments on the christmas tree = 6
 
 ***
 
-[('Sara', 'context', (u'singular', u'feminine')), ('has', 'operator', None), ('8', 'constant', None), ('pieces of chocolate', 'unit', None), ('.', 'punctuation', None)]
-[("Sara's mother", 'context', (u'singular', u'feminine')), ('gives', 'operator', None), (('Sara', (u'singular', u'feminine')), 'comparator_context', (u'singular', u'feminine')), ('4', 'constant', None), ('more', u'rel_more', None), ('pieces of chocolate', 'unit', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('pieces of chocolate', 'unit', None), ('does', 'q_start', None), ('Sara', 'context', (u'singular', u'feminine')), ('have', 'q_stop', None), (('now', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -792,9 +748,6 @@ pieces of chocolate owned by Sara + 4
 
 ***
 
-[('Alex', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('7', 'constant', None), ('doughnuts', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Bennett', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('4', 'constant', None), ('doughnuts', 'unit', (u'plural', u'neutral')), ('more', u'rel_more', None), ('than', 'conjunction', None), (('Alex', (u'singular', u'masculine')), 'comparator_context', (u'singular', u'masculine')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('doughnuts', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Bennett', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -848,9 +801,6 @@ doughnuts owned by Bennett + 4
 
 ***
 
-[('Charlie', 'context', (u'singular', u'masculine')), ('gave', 'operator', None), ('4', 'constant', None), ('bottles', 'unit', (u'plural', u'neutral')), ('to', 'conjunction', None), ('Mac', 'context', (u'singular', u'masculine')), ('.', 'punctuation', None)]
-[('Charlie', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('8', 'constant', None), ('bottles', 'unit', (u'plural', u'neutral')), (('left', 'SUB'), 'subordinate', None), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('bottles', 'unit', (u'plural', u'neutral')), ('did', 'q_start', None), ('Charlie', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('in', 'conjunction', None), ('the', u'noise', None), (('beginning', 'SUB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -904,9 +854,6 @@ bottles owned by Charlie == 8
 
 ***
 
-[('Meathead', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('6', 'constant', None), ('newspapers', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Archie', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('7', 'constant', None), ('newspapers', 'unit', (u'plural', u'neutral')), ('more', u'rel_more', None), ('than', 'conjunction', None), (('Meathead', (u'singular', u'masculine')), 'comparator_context', (u'singular', u'masculine')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('newspapers', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Archie', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -960,10 +907,6 @@ newspapers owned by Archie + 7
 
 ***
 
-[('Hellen', 'context', (u'singular', u'feminine')), ('has', 'operator', None), ('2', 'constant', None), ('dolls', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Troy', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('3', 'constant', None), ('more', u'rel_more', None), ('dolls', 'unit', (u'plural', u'neutral')), ('than', 'conjunction', None), (('Hellen', (u'singular', u'feminine')), 'comparator_context', (u'singular', u'feminine')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('dolls', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Troy', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('?', 'punctuation', None)]
-[('how many', 'asking', None), ('dolls', 'unit', (u'plural', u'neutral')), ('do', 'q_start', None), ('Troy and Hellen', 'context', (u'plural', u'mixed')), ('have', 'q_stop', None), (('altogether', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1037,10 +980,6 @@ dolls owned by Troy + 3
 
 ***
 
-[('Dad', 'context', (u'singular', u'masculine')), ('gives', 'operator', None), ('Richard', 'context', (u'singular', u'masculine')), ('7', 'constant', None), ('feathers', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Dad', 'context', (u'singular', u'masculine')), ('gives', 'operator', None), ('William', 'context', (u'singular', u'masculine')), ('4', 'constant', None), ('feathers', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('feathers', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Dad', 'context', (u'singular', u'masculine')), ('give', 'q_stop', None), ('to', 'conjunction', None), ('the', u'noise', None), ('two', 'constant', None), (('boys', 'NNS'), 'subordinate', None), ('?', 'punctuation', None)]
-[('how many', 'asking', None), ('more', u'rel_more', None), ('feathers', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Richard', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('than', 'conjunction', None), (('William', (u'singular', u'masculine')), 'comparator_context', (u'singular', u'masculine')), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1115,9 +1054,6 @@ feathers owned by Dad - 4
 
 ***
 
-[('Tom', 'context', (u'singular', u'masculine')), ('is', 'operator', None), ('6', 'constant', None), ('years', 'unit', (u'plural', u'neutral')), ('old', 'adjective', None), ('.', 'punctuation', None)]
-[('Lee', 'context', (u'singular', u'masculine')), ('is', 'operator', None), ('3', 'constant', None), ('years', 'unit', (u'plural', u'neutral')), ('younger', u'rel_less', None), ('than', 'conjunction', None), (('Tom', (u'singular', u'masculine')), 'comparator_context', (u'singular', u'masculine')), ('.', 'punctuation', None)]
-[('how old', 'asking', None), ('is', 'q_start', None), ('Lee', 'context', (u'singular', u'masculine')), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1171,9 +1107,6 @@ years owned by Lee - 3
 
 ***
 
-[('Sam', 'context', (u'singular', u'ambiguous')), ('has', 'operator', None), ('12', 'constant', None), ('bags', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Sam', 'context', (u'singular', u'masculine')), ('buys', 'operator', None), ('8', 'constant', None), ('more', u'rel_more', None), ('bags', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('bags', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Sam', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('in', 'conjunction', None), ('all', u'dynamic_variable', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1226,9 +1159,6 @@ bags owned by Sam + 8
 
 ***
 
-[('Paul', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('10', 'constant', None), ('books', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Paul', 'context', (u'singular', u'masculine')), ('gives', 'operator', None), ("Paul's sister", 'context', (u'singular', u'feminine')), ('7', 'constant', None), ('books', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('books', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Paul', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), (('left', 'SUB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1282,9 +1212,6 @@ books owned by Paul's sister + 7
 
 ***
 
-[('Paul', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('6', 'constant', None), ('cups', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Paul', 'context', (u'singular', u'masculine')), ('buys', 'operator', None), ('11', 'constant', None), ('more', u'rel_more', None), ('cups', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('cups', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Paul', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('in', 'conjunction', None), ('all', u'dynamic_variable', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1337,9 +1264,6 @@ cups owned by Paul + 11
 
 ***
 
-[('Sidd', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('10', 'constant', None), ('books', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Sidd', 'context', (u'singular', u'masculine')), ('buys', 'operator', None), ('11', 'constant', None), ('more', u'rel_more', None), ('books', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('books', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Sidd', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('in', 'conjunction', None), ('all', u'dynamic_variable', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1393,9 +1317,6 @@ books owned by Sidd + 11
 
 ***
 
-[('Lee', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('10', 'constant', None), ('blocks', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Lee', 'context', (u'singular', u'masculine')), ('buys', 'operator', None), ('2', 'constant', None), ('more', u'rel_more', None), ('blocks', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('blocks', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Lee', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), ('in', 'conjunction', None), ('all', u'dynamic_variable', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1448,9 +1369,6 @@ blocks owned by Lee + 2
 
 ***
 
-[('Tom', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('5', 'constant', None), ('bags', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Tom', 'context', (u'singular', u'masculine')), ('gives', 'operator', None), ("Tom's sister", 'context', (u'singular', u'feminine')), ('4', 'constant', None), ('bags', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('bags', 'unit', (u'plural', u'neutral')), ('does', 'q_start', None), ('Tom', 'context', (u'singular', u'masculine')), ('have', 'q_stop', None), (('left', 'SUB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1504,9 +1422,6 @@ bags owned by Tom - 4
 
 ***
 
-[('Tom', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('5', 'constant', None), ('books', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('Sidd', 'context', (u'singular', u'masculine')), ('has', 'operator', None), ('8', 'constant', None), ('books', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('books', 'unit', (u'plural', u'neutral')), ('do', 'q_start', None), ('Sidd and Tom', 'context', (u'plural', u'mixed')), ('have', 'q_stop', None), (('altogether', 'RB'), 'subordinate', None), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1559,8 +1474,6 @@ books owned by Sidd = 8
 
 ***
 
-[('me', 'context', (u'self', u'self')), ('have', 'operator', None), ('7', 'constant', None), ('balloons', 'unit', (u'plural', u'neutral')), ('and', 'coordinating_conjunction', None), ('my friend', 'context', (u'singular', u'ambiguous')), ('has', 'operator', None), ('5', 'constant', None), ('balloons', 'unit', (u'plural', u'neutral')), ('.', 'punctuation', None)]
-[('how many', 'asking', None), ('more', u'rel_more', None), ('balloons', 'unit', (u'plural', u'neutral')), ('do', 'q_start', None), ('me', 'context', (u'self', u'self')), ('have', 'q_stop', None), ('than', 'conjunction', None), (('my friend', (u'singular', u'ambiguous')), 'comparator_context', (u'singular', u'ambiguous')), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1604,9 +1517,6 @@ balloons owned by my friend = 5
 
 ***
 
-[('2', 'constant', None), ('birds', 'context', None), ('were', 'pre_ind_plu', None), ('sitting', u'acting', None), ('on', 'conjunction', None), ('the', u'noise', None), (('fence', 'NN'), 'subordinate', (u'singular', u'neutral')), ('.', 'punctuation', None)]
-[('4', 'constant', None), ('more', u'rel_more', None), ('birds', 'context', (u'plural', u'mixed')), ('came', 'operator', None), ('to', 'conjunction', None), ('join', 'operator', None), ('birds', 'context', (u'plural', u'mixed')), ('.', 'punctuation', None), (('fence', u'place_noun'), 'subordinate_inferred', (u'singular', u'neutral'))]
-[('how many', 'asking', None), ('birds', 'context', (u'plural', u'mixed')), ('are', 'pre_ind_plu', None), ('sitting', u'acting', None), ('on', 'conjunction', None), ('the', u'noise', None), (('fence', 'NN'), 'subordinate', (u'singular', u'neutral')), ('?', 'punctuation', None)]
 # Zoidberg Solution
 
 ## The problem
@@ -1656,3 +1566,47 @@ sitting birds on the fence + 4
 
 ## Correct response
 6 birds
+
+***
+
+# Zoidberg Solution
+
+## The problem
+You have 7 cookies and you ate 2 of them. 
+How many cookies do you have left? 
+
+
+## Digested problem
+    You    	have   	7      	cookies	and    	you    	ate    	2      	of     	them   	.      
+    PRP    	VBP    	CD     	NNS    	CC     	PRP    	VBP    	CD     	IN     	PRP    	.      
+
+    How    	many   	cookies	do     	you    	have   	left   	?      
+    WRB    	JJ     	NNS    	VBP    	PRP    	VB     	VBN    	.      
+
+## Problem inference
+I think this problem is about me losing cookies and asks a single question.
+
+## Parsed problem
+    I                       	have                    	7                       	cookies                 	and                     	I                       	ate                     	2                       	cookies                 	.                       
+    context                 	operator                	constant                	unit                    	coordinating_conjunction	context                 	operator                	constant                	unit                    	punctuation             
+
+    How many                	cookies                 	do                      	I                       	have                    	left                    	?                       
+    asking                  	unit                    	q_start                 	context                 	q_stop                  	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+How many cookies do you have left?
+
+### Answer interpretation
+The answer is the unknown value of cookies owned by me at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+cookies owned by me = 7
+cookies owned by me - 2
+
+## Correct response
+5 cookies

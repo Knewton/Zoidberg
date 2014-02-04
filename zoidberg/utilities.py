@@ -22,6 +22,9 @@ def oxfordComma(inp):
 		o = [i[0] for i in o]
 		outstr = ", ".join(o)
 		outstr += " and {0}".format(laststr)
+	elif len(o) == 0:
+		raise Exception("bad")
+		return "?????"
 	else:
 		return o[0]
 	return outstr
