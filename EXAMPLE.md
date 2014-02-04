@@ -101,8 +101,6 @@ bananas owned by Mrs. Jones + x
 bananas owned by Mrs. Jones - 5
 
 ### Sentence 3
-bananas owned by Mrs. Jones - 4
-bananas owned by Mrs. Jones == 0
 bananas owned by Mrs. Jones' friends + 4
 
 ## Correct response
@@ -153,7 +151,6 @@ The answer is the unknown value of jars owned by Tony at the end of the problem.
 jars owned by Tony = 19
 
 ### Sentence 2
-jars owned by Tony - 16
 jars owned by Tony's sister + 16
 
 ## Correct response
@@ -326,11 +323,9 @@ apples owned by Marc = 10
 apples owned by Marc - 2
 
 ### Sentence 3
-apples owned by Jim + 2
 apples owned by Marc - 2
 
 ### Sentence 4
-apples owned by Julia + 3
 apples owned by Marc - 3
 
 ## Correct response
@@ -358,7 +353,7 @@ How many fish are swimming in the pond now?
 I think this problem is about an increasing number of swimming fish in a pond and asks a single question.
 
 ## Parsed problem
-    8                   	fish                	are                 	swimming            	in                  	a                   	pond                	.                   
+    8                   	fish                	are                 	swimming            	in                  	1                   	pond                	.                   
     constant            	context             	pre_ind_plu         	acting              	conjunction         	constant            	subordinate         	punctuation         
 
     4                   	more                	fish                	join                	fish                	.                   	pond                
@@ -484,7 +479,6 @@ The answer is the unknown value of rocks owned by Pigpen at the beginning of the
 rocks owned by Pigpen = x
 
 ### Sentence 2
-rocks owned by Pigpen - 3
 rocks owned by Pigpen's friends - 8
 rocks owned by Pigpen's friends == 0
 
@@ -640,7 +634,6 @@ The answer is the unknown value of apples owned by Mickey at the end of the prob
 apples owned by Mickey = 12
 
 ### Sentence 2
-apples owned by Mickey - Eric apples
 apples owned by Eric = Mickey apples * 0.5
 
 ## Correct response
@@ -740,7 +733,6 @@ The answer is the unknown value of pieces of chocolate owned by Sara at the end 
 pieces of chocolate owned by Sara = 8
 
 ### Sentence 2
-pieces of chocolate owned by Sara's mother - 4
 pieces of chocolate owned by Sara + 4
 
 ## Correct response
@@ -843,7 +835,6 @@ The answer is the unknown value of bottles owned by Charlie at the beginning of 
 ## Data extraction
 
 ### Sentence 1
-bottles owned by Charlie - 4
 bottles owned by Mac + 4
 
 ### Sentence 2
@@ -1037,11 +1028,9 @@ The answer is the increase in value of feathers owned by Richard with respect to
 ## Data extraction
 
 ### Sentence 1
-feathers owned by Dad - 7
 feathers owned by Richard + 7
 
 ### Sentence 2
-feathers owned by William + 4
 feathers owned by Dad - 4
 
 ## Correct response
@@ -1204,7 +1193,6 @@ The answer is the unknown value of books owned by Paul at the end of the problem
 books owned by Paul = 10
 
 ### Sentence 2
-books owned by Paul - 7
 books owned by Paul's sister + 7
 
 ## Correct response
@@ -1414,7 +1402,6 @@ The answer is the unknown value of bags owned by Tom at the end of the problem.
 bags owned by Tom = 5
 
 ### Sentence 2
-bags owned by Tom's sister + 4
 bags owned by Tom - 4
 
 ## Correct response
@@ -1509,7 +1496,6 @@ The answer is the increase in value of balloons owned by me with respect to my f
 ## Data extraction
 
 ### Sentence 1
-balloons owned by me = 7
 balloons owned by my friend = 5
 
 ## Correct response
@@ -1655,3 +1641,45 @@ crickets owned by me == 11
 
 ## Correct response
 4 crickets
+
+***
+
+# Zoidberg Solution
+
+## The problem
+A bee has 6 legs. 
+How many legs do 5 bees have?
+
+## Digested problem
+    A   	bee 	has 	6   	legs	.   
+    DT  	NN  	VBZ 	CD  	NNS 	.   
+
+    How 	many	legs	do  	5   	bees	have	?   
+    WRB 	JJ  	NNS 	VBP 	CD  	NNS 	VBP 	.   
+
+## Problem inference
+I think this problem is about bees having legs and asks a single question.
+
+## Parsed problem
+    1          	bee        	has        	6          	legs       	.          
+    constant   	context    	operator   	constant   	unit       	punctuation
+
+    How many   	legs       	do         	5          	bees       	have       	?          
+    asking     	unit       	q_start    	constant   	context    	q_stop     	punctuation
+
+
+## Question 1
+
+### Question text
+How many legs do 5 bees have?
+
+### Answer interpretation
+The answer is the unknown value of legs owned by 5 bees.
+
+## Data extraction
+
+### Sentence 1
+legs owned by 1 bee = 6
+
+## Correct response
+30 legs

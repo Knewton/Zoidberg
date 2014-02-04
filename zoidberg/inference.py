@@ -119,6 +119,8 @@ class Inference(object):
 		self.contexts = uniq(self.contexts)
 		self.units = uniq(self.units)
 
+		self.condense()
+
 		# Set our phrasings based on the contexts in play
 		if len(self.contexts) > 1:
 			op_key = OPERATOR_STR["multiple_contexts"]
@@ -188,3 +190,8 @@ class Inference(object):
 		output_tuples(self.sentences, o, self.longest_phrase, self.problem.brain)
 
 		return "\n".join(o)
+
+	def condense(self):
+		self.contexts = self.problem.brain.condense(self.contexts)
+		self.units = self.problem.brain.condense(self.units)
+

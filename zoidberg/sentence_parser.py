@@ -437,14 +437,41 @@ class SentenceParser(object):
 
 							unit, uidx = self.fix_unit(unit)
 							if not unit in p.units_acting_as_context or not p.units_acting_as_context[unit]:
-								self.last_unit = unit
-								self.last_unit_tag = tag
-								self.last_unit_index = len(self.parsed)
-								self.units.append(unit)
-								self.unit_idx[unit] = self.last_unit_index
-								if self.new_units_as_context:
-									p.units_acting_as_context[unit] = True
-								self.track(unit, "unit", self.subtype, uidx)
+								if self.last_unit and self.framing_question and len(self.operators) == 0:
+									context = unit
+									if self.subtype[0] == "self":
+										context = self.problem.brain.self_reflexive(context, True)
+									# @TODO: This needs to be a subroutine or something
+									self.last_context = context
+									self.contexts.append(context)
+									if self.is_relative_quantity and not self.comparator_context and self.main_context:
+										self.comparator_context = context
+										self.track(context, "comparator_context", self.subtype)
+									else:
+										self.main_context = context
+										self.track(context, "context", self.subtype)
+									self.context_subtypes[context] = self.subtype
+								else:
+									if len(self.operators) > 0 and self.last_unit and not self.main_context:
+										if self.last_unit != unit:
+											context = self.units.pop()
+											self.last_context = context
+											self.contexts.append(context)
+											if self.is_relative_quantity and not self.comparator_context and self.main_context:
+												self.comparator_context = context
+												self.track(context, "comparator_context", self.subtype, self.last_unit_index)
+											else:
+												self.main_context = context
+												self.track(context, "context", self.subtype, self.last_unit_index)
+											self.context_subtypes[context] = self.subtype
+									self.last_unit = unit
+									self.last_unit_tag = tag
+									self.last_unit_index = len(self.parsed)
+									self.units.append(unit)
+									self.unit_idx[unit] = self.last_unit_index
+									if self.new_units_as_context:
+										p.units_acting_as_context[unit] = True
+									self.track(unit, "unit", self.subtype, uidx)
 							else:
 								context = unit
 								if self.subtype[0] == "self":
@@ -693,6 +720,8 @@ class SentenceParser(object):
 						self.track(word, vtype, self.subtype)
 					else:
 						self.track(vtype, "variable_relationship", self.subtype)
+				elif dtype == "constant":
+					self.track(p.brain.number(word, self.sentence_text), dtype, self.subtype)
 				else:
 					self.track(word, dtype, self.subtype)
 

@@ -37,6 +37,7 @@ class Answer(object):
 	def __init__(self, query):
 		self.query = query
 
+		self.constant = None
 		self.syntax = None
 		self.relative = False
 		self.rel_mode = None
@@ -48,6 +49,7 @@ class Answer(object):
 		self.value = None
 		self.unit = None
 		self.context = None
+		self.context_constant = None
 		self.context_subtype = None
 
 		self.last_unrefined_context = None
@@ -118,6 +120,9 @@ class Answer(object):
 			if part == "comparator_context":
 				self.comparator = val[0]
 
+			if part == "constant":
+				self.constant = val
+
 			# The qstart ends asking and begins refining
 			if part == "q_start":
 				asking = False
@@ -137,6 +142,9 @@ class Answer(object):
 				else:
 					self.last_unrefined_context = val
 					self.last_unrefined_context_subtype = subtype
+				if self.constant:
+					self.context_constant = self.constant
+					self.constant = None
 
 			# Assume subordinate during specifying is answer condition
 			if part in ["subordinate", "subordinate_inferred"]:
@@ -211,13 +219,16 @@ class Answer(object):
 			i.append(self.unit)
 
 		if self.context:
+			cntx = self.context
+			if self.context_constant:
+				cntx = " ".join([self.context_constant, cntx])
 			if self.query.problem.inference.is_requirement_problem:
-				i.append("needed by {0}".format(self.context))
+				i.append("needed by {0}".format(cntx))
 			elif self.operator is not None:
-				i.append("{1} {0}".format(self.context, OPERATOR_STR[self.operator]))
+				i.append("{1} {0}".format(cntx, OPERATOR_STR[self.operator]))
 			else:
 				# Assume equals failing all else?
-				i.append("{1} {0}".format(self.context, OPERATOR_STR["eq"]))
+				i.append("{1} {0}".format(cntx, OPERATOR_STR["eq"]))
 
 		if self.relative:
 			if self.comparator is not None:

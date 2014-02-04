@@ -4,6 +4,23 @@ from utilities import get_json, set_json, uniq
 import sys
 import json
 
+def common_prefix(strings):
+	""" Find the longest string that is a prefix of all the strings.
+	"""
+	if not strings:
+		return ''
+	prefix = strings[0]
+	for s in strings:
+		if len(s) < len(prefix):
+			prefix = prefix[:len(s)]
+		if not prefix:
+			return ''
+		for i in range(len(prefix)):
+			if prefix[i] != s[i]:
+				prefix = prefix[:i]
+				break
+	return prefix
+
 DEFAULT_PATH = "~/.zoidberg.brain.json"
 DEFAULT_BRAIN = {
 	"operator_verbs": {},
@@ -23,6 +40,10 @@ DEFAULT_BRAIN = {
 	"connotation_tags": {},
 	"tag_list": [],
 	"tag_units": {},
+	"word_forms": {
+		"single": {},
+		"plural": {}
+	}
 }
 
 # hardcoded taught the concept of self
@@ -479,7 +500,10 @@ class Brain(object):
 		return (plurality, gender)
 
 	def determiner(self, n, ref):
-		return self.proc("determiners", n, input_determiner, ref)
+		dt = self.proc("determiners", n, input_determiner, ref)
+		if dt == "constant":
+			self.number(n, ref)
+		return dt
 
 	def gerund(self, n, ref):
 		return self.proc("gerunds", n, input_gerund, ref)
@@ -516,4 +540,108 @@ class Brain(object):
 			raise Exception("Need to handle this reflexive self: " + val)
 		else:
 			return x[val]
+
+	def is_plural_form(self, item, comp, asked):
+		matches = False
+		if (item + "s") == comp:
+			matches = True
+		if not matches and (item + "es") == comp:
+			matches = True
+
+		if not matches:
+			lastTwo = item[-2:]
+			firstBit = item[:-2]
+
+			if lastTwo == "us":
+				if (firstBit + "i") == comp:
+					# Simple nucleus to nuclei style
+					matches = True
+
+			if not matches and lastTwo == "is":
+				if (firstBit + "es") == comp:
+					matches = True
+
+			if not matches and lastTwo == "on":
+				if (firstBit + "a") == comp:
+					matches = True
+
+			if not matches and lastTwo == ["ex", "ix"]:
+				if (firstBit + "ices") == comp:
+					matches = True
+
+		if matches:
+			inSingle = item in self.raw["word_forms"]["single"]
+			inPlural = comp in self.raw["word_forms"]["plural"]
+
+			if not inSingle:
+				self.raw["word_forms"]["single"][comp] = item
+			if not inPlural:
+				self.raw["word_forms"]["plural"][item] = comp
+
+			return (item, comp)
+		elif not asked:
+			# Ignore complex checks (those using spaces in the name)
+			if not (" " in item or " " in comp):
+				if len(common_prefix([item, comp])) > 2:
+					raise Exception("ASK USER FOR MAPPING")
+		else:
+			isPlural = item in self.raw["word_forms"]["single"]
+			isSingle = item in self.raw["word_forms"]["plural"]
+
+			if isPlural:
+				return (self.raw["word_forms"]["single"][item], item)
+			elif isSingle:
+				return (item, self.raw["word_forms"]["plural"][item])
+		return None
+
+	def condensor(self, item, comp):
+		v1 = " ".join([item, comp])
+		v1s = v1 in self.raw["word_forms"]["solved"]
+
+		v2 = " ".join([comp, item])
+		v2s = v2 in self.raw["word_forms"]["solved"]
+
+		rslt = self.is_plural_form(item, comp, (v1s or v2s))
+
+		if not v1s:
+			self.raw["word_forms"]["solved"].append(v1)
+
+		if not v2s:
+			self.raw["word_forms"]["solved"].append(v2)
+
+		if rslt is not None:
+			return rslt[1]
+
+		return None
+
+	def condense(self, itemList):
+		if not "word_forms" in self.raw:
+			self.raw["word_forms"] = {}
+		if not "single" in self.raw["word_forms"]:
+			self.raw["word_forms"]["single"] = {}
+		if not "plural" in self.raw["word_forms"]:
+			self.raw["word_forms"]["plural"] = {}
+		if not "solved" in self.raw["word_forms"]:
+			self.raw["word_forms"]["solved"] = []
+
+		outp = []
+		if len(itemList) < 2:
+			outp = itemList
+		else:
+			comps = [] + itemList
+
+			for item in itemList:
+				for comp in comps:
+					if item == comp:
+						continue
+					else:
+						cond = self.condensor(item, comp)
+						if cond is None:
+							outp.append(item)
+						else:
+							outp.append(cond)
+
+			outp = uniq(outp)
+
+		return outp
 

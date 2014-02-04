@@ -1,8 +1,9 @@
 clear
 echo "" > EXAMPLE.md
-MAX_IDX=31
+MIN_ID=1
+MAX_IDX=32
 
-for i in $(seq 1 $MAX_IDX); do
+for i in $(seq $MIN_ID $MAX_IDX); do
     cat calibrations/$i.txt | zoidberg | tee -a EXAMPLE.md
     if [[ $i != $MAX_IDX ]]; then
         echo -e "\n***\n" | tee -a EXAMPLE.md
