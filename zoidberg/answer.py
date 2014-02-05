@@ -173,9 +173,11 @@ class Answer(object):
 				if stype in ["place_noun", "time_ending", "time_starting"]:
 					specifying = True
 
+				#rint specifying
 				if specifying:
 					subs = self.query.subordinates
 					self.subordinate = [s for s in subs if s[0] == val[0]]
+					#rint subs, stype, val[0]
 					if len(self.subordinate) > 0:
 						self.subordinates += self.subordinate
 

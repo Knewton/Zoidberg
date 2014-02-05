@@ -412,19 +412,21 @@ class SentenceParser(object):
 										self.units.pop()
 									self.used_unit_adjectives.append(self.last_word)
 									self.parsed.pop()
-								#elif self.problem.involves_acting:
-								#	unit, uidx = self.fix_unit(unit)
-								#	self.last_unit = unit
-								#	self.last_unit_tag = tag
-								#	self.last_unit_index = len(self.parsed)
-								#	self.units.append(unit)
-								#	self.unit_idx[unit] = self.last_unit_index
-								#	if self.new_units_as_context:
-								#		p.units_acting_as_context[unit] = True
-								#	self.track(unit, "unit", self.subtype, uidx)
-								#	do_unset_conj = False
-								#	do_reg_unit = False
-								#	do_std = False
+								ptest = self.parsed.pop()
+								self.parsed.append(ptest)
+								if ptest[1] == "constant" and self.last_tag != "DT" and self.problem.exestential:
+									unit, uidx = self.fix_unit(unit)
+									self.last_unit = unit
+									self.last_unit_tag = tag
+									self.last_unit_index = len(self.parsed)
+									self.units.append(unit)
+									self.unit_idx[unit] = self.last_unit_index
+									if self.new_units_as_context:
+										p.units_acting_as_context[unit] = True
+									self.track(unit, "unit", self.subtype, uidx)
+									do_unset_conj = False
+									do_reg_unit = False
+									do_std = False
 
 							if do_std:
 								if word in self.used_unit_adjectives:
@@ -987,7 +989,8 @@ class SentenceParser(object):
 						continue
 					self.subordinate_subtypes[subord] = sub_subs[subord]
 					self.subordinate_lookup[subord] = sub_look[subord]
-					#self.subordinates.append(sub)
+					if subt != "refiner":
+						self.subordinates.append(sub)
 					self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
 
 		if self.main_context in self.problem.context_actions and len(self.actions) == 0:

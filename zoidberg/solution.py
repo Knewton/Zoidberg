@@ -481,8 +481,8 @@ class Solution(object):
 			if operator == "ex":
 				operator = "su"
 
-			if not answer_out:
-				data.append((operator, constant, context_var))
+			#if not answer_out:
+			data.append((operator, constant, context_var))
 
 			if zeroes_out:
 				data.append(("ans", "0", None))
@@ -509,6 +509,9 @@ class Solution(object):
 				self.containers[container][k1][context_constant] = {}
 
 			self.containers[container][k1][context_constant][k2] = data
+			#rint "==="
+			#rint "WAT", container, k1, context_constant, k2, data
+			#rint self.containers
 			self.digest_unit_groups(container, k1, context_constant, k2)
 
 		if self.coordinated:
@@ -595,8 +598,10 @@ class Solution(object):
 			did_set_context = False
 			last_context = None
 			last_context_subtype = None
+			open_conjunction = False
 			last_target = None
 			last_target_subtype = None
+			pending_constant = None
 			last_container = None
 			zeroes_out = False
 			answer_out = False
@@ -637,13 +642,27 @@ class Solution(object):
 					if self.operator == "ex":
 						self.can_target = True
 
-				if part == "constant" and not self.constant:
-					self.constant = val
+				if part == "constant":
+					if not self.constant:
+						self.constant = val
+					elif open_conjunction:
+						pending_constant = val
 
 				if part == "variable_relationship":
 					self.variable_relationship = val
 
 				if part == "unit":
+					if open_conjunction and pending_constant:
+						if self.has_any():
+							self.coordinated_container = self.generate_expression(zeroes_out, answer_out)
+							self.constant = pending_constant
+							pending_constant = None
+
+							self.coordinated = True
+							self.context = last_context
+							self.context_subtype = last_context_subtype
+							self.container = last_container
+							did_set_context = False
 					self.unit = val
 
 				if part == "context_unit":
@@ -684,6 +703,8 @@ class Solution(object):
 						self.action = val
 
 				if part in ["subordinate", "subordinate_inferred"]:
+					open_conjunction = False
+					pending_constant = None
 					if val[1] is not None:
 						if val[0] not in parser.subordinate_lookup:
 							continue
@@ -695,6 +716,9 @@ class Solution(object):
 							# If we have a conjunction we have an container
 							self.container = val[0]
 							last_container = self.container
+
+				if part == "conjunction":
+					open_conjunction = True
 
 				if part == "coordinating_conjunction":
 					if self.has_any():
@@ -753,10 +777,10 @@ class Solution(object):
 #				rint sd
 #				rint self.symbols
 #				rint "--"
-				new_constant_wrapper = {}
 				#rint data
+				new_data = {}
 				for context in data:
-					new_data = {}
+					new_constant_wrapper = {}
 					for context_constant in data[context]:
 						units = data[context][context_constant]
 
@@ -806,11 +830,13 @@ class Solution(object):
 								else:
 									con = constant
 								#	rint "HERE THEN?", con, constant
+								#rint "DIS", new_values, unit, context_constant, context, container
 								new_values.append((operator, con, dc))
 							new_units[unit] = new_values
 						new_constant_wrapper[context_constant] = new_units
 						last_context = context
 					new_data[context] = new_constant_wrapper
+					#rint context, new_constant_wrapper, container
 				new_container[container] = new_data
 			index += 1
 			new_sentence_data.append(new_container)
@@ -950,6 +976,7 @@ class Solution(object):
 						pass
 						# This should get handled in the formal logic elsewhere
 					elif sub == "place_noun" or sub is None:
+						#rint "here?"
 						compContext = word
 						dispUnit = answer.unit
 						if answer.actor:
