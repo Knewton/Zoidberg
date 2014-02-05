@@ -89,6 +89,7 @@ class SentenceParser(object):
 		self.subordinates = []
 		self.subordinate_strings = {}
 		self.subordinate_subtypes = {}
+		self.word_subtypes = {}
 
 		self.execute()
 
@@ -108,6 +109,9 @@ class SentenceParser(object):
 			self.longest_phrase = l
 
 	def track(self, val, attr, subtype=None, index=None, conv=False):
+		if subtype:
+			self.word_subtypes[val] = subtype
+
 		if attr == "subordinate":
 			self.subordinate_subtypes[val[0]] = subtype
 
@@ -780,32 +784,34 @@ class SentenceParser(object):
 			if tag == "PIP":
 				did_something = True
 				self.track(word, "pre_ind_plu", self.subtype)
-				self.acting = True
-				if self.last_unit is not None and self.last_context is None:
-					# If we have a present indicitive plural with no context
-					# it is likely that we're dealing with a context which has
-					# been misinterpreted as a unit, so switch that
-					# mistake here.
-					p.units_acting_as_context[self.last_unit] = True
+				if not self.problem.exestential:
+					self.acting = True
+					self.problem.involves_acting = True
+					if self.last_unit is not None and self.last_context is None:
+						# If we have a present indicitive plural with no context
+						# it is likely that we're dealing with a context which has
+						# been misinterpreted as a unit, so switch that
+						# mistake here.
+						p.units_acting_as_context[self.last_unit] = True
 
-					# Remove the last unit and make it a context
-					context = self.units.pop()
-					self.last_context = context
-					self.contexts.append(context)
-					if self.is_relative_quantity and not self.comparator_context and self.main_context:
-						self.comparator_context = context
-						self.track(context, "comparator_context", self.subtype, self.last_unit_index)
-					else:
-						self.main_context = context
-						self.track(context, "context", self.subtype, self.last_unit_index)
-					self.context_subtypes[context] = self.subtype
+						# Remove the last unit and make it a context
+						context = self.units.pop()
+						self.last_context = context
+						self.contexts.append(context)
+						if self.is_relative_quantity and not self.comparator_context and self.main_context:
+							self.comparator_context = context
+							self.track(context, "comparator_context", self.subtype, self.last_unit_index)
+						else:
+							self.main_context = context
+							self.track(context, "context", self.subtype, self.last_unit_index)
+						self.context_subtypes[context] = self.subtype
 
-					# @TODO: This needs a much better tracking system
-					self.last_unit = None
-					self.last_unit_tag = None
-					self.last_unit_index = -1
-				elif not self.phrasing_question:
-					self.new_units_as_context = True
+						# @TODO: This needs a much better tracking system
+						self.last_unit = None
+						self.last_unit_tag = None
+						self.last_unit_index = -1
+					elif not self.phrasing_question:
+						self.new_units_as_context = True
 
 			if tag in ["WRB", "WDT", "WP", "WP$"]: # Wh- determiner
 				self.question = True

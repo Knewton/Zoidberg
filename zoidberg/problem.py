@@ -23,6 +23,7 @@ class Problem(object):
 		self.all_tags = None
 		self.all_words = None
 		self.longest_word = None
+		self.involves_acting = False
 		self.units_acting_as_context = {}
 		self.context_subordinates = {}
 		self.context_actions = {}

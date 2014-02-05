@@ -655,14 +655,14 @@ How many christmas ornaments are on the christmas tree altogether?
     WRB       	JJ        	NNS       	NNS       	VBP       	IN        	DT        	NNS       	VBP       	RB        	.         
 
 ## Problem inference
-I think this problem is about christmas ornaments pink christmas ornaments, blue christmas ornaments, pink ornaments, christmas ornaments, and blue ornaments on the christmas tree and asks a single question.
+I think this problem is about pink christmas ornaments, blue christmas ornaments, pink ornaments, christmas ornaments, and blue ornaments on the christmas tree and asks a single question.
 
 ## Parsed problem
     There                   	are                     	6                       	pink christmas ornaments	and                     	8                       	blue christmas ornaments	on                      	the                     	christmas tree          	.                       
     exestential             	pre_ind_plu             	constant                	unit                    	coordinating_conjunction	constant                	unit                    	conjunction             	noise                   	subordinate             	punctuation             
 
     How many                	christmas ornaments     	are                     	on                      	the                     	christmas tree          	altogether              	?                       
-    asking                  	context                 	pre_ind_plu             	conjunction             	noise                   	subordinate             	subordinate             	punctuation             
+    asking                  	unit                    	pre_ind_plu             	conjunction             	noise                   	subordinate             	subordinate             	punctuation             
 
 
 ## Question 1
@@ -1732,6 +1732,49 @@ sitting birds on a branch = 4
 
 ### Sentence 2
 sitting birds on a branch - 1
+
+## Correct response
+3 birds
+
+***
+
+# Zoidberg Solution
+
+## The problem
+There are 6 birds and 3 nests. 
+How many more birds are there than nests? 
+
+## Digested problem
+    There	are  	6    	birds	and  	3    	nests	.    
+    EX   	VBP  	CD   	NNS  	CC   	CD   	NNS  	.    
+
+    How  	many 	more 	birds	are  	there	than 	nests	?    
+    WRB  	JJ   	RBR  	NNS  	VBP  	RB   	IN   	NNS  	.    
+
+## Problem inference
+I think this problem is about birds and nests than nests and asks a single question.
+
+## Parsed problem
+    There                   	are                     	6                       	birds                   	and                     	3                       	nests                   	.                       
+    exestential             	pre_ind_plu             	constant                	unit                    	coordinating_conjunction	constant                	unit                    	punctuation             
+
+    How many                	more                    	birds                   	are                     	there                   	than                    	nests                   	?                       
+    asking                  	rel_more                	unit                    	pre_ind_plu             	exestential             	conjunction             	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+How many more birds are there than nests?
+
+### Answer interpretation
+The answer is the increase in value of birds.
+
+## Data extraction
+
+### Sentence 1
+nests = 3
+birds = 6
 
 ## Correct response
 3 birds

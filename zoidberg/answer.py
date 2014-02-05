@@ -22,7 +22,8 @@ ANSWER_SUBORDINATE = {
 	"time_ending": "at the end of the problem",
 	"context_grouping": "added together",
 	"unit_grouping": "total up",
-	"unit_requirement": "needed to equal the specified value"
+	"unit_requirement": "needed to equal the specified value",
+	"comparator": "quantities"
 }
 
 # A Zoidberg answer refers to the structure and syntax of what the correct
@@ -42,6 +43,7 @@ class Answer(object):
 		self.relative = False
 		self.rel_mode = None
 		self.comparator = None
+		self.comparator_unit = None
 		self.subordinates = []
 		self.operator = None
 
@@ -167,6 +169,9 @@ class Answer(object):
 					self.subordinate = [s for s in subs if s[0] == val[0]]
 					if len(self.subordinate) > 0:
 						self.subordinates += self.subordinate
+
+				if stype == "comparator":
+					self.comparator_unit = val[0]
 
 				#rint "Here", stype, val, self.subordinates
 

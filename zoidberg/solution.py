@@ -107,6 +107,7 @@ class Solution(object):
 		if context is None and unit is not None:
 			context = "_unknown_"
 		if context is None or unit is None:
+			raise Exception
 			return (False, Symbol("BROKEN"), "BROKEN", "BROKEN")
 
 		s = [context, unit]
@@ -959,6 +960,8 @@ class Solution(object):
 							inf, equ, con, sym = self.get_symbol(answer.context, answer.context_constant, answer.unit, word, index)
 						#rint inf, equ, con, sym
 						resp = (simple_solve(equ, answer.context_constant), dispUnit)
+					elif sub == "comparator":
+						pass
 					else:
 						dontSave = True
 						self.correct_responses.append("Not sure; unknown subordinate type {0} ({1})".format(sub, word))
@@ -985,6 +988,8 @@ class Solution(object):
 				inf, equ, con, sym = self.get_symbol(answer.context, answer.context_constant, answer.unit, None, index)
 				if answer.comparator is not None:
 					coinf, comp, conc, csym = self.get_symbol(answer.comparator, answer.context_constant, answer.unit, compContext)
+				elif answer.comparator_unit is not None:
+					coinf, comp, conc, csym = self.get_symbol(answer.context, answer.context_constant, answer.comparator_unit, compContext)
 				else:
 					coinf, comp, conc, csym = self.get_symbol(answer.context, answer.context_constant, answer.unit, None)
 
@@ -1000,6 +1005,8 @@ class Solution(object):
 				k = "Answer"
 				if not k in self.work:
 					self.work[k] = []
+
+				#rint self.symbols, answer.rel_mode, r, comp, answr.context
 
 				if self.symbol_answer and csym:
 					resp = (safe_solve(equ, Symbol(csym)), answer.unit)

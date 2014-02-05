@@ -1,7 +1,7 @@
 clear
 echo "" > EXAMPLE.md
 MIN_ID=1
-MAX_IDX=33
+MAX_IDX=34
 
 for i in $(seq $MIN_ID $MAX_IDX); do
     cat calibrations/$i.txt | zoidberg | tee -a EXAMPLE.md
