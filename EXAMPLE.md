@@ -1,4 +1,5 @@
 
+{'_unknown_': {'Jane balloons': 20}}
 # Zoidberg Solution
 
 ## The problem
@@ -21,8 +22,8 @@ I think this problem is about Jane getting balloons and asks a single question.
     Jane       	has        	14         	balloons   	.          
     context    	operator   	constant   	unit       	punctuation
 
-    Jane       	buys       	another    	6          	balloons   	.          
-    context    	operator   	noise      	constant   	unit       	punctuation
+    Jane       	buys       	6          	balloons   	.          
+    context    	operator   	constant   	unit       	punctuation
 
     How many   	balloons   	does       	Jane       	have       	now        	?          
     asking     	unit       	q_start    	context    	q_stop     	subordinate	punctuation
@@ -49,6 +50,7 @@ balloons owned by Jane + 6
 
 ***
 
+{'_unknown_': {"Mrs. Jones' friends bananas": 4, 'x': x, 'Mrs. Jones bananas': x - 9 == 0}}
 # Zoidberg Solution
 
 ## The problem
@@ -108,6 +110,7 @@ bananas owned by Mrs. Jones' friends + 4
 
 ***
 
+{'_unknown_': {'Tony jars': 3, "Tony's sister jars": 16}}
 # Zoidberg Solution
 
 ## The problem
@@ -158,6 +161,7 @@ jars owned by Tony's sister + 16
 
 ***
 
+{'_unknown_': {'Lucy dolls': 8, 'Ethelle dolls': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -209,6 +213,7 @@ dolls owned by Ethelle + 4
 
 ***
 
+{'_unknown_': {'Joey toy cars': 26, 'Chandler toy cars': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -261,6 +266,7 @@ toy cars owned by Chandler + 6
 
 ***
 
+{'_unknown_': {'Marc apples': 3, 'Julia apples': 3, 'Jim apples': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -333,6 +339,7 @@ apples owned by Marc - 3
 
 ***
 
+{'_unknown_': {'@fish swimming pond': 12, '@fish swimming': @fish swimming}}
 # Zoidberg Solution
 
 ## The problem
@@ -384,6 +391,7 @@ swimming fish in a pond + 4
 
 ***
 
+{'_unknown_': {'Michael pieces of pizza': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -434,6 +442,7 @@ pieces of pizza owned by Michael - 2
 
 ***
 
+{'_unknown_': {"Pigpen's friends rocks": Pigpen's friends rocks - 8 == 0, 'x': x, 'Pigpen rocks': x - 3}}
 # Zoidberg Solution
 
 ## The problem
@@ -487,6 +496,7 @@ rocks owned by Pigpen's friends == 0
 
 ***
 
+{'_unknown_': {'Mr. Lupis eggs muffins': 4, 'Mr. Lupis eggs': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -537,6 +547,7 @@ eggs owned by Mr. Lupis = 2
 
 ***
 
+{'_unknown_': {'Mitch cobs of corn': 3, 'Lisa cobs of corn': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -589,6 +600,7 @@ cobs of corn owned by Lisa = 2
 
 ***
 
+{'_unknown_': {'Eric apples': 6.00000000000000, 'Mickey apples': 6.00000000000000, u'Mickey apples * 0.5': 6.00000000000000}}
 # Zoidberg Solution
 
 ## The problem
@@ -641,6 +653,7 @@ apples owned by Eric = Mickey apples * 0.5
 
 ***
 
+{'_unknown_': {'_unknown_ pink ornaments christmas tree': 6, '_unknown_ pink christmas ornaments christmas tree': 6, '_unknown_ blue ornaments christmas tree': 8, '_unknown_ blue christmas ornaments christmas tree': 8, '_unknown_ christmas ornaments christmas tree': 14}}
 # Zoidberg Solution
 
 ## The problem
@@ -688,6 +701,7 @@ pink christmas ornaments on the christmas tree = 6
 
 ***
 
+{'_unknown_': {"Sara's mother pieces of chocolate": -4, 'Sara pieces of chocolate': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -740,6 +754,7 @@ pieces of chocolate owned by Sara + 4
 
 ***
 
+{'_unknown_': {'Bennett doughnuts': 11, 'Alex doughnuts': 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -793,6 +808,7 @@ doughnuts owned by Bennett + 4
 
 ***
 
+{'_unknown_': {'Charlie bottles': Charlie bottles - 4 == 8, 'Mac bottles': 4}}
 # Zoidberg Solution
 
 ## The problem
@@ -845,6 +861,7 @@ bottles owned by Charlie == 8
 
 ***
 
+{'_unknown_': {'Meathead newspapers': 6, 'Archie newspapers': 13}}
 # Zoidberg Solution
 
 ## The problem
@@ -898,6 +915,7 @@ newspapers owned by Archie + 7
 
 ***
 
+{'_unknown_': {'Troy dolls': 5, 'Hellen dolls': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -971,6 +989,7 @@ dolls owned by Troy + 3
 
 ***
 
+{'_unknown_': {'William feathers': 4, 'Dad feathers': -11, 'Richard feathers': 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -1043,6 +1062,7 @@ feathers owned by Dad - 4
 
 ***
 
+{'_unknown_': {'Lee years': 3, 'Tom years': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -1096,6 +1116,7 @@ years owned by Lee - 3
 
 ***
 
+{'_unknown_': {'Sam bags': 20}}
 # Zoidberg Solution
 
 ## The problem
@@ -1148,6 +1169,7 @@ bags owned by Sam + 8
 
 ***
 
+{'_unknown_': {'Paul books': 3, "Paul's sister books": 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -1200,6 +1222,7 @@ books owned by Paul's sister + 7
 
 ***
 
+{'_unknown_': {'Paul cups': 17}}
 # Zoidberg Solution
 
 ## The problem
@@ -1252,6 +1275,7 @@ cups owned by Paul + 11
 
 ***
 
+{'_unknown_': {'Sidd books': 21}}
 # Zoidberg Solution
 
 ## The problem
@@ -1305,6 +1329,7 @@ books owned by Sidd + 11
 
 ***
 
+{'_unknown_': {'Lee blocks': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -1357,6 +1382,7 @@ blocks owned by Lee + 2
 
 ***
 
+{'_unknown_': {'Tom bags': 1, "Tom's sister bags": 4}}
 # Zoidberg Solution
 
 ## The problem
@@ -1409,6 +1435,7 @@ bags owned by Tom - 4
 
 ***
 
+{'_unknown_': {'Tom books': 5, 'Sidd books': 8}}
 # Zoidberg Solution
 
 ## The problem
@@ -1461,6 +1488,7 @@ books owned by Sidd = 8
 
 ***
 
+{'_unknown_': {'my friend balloons': 5, 'me balloons': 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -1503,6 +1531,7 @@ balloons owned by my friend = 5
 
 ***
 
+{'_unknown_': {'@birds sitting': @birds sitting, '@birds sitting fence': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -1555,6 +1584,7 @@ sitting birds on the fence + 4
 
 ***
 
+{'_unknown_': {'me cookies': 5}}
 # Zoidberg Solution
 
 ## The problem
@@ -1599,6 +1629,7 @@ cookies owned by me - 2
 
 ***
 
+{'_unknown_': {'me crickets': me crickets + 7 == 11}}
 # Zoidberg Solution
 
 ## The problem
@@ -1644,6 +1675,7 @@ crickets owned by me == 11
 
 ***
 
+{u'1': {'bee legs': 6}, '5': {'bees legs': bees legs}}
 # Zoidberg Solution
 
 ## The problem
@@ -1686,6 +1718,7 @@ legs owned by 1 bee = 6
 
 ***
 
+{'_unknown_': {'@birds sitting branch': 3, '@birds sitting': @birds sitting}}
 # Zoidberg Solution
 
 ## The problem
@@ -1738,6 +1771,7 @@ sitting birds on a branch - 1
 
 ***
 
+{'_unknown_': {'_unknown_ nests': 3, '_unknown_ birds': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -1781,6 +1815,7 @@ birds = 6
 
 ***
 
+{'_unknown_': {'@raccoons playing woods': 1, '@raccoons playing': @raccoons playing}}
 # Zoidberg Solution
 
 ## The problem
@@ -1829,3 +1864,100 @@ playing raccoons in the woods - 2
 
 ## Correct response
 1 raccoons
+
+***
+
+{'_unknown_': {'_unknown_ flowers': 5, '_unknown_ bees': 3}}
+# Zoidberg Solution
+
+## The problem
+There are 5 flowers and 3 bees. 
+How many less bees than flowers?
+
+## Digested problem
+    There  	are    	5      	flowers	and    	3      	bees   	.      
+    EX     	VBP    	CD     	NNS    	CC     	CD     	NNS    	.      
+
+    How    	many   	less   	bees   	than   	flowers	?      
+    WRB    	JJ     	JJR    	NNS    	IN     	NNS    	.      
+
+## Problem inference
+I think this problem is about flowers and bees than flowers and asks a single question.
+
+## Parsed problem
+    There                   	are                     	5                       	flowers                 	and                     	3                       	bees                    	.                       
+    exestential             	pre_ind_plu             	constant                	unit                    	coordinating_conjunction	constant                	unit                    	punctuation             
+
+    How many                	less                    	bees                    	than                    	flowers                 	?                       
+    asking                  	rel_less                	unit                    	conjunction             	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+How many less bees than flowers?
+
+### Answer interpretation
+The answer is the difference in value of bees.
+
+## Data extraction
+
+### Sentence 1
+flowers = 5
+bees = 3
+
+## Correct response
+2 bees
+
+***
+
+{'_unknown_': {'@pigeons eating lonely': 2}}
+# Zoidberg Solution
+
+## The problem
+1 lonely pigeons was eating breadcrumbs. 
+Another pigeon came to eat breadcrumbs, too. 
+How many pigeons are eating breadcrumbs now? 
+
+## Digested problem
+    1          	lonely     	pigeons    	was        	eating     	breadcrumbs	.          
+    LS         	RB         	NNS        	VBD        	VBG        	NNS        	.          
+
+    Another    	pigeon     	came       	to         	eat        	breadcrumbs	,          	too        	.          
+    DT         	NN         	VBD        	TO         	VB         	NNS        	,          	RB         	.          
+
+    How        	many       	pigeons    	are        	eating     	breadcrumbs	now        	?          
+    WRB        	JJ         	NNS        	VBP        	VBG        	NNS        	RB         	.          
+
+## Problem inference
+I think this problem is about pigeons getting and losing eating breadcrumbs and pigeon lonely and asks a single question.
+
+## Parsed problem
+    1                   	lonely              	pigeons             	was                 	eating              	breadcrumbs         	.                   
+    constant            	subordinate         	context             	pre_ind_plu         	acting              	unit                	punctuation         
+
+    1                   	pigeon              	came                	to                  	eat                 	breadcrumbs         	,                   	too                 	.                   	pigeons             	lonely              	eating              
+    constant            	unit                	operator            	conjunction         	operator            	subordinate         	punctuation         	noise               	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
+
+    How many            	pigeons             	are                 	eating              	breadcrumbs         	now                 	?                   	lonely              
+    asking              	context             	pre_ind_plu         	acting              	unit                	subordinate         	punctuation         	subordinate_inferred
+
+
+## Question 1
+
+### Question text
+How many pigeons are eating breadcrumbs now?
+
+### Answer interpretation
+The answer is the unknown value of pigeons eating lonely at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+eating pigeons lonely = 1
+
+### Sentence 2
+eating pigeons lonely + 1
+
+## Correct response
+2 pigeons

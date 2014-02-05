@@ -695,7 +695,7 @@ class SentenceParser(object):
 				did_something = True
 				self.track(word, "conjunction", self.subtype)
 
-			if tag == ".":
+			if tag in [".", ","]:
 				did_something = True
 				self.track(word, "punctuation", self.subtype)
 

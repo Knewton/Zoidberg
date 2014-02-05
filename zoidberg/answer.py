@@ -152,7 +152,10 @@ class Answer(object):
 			# Assume subordinate during specifying is answer condition
 			if part in ["subordinate", "subordinate_inferred"]:
 				stype = self.query.subordinate_lookup[val[0]]
-				if stype == "context_grouping":
+				if stype == "refiner":
+					if self.action:
+						self.action = " ".join([self.action, val[0]])
+				elif stype == "context_grouping":
 					if len(self.query.problem.subordinate_adaptive_contexts) > 0:
 						sac = self.query.problem.subordinate_adaptive_contexts[0]
 						self.context = sac

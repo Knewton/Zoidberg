@@ -685,6 +685,8 @@ class Solution(object):
 
 				if part in ["subordinate", "subordinate_inferred"]:
 					if val[1] is not None:
+						if val[0] not in parser.subordinate_lookup:
+							continue
 						stype = parser.subordinate_lookup[val[0]]
 						if self.constant is not None and stype in ["time_ending", "unit_requirement"]:
 							answer_out = True
@@ -1181,6 +1183,6 @@ class Solution(object):
 					o.append("\n### Response {0}".format(index))
 				o.append(response)
 				index += 1
-		#rint self.symbols
+		print self.symbols
 
 		return "\n".join(o)

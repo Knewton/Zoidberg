@@ -83,7 +83,8 @@ SUBORDINATES = [
 	("unit_grouping", "Unit Grouping (Group by units [total golfballs])"),
 	("unit_requirement", "Unit Requirement (Specifies the total in a missing number problem)"),
 	("comparator", "Comparator (Specifies the unit to be compared with)"),
-	("object", "Object (Specifies the object of some action [eating >dinner<]")
+	("object", "Object (Specifies the object of some action [eating >dinner<]"),
+	("refiner", "Refiner (Specifies a type of something [>lonley< pidgeons]")
 ]
 
 RELATIVE = [
