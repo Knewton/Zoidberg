@@ -294,7 +294,7 @@ I think this problem is about Marc, Jim, and Julia exchanging apples and asks a 
     context    	operator   	constant   	unit       	punctuation
 
     Marc       	throws     	2          	apples     	away       	.          
-    context    	operator   	constant   	unit       	noise      	punctuation
+    context    	operator   	constant   	unit       	operator   	punctuation
 
     Marc       	gives      	2          	apples     	to         	Jim        	.          
     context    	operator   	constant   	unit       	conjunction	context    	punctuation
@@ -350,14 +350,14 @@ How many fish are swimming in the pond now?
     WRB     	JJ      	JJ      	VBP     	VBG     	IN      	DT      	NN      	RB      	.       
 
 ## Problem inference
-I think this problem is about an increasing number of swimming fish in a pond and asks a single question.
+I think this problem is about an increasing number of fish swimming in a pond and asks a single question.
 
 ## Parsed problem
     8                   	fish                	are                 	swimming            	in                  	1                   	pond                	.                   
     constant            	context             	pre_ind_plu         	acting              	conjunction         	constant            	subordinate         	punctuation         
 
-    4                   	more                	fish                	join                	fish                	.                   	pond                
-    constant            	rel_more            	context             	operator            	context             	punctuation         	subordinate_inferred
+    4                   	more                	fish                	join                	fish                	.                   	pond                	swimming            
+    constant            	rel_more            	context             	operator            	context             	punctuation         	subordinate_inferred	acting_inferred     
 
     How many            	fish                	are                 	swimming            	in                  	the                 	pond                	now                 	?                   
     asking              	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	subordinate         	punctuation         
@@ -614,7 +614,7 @@ I think this problem is about Mickey and Eric exchanging apples and asks a singl
     context              	operator             	constant             	unit                 	punctuation          
 
     Eric                 	takes                	away                 	0.5                  	of                   	the                  	apples owned by Mickey	.                    
-    context              	operator             	noise                	variable_relationship	conjunction          	noise                	context_unit         	punctuation          
+    context              	operator             	operator             	variable_relationship	conjunction          	noise                	context_unit         	punctuation          
 
     How many             	apples               	does                 	Mickey               	have                 	now                  	?                    
     asking               	unit                 	q_start              	context              	q_stop               	subordinate          	punctuation          
@@ -1521,14 +1521,14 @@ How many birds are sitting on the fence?
     WRB    	JJ     	NNS    	VBP    	VBG    	IN     	DT     	NN     	.      
 
 ## Problem inference
-I think this problem is about an increasing number of sitting birds on the fence and asks a single question.
+I think this problem is about an increasing number of birds sitting on the fence and asks a single question.
 
 ## Parsed problem
     2                   	birds               	were                	sitting             	on                  	the                 	fence               	.                   
     constant            	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
 
-    4                   	more                	birds               	came                	to                  	join                	birds               	.                   	fence               
-    constant            	rel_more            	context             	operator            	conjunction         	operator            	context             	punctuation         	subordinate_inferred
+    4                   	more                	birds               	came                	to                  	join                	birds               	.                   	fence               	sitting             
+    constant            	rel_more            	context             	operator            	conjunction         	operator            	context             	punctuation         	subordinate_inferred	acting_inferred     
 
     How many            	birds               	are                 	sitting             	on                  	the                 	fence               	?                   
     asking              	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
@@ -1683,3 +1683,55 @@ legs owned by 1 bee = 6
 
 ## Correct response
 30 legs
+
+***
+
+# Zoidberg Solution
+
+## The problem
+4 birds are sitting on a branch. 
+1 flies away. 
+How many birds are left on the branch? 
+
+## Digested problem
+    4      	birds  	are    	sitting	on     	a      	branch 	.      
+    LS     	NNS    	VBP    	VBG    	IN     	DT     	NN     	.      
+
+    1      	flies  	away   	.      
+    LS     	NNS    	RB     	.      
+
+    How    	many   	birds  	are    	left   	on     	the    	branch 	?      
+    WRB    	JJ     	NNS    	VBP    	VBN    	IN     	DT     	NN     	.      
+
+## Problem inference
+I think this problem is about a decreasing number of birds sitting and flies on a branch and asks a single question.
+
+## Parsed problem
+    4                   	birds               	are                 	sitting             	on                  	1                   	branch              	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	constant            	subordinate         	punctuation         
+
+    1                   	flies               	away                	.                   	birds               	branch              
+    constant            	acting              	operator            	punctuation         	context_inferred    	subordinate_inferred
+
+    How many            	birds               	are                 	left                	on                  	the                 	branch              	?                   	sitting             
+    asking              	context             	pre_ind_plu         	subordinate         	conjunction         	noise               	subordinate         	punctuation         	acting_inferred     
+
+
+## Question 1
+
+### Question text
+How many birds are left on the branch?
+
+### Answer interpretation
+The answer is the unknown value of birds sitting at the end of the problem on a branch.
+
+## Data extraction
+
+### Sentence 1
+sitting birds on a branch = 4
+
+### Sentence 2
+sitting birds on a branch - 1
+
+## Correct response
+3 birds

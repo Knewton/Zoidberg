@@ -114,6 +114,8 @@ class SentenceParser(object):
 		if attr == "context":
 			if subtype is not None:
 				self.resolve_context(subtype, val)
+			else:
+				self.problem.last_contexts["last"] = (val, subtype)
 
 		if attr == "comparator_context":
 			if subtype is not None:
@@ -672,6 +674,8 @@ class SentenceParser(object):
 					if gtype == "acting":
 						self.acting = False
 						self.actions.append(word)
+						if self.main_context:
+							p.context_actions[self.main_context] = (word, gtype, self.subtype)
 					self.track(word, gtype, self.subtype)
 
 			if tag in ["JJR", "COMP"]:
@@ -909,6 +913,25 @@ class SentenceParser(object):
 			for sub in self.subordinates:
 				subord, subt = sub
 				self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
+
+		if not self.main_context and self.operator:
+			if self.problem.last_contexts["last"]:
+				context, subtype = self.problem.last_contexts["last"]
+				self.main_context = context
+				self.track(context, "context_inferred", subtype)
+
+		#rint self.subordinates, self.main_context, self.problem.context_subordinates
+
+		if self.main_context in self.problem.context_subordinates and len(self.subordinates) == 0:
+			# This is an inferred context
+			self.subordinates, self.subordinate_strings, self.subordinate_subtypes, self.subordinate_lookup = self.problem.context_subordinates[self.main_context]
+			for sub in self.subordinates:
+				subord, subt = sub
+				self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
+
+		if self.main_context in self.problem.context_actions and len(self.actions) == 0:
+			word, gtype, subtype = self.problem.context_actions[self.main_context]
+			self.track(word, gtype + "_inferred", subtype)
 
 	def __str__(self):
 		return self.sentence_text

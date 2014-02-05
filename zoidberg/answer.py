@@ -106,7 +106,7 @@ class Answer(object):
 					self.last_unrefined_context_subtype = None
 
 			# Specifying the acting is tantamount to ending the question
-			if part == "acting":
+			if part in ["acting", "acting_inferred"]:
 				if asking:
 					self.action = val
 					asking = False
@@ -135,7 +135,7 @@ class Answer(object):
 				specifying = True
 
 			# assume context during refining is owner
-			if part == "context":
+			if part in ["context", "context_inferred"]:
 				if refining:
 					self.context = val
 					self.context_subtype = subtype
@@ -159,11 +159,16 @@ class Answer(object):
 				# problem, then we can simply assume that specification is occurring
 					specifying = True
 
+				if stype in ["place_noun", "time_ending", "time_starting"]:
+					specifying = True
+
 				if specifying:
 					subs = self.query.subordinates
 					self.subordinate = [s for s in subs if s[0] == val[0]]
 					if len(self.subordinate) > 0:
 						self.subordinates += self.subordinate
+
+				#rint "Here", stype, val, self.subordinates
 
 	def __str__(self):
 

@@ -25,6 +25,7 @@ class Problem(object):
 		self.longest_word = None
 		self.units_acting_as_context = {}
 		self.context_subordinates = {}
+		self.context_actions = {}
 		self.descriptive_units = []
 		self.refined_units = {}
 		self.units = []

@@ -166,7 +166,7 @@ class Inference(object):
 		thought_any = False
 
 		multiple_contexts = len(self.contexts) > 1
-		for x in [self.preops, self.actions, self.contexts, self.operators,
+		for x in [self.preops, self.contexts, self.operators, self.actions,
 					self.units, self.subordinates]:
 			f = list_format(x)
 			if f is not None:

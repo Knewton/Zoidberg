@@ -607,7 +607,7 @@ class Solution(object):
 				if subtype and subtype[0] == "self":
 					val = self.problem.brain.self_reflexive(val, True)
 
-				if part == "context":
+				if part in ["context", "context_inferred"]:
 					if not did_set_context:
 						did_set_context = True
 						self.context = val
@@ -812,7 +812,7 @@ class Solution(object):
 			index += 1
 			new_sentence_data.append(new_container)
 		self.sentence_data = new_sentence_data
-#		rint self.sentence_data
+		#rint self.sentence_data
 
 	def compute_correct(self):
 		self.compute()
@@ -877,6 +877,9 @@ class Solution(object):
 			#rint self.symbols
 			#rint self.ending_vars
 			#rint self.beginning_vars
+
+			#rint answer.subordinates, answer.unit, answer.context
+			#rint answer.actor, answer.action
 
 			if len(answer.subordinates) > 0:
 				working_answer = None
@@ -1171,5 +1174,6 @@ class Solution(object):
 					o.append("\n### Response {0}".format(index))
 				o.append(response)
 				index += 1
+		#rint self.symbols
 
 		return "\n".join(o)

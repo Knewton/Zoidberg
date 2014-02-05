@@ -146,6 +146,7 @@ RETAGS = [
 	("comparison_adj", "This indicates a comparison between things"),
 	("answer_syntax", "This frames the answer to the question"),
 	("numbers", "This is a cardinal number"),
+	("gerund", "This is a gerund"),
 	("pre_ind_plu", "This is present indicitive plural (someone ->is<-, they ->are<-)"),
 
 	("noun", "Singular or mass noun"),
@@ -208,6 +209,8 @@ def get_input(data, prompt, x, ref, brain, force_retag=False, for_tag=False):
 		# retagged value
 		if item == "subordinates":
 			brain.subordinate((x, "UNKNOWN"), ref)
+		elif item == "gerund":
+			brain.gerund(x, ref)
 		elif item == "operator_verbs":
 			brain.operator(x, ref)
 		elif item == "comparison_adj":
@@ -392,6 +395,8 @@ class Brain(object):
 			item = self.raw["retagged"][val]
 			if item == "subordinates":
 				tag = "SUB"
+			elif item == "gerund":
+				tag = "VBG"
 			elif item == "operator_verbs":
 				tag = "VBX"
 			elif item == "comparison_adj":
