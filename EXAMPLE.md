@@ -1,5 +1,4 @@
 
-{'_unknown_': {'Jane balloons': 20}}
 # Zoidberg Solution
 
 ## The problem
@@ -50,7 +49,6 @@ balloons owned by Jane + 6
 
 ***
 
-{'_unknown_': {"Mrs. Jones' friends bananas": 4, 'x': x, 'Mrs. Jones bananas': x - 9 == 0}}
 # Zoidberg Solution
 
 ## The problem
@@ -110,7 +108,6 @@ bananas owned by Mrs. Jones' friends + 4
 
 ***
 
-{'_unknown_': {'Tony jars': 3, "Tony's sister jars": 16}}
 # Zoidberg Solution
 
 ## The problem
@@ -161,7 +158,6 @@ jars owned by Tony's sister + 16
 
 ***
 
-{'_unknown_': {'Lucy dolls': 8, 'Ethelle dolls': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -213,7 +209,6 @@ dolls owned by Ethelle + 4
 
 ***
 
-{'_unknown_': {'Joey toy cars': 26, 'Chandler toy cars': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -266,7 +261,6 @@ toy cars owned by Chandler + 6
 
 ***
 
-{'_unknown_': {'Marc apples': 3, 'Julia apples': 3, 'Jim apples': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -339,7 +333,6 @@ apples owned by Marc - 3
 
 ***
 
-{'_unknown_': {'@fish swimming pond': 12, '@fish swimming': @fish swimming}}
 # Zoidberg Solution
 
 ## The problem
@@ -391,7 +384,6 @@ swimming fish in a pond + 4
 
 ***
 
-{'_unknown_': {'Michael pieces of pizza': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -442,7 +434,6 @@ pieces of pizza owned by Michael - 2
 
 ***
 
-{'_unknown_': {"Pigpen's friends rocks": Pigpen's friends rocks - 8 == 0, 'x': x, 'Pigpen rocks': x - 3}}
 # Zoidberg Solution
 
 ## The problem
@@ -496,7 +487,6 @@ rocks owned by Pigpen's friends == 0
 
 ***
 
-{'_unknown_': {'Mr. Lupis eggs muffins': 4, 'Mr. Lupis eggs': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -547,7 +537,6 @@ eggs owned by Mr. Lupis = 2
 
 ***
 
-{'_unknown_': {'Mitch cobs of corn': 3, 'Lisa cobs of corn': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -600,7 +589,6 @@ cobs of corn owned by Lisa = 2
 
 ***
 
-{'_unknown_': {'Eric apples': 6.00000000000000, 'Mickey apples': 6.00000000000000, u'Mickey apples * 0.5': 6.00000000000000}}
 # Zoidberg Solution
 
 ## The problem
@@ -653,7 +641,6 @@ apples owned by Eric = Mickey apples * 0.5
 
 ***
 
-{'_unknown_': {'_unknown_ pink ornaments christmas tree': 6, '_unknown_ pink christmas ornaments christmas tree': 6, '_unknown_ blue ornaments christmas tree': 8, '_unknown_ blue christmas ornaments christmas tree': 8, '_unknown_ christmas ornaments christmas tree': 14}}
 # Zoidberg Solution
 
 ## The problem
@@ -701,7 +688,6 @@ pink christmas ornaments on the christmas tree = 6
 
 ***
 
-{'_unknown_': {"Sara's mother pieces of chocolate": -4, 'Sara pieces of chocolate': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -754,7 +740,6 @@ pieces of chocolate owned by Sara + 4
 
 ***
 
-{'_unknown_': {'Bennett doughnuts': 11, 'Alex doughnuts': 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -808,7 +793,6 @@ doughnuts owned by Bennett + 4
 
 ***
 
-{'_unknown_': {'Charlie bottles': Charlie bottles - 4 == 8, 'Mac bottles': 4}}
 # Zoidberg Solution
 
 ## The problem
@@ -861,7 +845,6 @@ bottles owned by Charlie == 8
 
 ***
 
-{'_unknown_': {'Meathead newspapers': 6, 'Archie newspapers': 13}}
 # Zoidberg Solution
 
 ## The problem
@@ -915,7 +898,6 @@ newspapers owned by Archie + 7
 
 ***
 
-{'_unknown_': {'Troy dolls': 5, 'Hellen dolls': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -989,7 +971,6 @@ dolls owned by Troy + 3
 
 ***
 
-{'_unknown_': {'William feathers': 4, 'Dad feathers': -11, 'Richard feathers': 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -1062,7 +1043,6 @@ feathers owned by Dad - 4
 
 ***
 
-{'_unknown_': {'Lee years': 3, 'Tom years': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -1116,7 +1096,6 @@ years owned by Lee - 3
 
 ***
 
-{'_unknown_': {'Sam bags': 20}}
 # Zoidberg Solution
 
 ## The problem
@@ -1169,7 +1148,6 @@ bags owned by Sam + 8
 
 ***
 
-{'_unknown_': {'Paul books': 3, "Paul's sister books": 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -1222,7 +1200,6 @@ books owned by Paul's sister + 7
 
 ***
 
-{'_unknown_': {'Paul cups': 17}}
 # Zoidberg Solution
 
 ## The problem
@@ -1275,7 +1252,6 @@ cups owned by Paul + 11
 
 ***
 
-{'_unknown_': {'Sidd books': 21}}
 # Zoidberg Solution
 
 ## The problem
@@ -1329,7 +1305,6 @@ books owned by Sidd + 11
 
 ***
 
-{'_unknown_': {'Lee blocks': 12}}
 # Zoidberg Solution
 
 ## The problem
@@ -1382,7 +1357,6 @@ blocks owned by Lee + 2
 
 ***
 
-{'_unknown_': {'Tom bags': 1, "Tom's sister bags": 4}}
 # Zoidberg Solution
 
 ## The problem
@@ -1435,7 +1409,6 @@ bags owned by Tom - 4
 
 ***
 
-{'_unknown_': {'Tom books': 5, 'Sidd books': 8}}
 # Zoidberg Solution
 
 ## The problem
@@ -1488,7 +1461,6 @@ books owned by Sidd = 8
 
 ***
 
-{'_unknown_': {'my friend balloons': 5, 'me balloons': 7}}
 # Zoidberg Solution
 
 ## The problem
@@ -1531,7 +1503,6 @@ balloons owned by my friend = 5
 
 ***
 
-{'_unknown_': {'@birds sitting': @birds sitting, '@birds sitting fence': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -1584,7 +1555,6 @@ sitting birds on the fence + 4
 
 ***
 
-{'_unknown_': {'me cookies': 5}}
 # Zoidberg Solution
 
 ## The problem
@@ -1629,7 +1599,6 @@ cookies owned by me - 2
 
 ***
 
-{'_unknown_': {'me crickets': me crickets + 7 == 11}}
 # Zoidberg Solution
 
 ## The problem
@@ -1675,7 +1644,6 @@ crickets owned by me == 11
 
 ***
 
-{u'1': {'bee legs': 6}, '5': {'bees legs': bees legs}}
 # Zoidberg Solution
 
 ## The problem
@@ -1718,7 +1686,6 @@ legs owned by 1 bee = 6
 
 ***
 
-{'_unknown_': {'@birds sitting branch': 3, '@birds sitting': @birds sitting}}
 # Zoidberg Solution
 
 ## The problem
@@ -1771,7 +1738,6 @@ sitting birds on a branch - 1
 
 ***
 
-{'_unknown_': {'_unknown_ nests': 3, '_unknown_ birds': 6}}
 # Zoidberg Solution
 
 ## The problem
@@ -1815,7 +1781,6 @@ birds = 6
 
 ***
 
-{'_unknown_': {'@raccoons playing woods': 1, '@raccoons playing': @raccoons playing}}
 # Zoidberg Solution
 
 ## The problem
@@ -1867,7 +1832,6 @@ playing raccoons in the woods - 2
 
 ***
 
-{'_unknown_': {'_unknown_ flowers': 5, '_unknown_ bees': 3}}
 # Zoidberg Solution
 
 ## The problem
@@ -1911,7 +1875,6 @@ bees = 3
 
 ***
 
-{'_unknown_': {'@pigeons eating lonely': 2}}
 # Zoidberg Solution
 
 ## The problem
@@ -1961,3 +1924,161 @@ eating pigeons lonely + 1
 
 ## Correct response
 2 pigeons
+
+***
+
+# Zoidberg Solution
+
+## The problem
+3 owls were sitting on the fence. 
+2 more owls joined them. 
+How many owls are on the fence now? 
+
+
+## Digested problem
+    3      	owls   	were   	sitting	on     	the    	fence  	.      
+    LS     	NNS    	VBD    	VBG    	IN     	DT     	NN     	.      
+
+    2      	more   	owls   	joined 	them   	.      
+    LS     	JJR    	NNS    	VBD    	PRP    	.      
+
+    How    	many   	owls   	are    	on     	the    	fence  	now    	?      
+    WRB    	JJ     	NNS    	VBP    	IN     	DT     	NN     	RB     	.      
+
+## Problem inference
+I think this problem is about an increasing number of owls sitting on the fence and asks a single question.
+
+## Parsed problem
+    3                   	owls                	were                	sitting             	on                  	the                 	fence               	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
+
+    2                   	more                	owls                	joined              	owls                	.                   	fence               	sitting             
+    constant            	rel_more            	context             	operator            	context             	punctuation         	subordinate_inferred	acting_inferred     
+
+    How many            	owls                	are                 	on                  	the                 	fence               	now                 	?                   	sitting             
+    asking              	context             	pre_ind_plu         	conjunction         	noise               	subordinate         	subordinate         	punctuation         	acting_inferred     
+
+
+## Question 1
+
+### Question text
+How many owls are on the fence now?
+
+### Answer interpretation
+The answer is the unknown value of owls sitting on the fence at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+sitting owls on the fence = 3
+
+### Sentence 2
+sitting owls on the fence + 2
+
+## Correct response
+5 owls
+
+***
+
+# Zoidberg Solution
+
+## The problem
+2 beavers were working on their home. 
+1 went for a swim. 
+How many beavers are still working on their home? 
+
+
+## Digested problem
+    2      	beavers	were   	working	on     	their  	home   	.      
+    LS     	NNS    	VBD    	VBG    	IN     	PRP$   	NN     	.      
+
+    1      	went   	for    	a      	swim   	.      
+    LS     	VBD    	IN     	DT     	NN     	.      
+
+    How    	many   	beavers	are    	still  	working	on     	their  	home   	?      
+    WRB    	JJ     	NNS    	VBP    	RB     	VBG    	IN     	PRP$   	NN     	.      
+
+## Problem inference
+I think this problem is about a decreasing number of beavers, their home, and beavers' home working on their home and asks a single question.
+
+## Parsed problem
+    2                   	beavers             	were                	working             	on                  	home                	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	subordinate         	punctuation         
+
+    1                   	went                	for                 	1                   	swim                	.                   	beavers             	home                	working             
+    constant            	operator            	conjunction         	constant            	noise               	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
+
+    How many            	beavers             	are                 	still               	working             	on                  	home                	?                   
+    asking              	context             	pre_ind_plu         	subordinate         	acting              	conjunction         	subordinate         	punctuation         
+
+
+## Question 1
+
+### Question text
+How many beavers are still working on their home?
+
+### Answer interpretation
+The answer is the unknown value of beavers working at the end of the problem on their home.
+
+## Data extraction
+
+### Sentence 1
+working beavers on their home = 2
+
+### Sentence 2
+working beavers on their home - 1
+
+## Correct response
+1 beavers
+
+***
+
+# Zoidberg Solution
+
+## The problem
+2 toucans are sitting on a tree limb. 
+1 more toucan joins them. 
+How many toucans in all? 
+
+## Digested problem
+    2      	toucans	are    	sitting	on     	a      	tree   	limb   	.      
+    LS     	NNS    	VBP    	VBG    	IN     	DT     	NN     	NN     	.      
+
+    1      	more   	toucan 	joins  	them   	.      
+    LS     	JJR    	JJ     	NNS    	PRP    	.      
+
+    How    	many   	toucans	in     	all    	?      
+    WRB    	JJ     	NNS    	IN     	DT     	.      
+
+## Problem inference
+I think this problem is about an increasing number of toucans sitting on a tree limb and asks a single question.
+
+## Parsed problem
+    2                   	toucans             	are                 	sitting             	on                  	1                   	tree limb           	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	constant            	subordinate         	punctuation         
+
+    1                   	more                	toucan              	joins               	.                   	toucans             	tree limb           	sitting             
+    constant            	rel_more            	adjective           	operator            	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
+
+    How many            	toucans             	in                  	all                 	?                   	tree limb           	sitting             
+    asking              	context             	conjunction         	dynamic_variable    	punctuation         	subordinate_inferred	acting_inferred     
+
+
+## Question 1
+
+### Question text
+How many toucans in all?
+
+### Answer interpretation
+The answer is the unknown value of toucans sitting on a tree limb.
+
+## Data extraction
+
+### Sentence 1
+sitting toucans on a tree limb = 2
+
+### Sentence 2
+sitting toucans on a tree limb + 1
+
+## Correct response
+3 toucans

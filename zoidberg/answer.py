@@ -115,6 +115,11 @@ class Answer(object):
 					asking = False
 					refining = True
 					specifying = True
+					if self.last_unrefined_context:
+						self.actor = self.last_unrefined_context
+						self.actor_subtype = self.last_unrefined_context_subtype
+						self.last_unrefined_context = None
+						self.last_unrefined_context_subtype = None
 
 			# assume unit appearing during asking for answer
 			if part == "unit" and asking:

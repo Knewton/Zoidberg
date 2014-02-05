@@ -107,7 +107,7 @@ class Solution(object):
 		if context is None and unit is not None:
 			context = "_unknown_"
 		if context is None or unit is None:
-			raise Exception
+			#raise Exception
 			return (False, Symbol("BROKEN"), "BROKEN", "BROKEN")
 
 		s = [context, unit]
@@ -1183,6 +1183,6 @@ class Solution(object):
 					o.append("\n### Response {0}".format(index))
 				o.append(response)
 				index += 1
-		print self.symbols
+		#rint self.symbols
 
 		return "\n".join(o)
