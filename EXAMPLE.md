@@ -814,14 +814,14 @@ How many bottles did Charlie have in the beginning?
 I think this problem is about Charlie and Mac bottles and asks a single question.
 
 ## Parsed problem
-    Charlie    	gave       	4          	bottles    	to         	Mac        	.          
-    context    	operator   	constant   	unit       	conjunction	context    	punctuation
+    Charlie             	gave                	4                   	bottles             	to                  	Mac                 	.                   
+    context             	operator            	constant            	unit                	conjunction         	context             	punctuation         
 
-    Charlie    	has        	8          	bottles    	left       	.          
-    context    	operator   	constant   	unit       	subordinate	punctuation
+    Charlie             	has                 	8                   	bottles             	left                	.                   
+    context             	operator            	constant            	unit                	subordinate         	punctuation         
 
-    How many   	bottles    	did        	Charlie    	have       	in         	the        	beginning  	?          
-    asking     	unit       	q_start    	context    	q_stop     	conjunction	noise      	subordinate	punctuation
+    How many            	bottles             	did                 	Charlie             	have                	in                  	the                 	beginning           	?                   	left                
+    asking              	unit                	q_start             	context             	q_stop              	conjunction         	noise               	subordinate         	punctuation         	subordinate_inferred
 
 
 ## Question 1
@@ -1778,3 +1778,54 @@ birds = 6
 
 ## Correct response
 3 birds
+
+***
+
+# Zoidberg Solution
+
+## The problem
+3 raccoons are playing in the woods. 
+2 go home to eat dinner. How many raccoons are left in the woods? 
+
+## Digested problem
+    3       	raccoons	are     	playing 	in      	the     	woods   	.       
+    LS      	NNS     	VBP     	VBG     	IN      	DT      	NNS     	.       
+
+    2       	go      	home    	to      	eat     	dinner  	.       
+    LS      	VBP     	RB      	TO      	VB      	NN      	.       
+
+    How     	many    	raccoons	are     	left    	in      	the     	woods   	?       
+    WRB     	JJ      	NNS     	VBP     	VBN     	IN      	DT      	NNS     	.       
+
+## Problem inference
+I think this problem is about a decreasing number of raccoons playing in the woods and home and asks a single question.
+
+## Parsed problem
+    3                   	raccoons            	are                 	playing             	in                  	the                 	woods               	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
+
+    2                   	go                  	home                	to                  	eat                 	dinner              	.                   	raccoons            	woods               	playing             
+    constant            	operator            	subordinate         	conjunction         	operator            	subordinate         	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
+
+    How many            	raccoons            	are                 	left                	in                  	the                 	woods               	?                   	playing             
+    asking              	context             	pre_ind_plu         	subordinate         	conjunction         	noise               	subordinate         	punctuation         	acting_inferred     
+
+
+## Question 1
+
+### Question text
+How many raccoons are left in the woods?
+
+### Answer interpretation
+The answer is the unknown value of raccoons playing at the end of the problem in the woods.
+
+## Data extraction
+
+### Sentence 1
+playing raccoons in the woods = 3
+
+### Sentence 2
+playing raccoons in the woods - 2
+
+## Correct response
+1 raccoons

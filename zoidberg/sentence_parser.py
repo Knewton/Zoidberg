@@ -619,7 +619,7 @@ class SentenceParser(object):
 				self.context_subtypes[context] = self.subtype
 
 			if tag[:2] == "VB":
-				if tag == "VB":
+				if tag == "VB" and self.question:
 					if self.last_verb_tag is not None:
 						# VB*...VB indicates a question not an operation
 						self.last_operator = None
@@ -896,8 +896,11 @@ class SentenceParser(object):
 		for o in self.conjunctions:
 			subordinate, conjunction = o
 			outp = p.brain.subordinate(subordinate, text)
-			self.subordinates.append((subordinate[0], outp))
 			self.subordinate_lookup[subordinate[0]] = outp
+			if outp == "object":
+				continue
+
+			self.subordinates.append((subordinate[0], outp))
 			if len(self.subordinate_strings[subordinate[0]]) == 0:
 				self.subordinate_strings[subordinate[0]] = ANSWER_SUBORDINATE[outp]
 			if outp == "context_grouping":
@@ -928,12 +931,23 @@ class SentenceParser(object):
 
 		#rint self.subordinates, self.main_context, self.problem.context_subordinates
 
-		if self.main_context in self.problem.context_subordinates and len(self.subordinates) == 0:
-			# This is an inferred context
-			self.subordinates, self.subordinate_strings, self.subordinate_subtypes, self.subordinate_lookup = self.problem.context_subordinates[self.main_context]
-			for sub in self.subordinates:
-				subord, subt = sub
-				self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
+		if self.main_context in self.problem.context_subordinates:
+			if len(self.subordinates) == 0:
+				# This is an inferred context
+				self.subordinates, self.subordinate_strings, self.subordinate_subtypes, self.subordinate_lookup = self.problem.context_subordinates[self.main_context]
+				for sub in self.subordinates:
+					subord, subt = sub
+					self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
+			elif len(self.subordinates) > 0:
+				subs, sub_strs, sub_subs, sub_look = self.problem.context_subordinates[self.main_context]
+				for sub in subs:
+					subord, subt = sub
+					if subord in self.subordinate_lookup:
+						continue
+					self.subordinate_subtypes[subord] = sub_subs[subord]
+					self.subordinate_lookup[subord] = sub_look[subord]
+					#self.subordinates.append(sub)
+					self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
 
 		if self.main_context in self.problem.context_actions and len(self.actions) == 0:
 			word, gtype, subtype = self.problem.context_actions[self.main_context]

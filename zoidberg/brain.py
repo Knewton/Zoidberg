@@ -82,7 +82,8 @@ SUBORDINATES = [
 	("context_grouping", "Context Grouping (Group by owners of units [total items owned by all])"),
 	("unit_grouping", "Unit Grouping (Group by units [total golfballs])"),
 	("unit_requirement", "Unit Requirement (Specifies the total in a missing number problem)"),
-	("comparator", "Comparator (Specifies the unit to be compared with)")
+	("comparator", "Comparator (Specifies the unit to be compared with)"),
+	("object", "Object (Specifies the object of some action [eating >dinner<]")
 ]
 
 RELATIVE = [

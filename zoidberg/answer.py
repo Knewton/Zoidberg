@@ -6,7 +6,8 @@ OPERATOR_STR = {
 	"mu": "gained by",
 	"ex": "given to",
 	"su": "lost by",
-	"di": "lost by"
+	"di": "lost by",
+	"re": "required by"
 }
 
 ANSWER_SYNTAX = {
