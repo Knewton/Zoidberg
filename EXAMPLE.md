@@ -1,9 +1,10 @@
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Jane has 14 balloons. She buys another 6 balloons. How many balloons does she have now?
-
+    Jane has 14 balloons. She buys another 6 balloons. How many balloons does she have now?
+    
 ## Digested problem
     Jane    	has     	14      	balloons	.       
     NNP     	VBZ     	CD      	NNS     	.       
@@ -15,7 +16,7 @@ Jane has 14 balloons. She buys another 6 balloons. How many balloons does she ha
     WRB     	JJ      	NNS     	VBZ     	PRP     	VB      	RB      	.       
 
 ## Problem inference
-I think this problem is about Jane getting balloons and asks a single question.
+    I think this problem is about Jane getting balloons and asks a single question.
 
 ## Parsed problem
     Jane       	has        	14         	balloons   	.          
@@ -31,29 +32,30 @@ I think this problem is about Jane getting balloons and asks a single question.
 ## Question 1
 
 ### Question text
-How many balloons does she have now?
+    How many balloons does she have now?
 
 ### Answer interpretation
-The answer is the unknown value of balloons owned by Jane at the end of the problem.
+    The answer is the unknown value of balloons owned by Jane at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-balloons owned by Jane = 14
+    balloons owned by Jane = 14
 
 ### Sentence 2
-balloons owned by Jane + 6
+    balloons owned by Jane + 6
 
 ## Correct response
-20 balloons
+    20 balloons
 
 ***
 
+time_starting
 # Zoidberg Solution
 
 ## The problem
-Mrs. Jones bought some bananas. Her family ate 5 bananas. She gave the remaining 4 bananas to her friends. How many bananas did she buy in the beginning?
-
+    Mrs. Jones bought some bananas. Her family ate 5 bananas. She gave the remaining 4 bananas to her friends. How many bananas did she buy in the beginning?
+    
 ## Digested problem
     Mrs.     	Jones    	bought   	some     	bananas  	.        
     NNP      	NNP      	VBD      	DT       	NNS      	.        
@@ -68,7 +70,7 @@ Mrs. Jones bought some bananas. Her family ate 5 bananas. She gave the remaining
     WRB      	JJ       	NNS      	VBD      	PRP      	VB       	IN       	DT       	NN       	.        
 
 ## Problem inference
-I think this problem is about Mrs. Jones, Mrs. Jones' family, and Mrs. Jones' friends exchanging bananas and asks a single question.
+    I think this problem is about Mrs. Jones, Mrs. Jones' family, and Mrs. Jones' friends exchanging bananas and asks a single question.
 
 ## Parsed problem
     Mrs. Jones         	bought             	some               	bananas            	.                  
@@ -87,34 +89,35 @@ I think this problem is about Mrs. Jones, Mrs. Jones' family, and Mrs. Jones' fr
 ## Question 1
 
 ### Question text
-How many bananas did she buy in the beginning?
+    How many bananas did she buy in the beginning?
 
 ### Answer interpretation
-The answer is the unknown value of bananas gained by Mrs. Jones at the beginning of the problem.
+    The answer is the unknown value of bananas gained by Mrs. Jones at the beginning of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-bananas owned by Mrs. Jones + x
+    bananas owned by Mrs. Jones + x
 
 ### Sentence 2
-bananas owned by Mrs. Jones - 5
+    bananas owned by Mrs. Jones - 5
 
 ### Sentence 3
-bananas owned by Mrs. Jones - 4
-bananas owned by Mrs. Jones == 0
-bananas owned by Mrs. Jones' friends + 4
+    bananas owned by Mrs. Jones - 4
+    bananas owned by Mrs. Jones == 0
+    bananas owned by Mrs. Jones' friends + 4
 
 ## Correct response
-9 bananas
+    9 bananas
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Tony has 19 jars. He gives 16 jars to his sister. How many jars does he have now?
-
+    Tony has 19 jars. He gives 16 jars to his sister. How many jars does he have now?
+    
 ## Digested problem
     Tony  	has   	19    	jars  	.     
     NNP   	VBZ   	CD    	NNS   	.     
@@ -126,7 +129,7 @@ Tony has 19 jars. He gives 16 jars to his sister. How many jars does he have now
     WRB   	JJ    	NNS   	VBZ   	PRP   	VB    	RB    	.     
 
 ## Problem inference
-I think this problem is about Tony and Tony's sister jars and asks a single question.
+    I think this problem is about Tony and Tony's sister jars and asks a single question.
 
 ## Parsed problem
     Tony           	has            	19             	jars           	.              
@@ -142,30 +145,30 @@ I think this problem is about Tony and Tony's sister jars and asks a single ques
 ## Question 1
 
 ### Question text
-How many jars does he have now?
+    How many jars does he have now?
 
 ### Answer interpretation
-The answer is the unknown value of jars owned by Tony at the end of the problem.
+    The answer is the unknown value of jars owned by Tony at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-jars owned by Tony = 19
+    jars owned by Tony = 19
 
 ### Sentence 2
-jars owned by Tony - 16
-jars owned by Tony's sister + 16
+    jars owned by Tony - 16
+    jars owned by Tony's sister + 16
 
 ## Correct response
-3 jars
+    3 jars
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Lucy has 8 dolls. Ethelle has 4 more dolls than her. How many dolls does Ethelle have?
-
+    Lucy has 8 dolls. Ethelle has 4 more dolls than her. How many dolls does Ethelle have?
+    
 ## Digested problem
     Lucy   	has    	8      	dolls  	.      
     NNP    	VBZ    	CD     	NNS    	.      
@@ -177,7 +180,7 @@ Lucy has 8 dolls. Ethelle has 4 more dolls than her. How many dolls does Ethelle
     WRB    	JJ     	NNS    	VBZ    	NNP    	VB     	.      
 
 ## Problem inference
-I think this problem is about Lucy and Ethelle grouping dolls and asks a single question.
+    I think this problem is about Lucy and Ethelle grouping dolls and asks a single question.
 
 ## Parsed problem
     Lucy              	has               	8                 	dolls             	.                 
@@ -193,30 +196,30 @@ I think this problem is about Lucy and Ethelle grouping dolls and asks a single 
 ## Question 1
 
 ### Question text
-How many dolls does Ethelle have?
+    How many dolls does Ethelle have?
 
 ### Answer interpretation
-The answer is the unknown value of dolls owned by Ethelle.
+    The answer is the unknown value of dolls owned by Ethelle.
 
 ## Data extraction
 
 ### Sentence 1
-dolls owned by Lucy = 8
+    dolls owned by Lucy = 8
 
 ### Sentence 2
-dolls owned by Ethelle = 8
-dolls owned by Ethelle + 4
+    dolls owned by Ethelle = 8
+    dolls owned by Ethelle + 4
 
 ## Correct response
-12 dolls
+    12 dolls
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Joey has 13 toy cars. Chandler has 6 toy cars. How many fewer toy cars does Chandler have than Joey?
-
+    Joey has 13 toy cars. Chandler has 6 toy cars. How many fewer toy cars does Chandler have than Joey?
+    
 ## Digested problem
     Joey    	has     	13      	toy     	cars    	.       
     NNP     	VBZ     	CD      	NN      	NNS     	.       
@@ -228,7 +231,7 @@ Joey has 13 toy cars. Chandler has 6 toy cars. How many fewer toy cars does Chan
     WRB     	JJ      	JJR     	NN      	NNS     	VBZ     	NNP     	VB      	IN      	NNP     	.       
 
 ## Problem inference
-I think this problem is about Joey and Chandler grouping toy cars and asks a single question.
+    I think this problem is about Joey and Chandler grouping toy cars and asks a single question.
 
 ## Parsed problem
     Joey              	has               	13                	toy cars          	.                 
@@ -244,35 +247,36 @@ I think this problem is about Joey and Chandler grouping toy cars and asks a sin
 ## Question 1
 
 ### Question text
-How many fewer toy cars does Chandler have than Joey?
+    How many fewer toy cars does Chandler have than Joey?
 
 ### Answer interpretation
-The answer is the difference in value of toy cars owned by Chandler with respect to Joey.
+    The answer is the difference in value of toy cars owned by Chandler with respect to Joey.
 
 ## Data extraction
 
 ### Sentence 1
-toy cars owned by Joey = 13
-toy cars owned by Joey + 13
+    toy cars owned by Joey = 13
+    toy cars owned by Joey + 13
 
 ### Sentence 2
-toy cars owned by Chandler = 6
-toy cars owned by Chandler + 6
+    toy cars owned by Chandler = 6
+    toy cars owned by Chandler + 6
 
 ## Correct response
-14 toy cars
+    14 toy cars
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Marc has 10 apples.
-He throws 2 apples away.
-He gives 2 apples to Jim.
-Marc gives 3 apples to Julia.
-How many apples does Marc have now?
-
+    Marc has 10 apples.
+    He throws 2 apples away.
+    He gives 2 apples to Jim.
+    Marc gives 3 apples to Julia.
+    How many apples does Marc have now?
+    
 ## Digested problem
     Marc  	has   	10    	apples	.     
     NNP   	VBZ   	CD    	NNS   	.     
@@ -290,7 +294,7 @@ How many apples does Marc have now?
     WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	RB    	.     
 
 ## Problem inference
-I think this problem is about Marc, Jim, and Julia exchanging apples and asks a single question.
+    I think this problem is about Marc, Jim, and Julia exchanging apples and asks a single question.
 
 ## Parsed problem
     Marc       	has        	10         	apples     	.          
@@ -312,38 +316,42 @@ I think this problem is about Marc, Jim, and Julia exchanging apples and asks a 
 ## Question 1
 
 ### Question text
-How many apples does Marc have now?
+    How many apples does Marc have now?
 
 ### Answer interpretation
-The answer is the unknown value of apples owned by Marc at the end of the problem.
+    The answer is the unknown value of apples owned by Marc at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-apples owned by Marc = 10
+    apples owned by Marc = 10
 
 ### Sentence 2
-apples owned by Marc - 2
+    apples owned by Marc - 2
 
 ### Sentence 3
-apples owned by Jim + 2
-apples owned by Marc - 2
+    apples owned by Jim + 2
+    apples owned by Marc - 2
 
 ### Sentence 4
-apples owned by Julia + 3
-apples owned by Marc - 3
+    apples owned by Julia + 3
+    apples owned by Marc - 3
 
 ## Correct response
-3 apples
+    3 apples
 
 ***
 
+place_noun
+place_noun
+place_noun
+time_ending
 # Zoidberg Solution
 
 ## The problem
-8 fish are swimming in a pond. 4 more fish join them.
-How many fish are swimming in the pond now?
-
+    8 fish are swimming in a pond. 4 more fish join them.
+    How many fish are swimming in the pond now?
+    
 ## Digested problem
     8       	fish    	are     	swimming	in      	a       	pond    	.       
     CD      	JJ      	NN      	VBG     	IN      	DT      	NN      	.       
@@ -355,7 +363,7 @@ How many fish are swimming in the pond now?
     WRB     	JJ      	JJ      	VBP     	VBG     	IN      	DT      	NN      	RB      	.       
 
 ## Problem inference
-I think this problem is about an increasing number of fish swimming in a pond and asks a single question.
+    I think this problem is about an increasing number of fish swimming in a pond and asks a single question.
 
 ## Parsed problem
     8                   	fish                	are                 	swimming            	in                  	1                   	pond                	.                   
@@ -371,29 +379,30 @@ I think this problem is about an increasing number of fish swimming in a pond an
 ## Question 1
 
 ### Question text
-How many fish are swimming in the pond now?
+    How many fish are swimming in the pond now?
 
 ### Answer interpretation
-The answer is the unknown value of fish swimming in a pond at the end of the problem.
+    The answer is the unknown value of fish swimming in a pond at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-swimming fish in a pond = 8
+    swimming fish in a pond = 8
 
 ### Sentence 2
-swimming fish in a pond + 4
+    swimming fish in a pond + 4
 
 ## Correct response
-12 fish
+    12 fish
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Michael had 8 pieces of pizza. He ate 2 pieces of pizza. How many pieces of pizza did Michael have left?
-
+    Michael had 8 pieces of pizza. He ate 2 pieces of pizza. How many pieces of pizza did Michael have left?
+    
 ## Digested problem
     Michael	had    	8      	pieces 	of     	pizza  	.      
     NNP    	VBD    	CD     	NNS    	IN     	NN     	.      
@@ -405,7 +414,7 @@ Michael had 8 pieces of pizza. He ate 2 pieces of pizza. How many pieces of pizz
     WRB    	JJ     	NNS    	IN     	NN     	VBD    	NNP    	VB     	VBN    	.      
 
 ## Problem inference
-I think this problem is about Michael losing pieces of pizza and asks a single question.
+    I think this problem is about Michael losing pieces of pizza and asks a single question.
 
 ## Parsed problem
     Michael        	had            	8              	pieces of pizza	.              
@@ -421,31 +430,32 @@ I think this problem is about Michael losing pieces of pizza and asks a single q
 ## Question 1
 
 ### Question text
-How many pieces of pizza did Michael have left?
+    How many pieces of pizza did Michael have left?
 
 ### Answer interpretation
-The answer is the unknown value of pieces of pizza owned by Michael at the end of the problem.
+    The answer is the unknown value of pieces of pizza owned by Michael at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-pieces of pizza owned by Michael = 8
+    pieces of pizza owned by Michael = 8
 
 ### Sentence 2
-pieces of pizza owned by Michael - 2
+    pieces of pizza owned by Michael - 2
 
 ## Correct response
-6 pieces of pizza
+    6 pieces of pizza
 
 ***
 
+time_starting
 # Zoidberg Solution
 
 ## The problem
-Pigpen had some rocks.
-He kept 3 rocks for himself and gave the remaining 8 rocks to his friends.
-How many rocks did he have in the beginning?
-
+    Pigpen had some rocks.
+    He kept 3 rocks for himself and gave the remaining 8 rocks to his friends.
+    How many rocks did he have in the beginning?
+    
 ## Digested problem
     Pigpen   	had      	some     	rocks    	.        
     NNP      	VBD      	DT       	NNS      	.        
@@ -457,7 +467,7 @@ How many rocks did he have in the beginning?
     WRB      	JJ       	NNS      	VBD      	PRP      	VBP      	IN       	DT       	NN       	.        
 
 ## Problem inference
-I think this problem is about Pigpen and Pigpen's friends exchanging rocks and asks a single question.
+    I think this problem is about Pigpen and Pigpen's friends exchanging rocks and asks a single question.
 
 ## Parsed problem
     Pigpen                  	had                     	some                    	rocks                   	.                       
@@ -473,31 +483,34 @@ I think this problem is about Pigpen and Pigpen's friends exchanging rocks and a
 ## Question 1
 
 ### Question text
-How many rocks did he have in the beginning?
+    How many rocks did he have in the beginning?
 
 ### Answer interpretation
-The answer is the unknown value of rocks owned by Pigpen at the beginning of the problem.
+    The answer is the unknown value of rocks owned by Pigpen at the beginning of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-rocks owned by Pigpen = x
+    rocks owned by Pigpen = x
 
 ### Sentence 2
-rocks owned by Pigpen - 3
-rocks owned by Pigpen's friends - 8
-rocks owned by Pigpen's friends == 0
+    rocks owned by Pigpen - 3
+    rocks owned by Pigpen's friends - 8
+    rocks owned by Pigpen's friends == 0
 
 ## Correct response
-3 rocks
+    3 rocks
 
 ***
 
+None
+None
+None
 # Zoidberg Solution
 
 ## The problem
-Mr. Lupis needs 4 eggs to bake 13 muffins. He has only 2 eggs. How many more eggs does he need to bake the muffins?
-
+    Mr. Lupis needs 4 eggs to bake 13 muffins. He has only 2 eggs. How many more eggs does he need to bake the muffins?
+    
 ## Digested problem
     Mr.    	Lupis  	needs  	4      	eggs   	to     	bake   	13     	muffins	.      
     NNP    	NNP    	VBZ    	CD     	NNS    	TO     	VB     	CD     	NNS    	.      
@@ -509,7 +522,7 @@ Mr. Lupis needs 4 eggs to bake 13 muffins. He has only 2 eggs. How many more egg
     WRB    	JJ     	RBR    	NNS    	VBZ    	PRP    	VBP    	TO     	VB     	DT     	NNS    	.      
 
 ## Problem inference
-I think this problem is about Mr. Lupis eggs and asks a single question.
+    I think this problem is about Mr. Lupis eggs and asks a single question.
 
 ## Parsed problem
     Mr. Lupis           	needs               	4                   	eggs                	to                  	bake                	13                  	muffins             	.                   
@@ -525,31 +538,32 @@ I think this problem is about Mr. Lupis eggs and asks a single question.
 ## Question 1
 
 ### Question text
-How many more eggs does he need to bake the muffins?
+    How many more eggs does he need to bake the muffins?
 
 ### Answer interpretation
-The answer is the increase in value of eggs needed by Mr. Lupis to bake muffins.
+    The answer is the increase in value of eggs needed by Mr. Lupis to bake muffins.
 
 ## Data extraction
 
 ### Sentence 1
-eggs needed by Mr. Lupis to bake muffins == 4
+    eggs needed by Mr. Lupis to bake muffins == 4
 
 ### Sentence 2
-eggs owned by Mr. Lupis = 2
+    eggs owned by Mr. Lupis = 2
 
 ## Correct response
-2 eggs
+    2 eggs
 
 ***
 
+context_grouping
 # Zoidberg Solution
 
 ## The problem
-Mitch has 3 cobs of corn. 
-Lisa has 2 cobs of corn. 
-How many cobs of corn do they have altogether?
-
+    Mitch has 3 cobs of corn. 
+    Lisa has 2 cobs of corn. 
+    How many cobs of corn do they have altogether?
+    
 ## Digested problem
     Mitch     	has       	3         	cobs      	of        	corn      	.         
     NN        	VBZ       	CD        	NNS       	IN        	NN        	.         
@@ -561,7 +575,7 @@ How many cobs of corn do they have altogether?
     WRB       	JJ        	NNS       	IN        	NN        	VBP       	PRP       	VBP       	RB        	.         
 
 ## Problem inference
-I think this problem is about Mitch and Lisa grouping cobs of corn and asks a single question.
+    I think this problem is about Mitch and Lisa grouping cobs of corn and asks a single question.
 
 ## Parsed problem
     Mitch         	has           	3             	cobs of corn  	.             
@@ -577,31 +591,32 @@ I think this problem is about Mitch and Lisa grouping cobs of corn and asks a si
 ## Question 1
 
 ### Question text
-How many cobs of corn do they have altogether?
+    How many cobs of corn do they have altogether?
 
 ### Answer interpretation
-The answer is the unknown value of cobs of corn owned by Mitch and Lisa added together.
+    The answer is the unknown value of cobs of corn owned by Mitch and Lisa added together.
 
 ## Data extraction
 
 ### Sentence 1
-cobs of corn owned by Mitch = 3
+    cobs of corn owned by Mitch = 3
 
 ### Sentence 2
-cobs of corn owned by Lisa = 2
+    cobs of corn owned by Lisa = 2
 
 ## Correct response
-5 cobs of corn
+    5 cobs of corn
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Mickey has a dozen apples.
-Eric takes away half of the apples.
-How many apples does Mickey have now?
-
+    Mickey has a dozen apples.
+    Eric takes away half of the apples.
+    How many apples does Mickey have now?
+    
 ## Digested problem
     Mickey	has   	a     	dozen 	apples	.     
     NNP   	VBZ   	DT    	NN    	NNS   	.     
@@ -613,7 +628,7 @@ How many apples does Mickey have now?
     WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	RB    	.     
 
 ## Problem inference
-I think this problem is about Mickey and Eric exchanging apples and asks a single question.
+    I think this problem is about Mickey and Eric exchanging apples and asks a single question.
 
 ## Parsed problem
     Mickey               	has                  	12                   	apples               	.                    
@@ -629,31 +644,34 @@ I think this problem is about Mickey and Eric exchanging apples and asks a singl
 ## Question 1
 
 ### Question text
-How many apples does Mickey have now?
+    How many apples does Mickey have now?
 
 ### Answer interpretation
-The answer is the unknown value of apples owned by Mickey at the end of the problem.
+    The answer is the unknown value of apples owned by Mickey at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-apples owned by Mickey = 12
+    apples owned by Mickey = 12
 
 ### Sentence 2
-apples owned by Mickey - Eric apples
-apples owned by Eric = Mickey apples * 0.5
+    apples owned by Mickey - Eric apples
+    apples owned by Eric = Mickey apples * 0.5
 
 ## Correct response
-6 apples
+    6 apples
 
 ***
 
+place_noun
+place_noun
+context_grouping
 # Zoidberg Solution
 
 ## The problem
-There are 6 pink christmas ornaments and 8 blue christmas ornaments on the christmas tree.
-How many christmas ornaments are on the christmas tree altogether?
-
+    There are 6 pink christmas ornaments and 8 blue christmas ornaments on the christmas tree.
+    How many christmas ornaments are on the christmas tree altogether?
+    
 ## Digested problem
     There     	are       	6         	pink      	christmas 	ornaments 	and       	8         	blue      	christmas 	ornaments 	on        	the       	christmas 	tree      	.         
     EX        	VBP       	CD        	NN        	NNS       	NNS       	CC        	CD        	JJ        	NNS       	NNS       	IN        	DT        	NNS       	VBP       	.         
@@ -662,7 +680,7 @@ How many christmas ornaments are on the christmas tree altogether?
     WRB       	JJ        	NNS       	NNS       	VBP       	IN        	DT        	NNS       	VBP       	RB        	.         
 
 ## Problem inference
-I think this problem is about pink christmas ornaments, blue christmas ornaments, pink ornaments, christmas ornaments, and blue ornaments on the christmas tree and asks a single question.
+    I think this problem is about pink christmas ornaments, blue christmas ornaments, pink ornaments, christmas ornaments, and blue ornaments on the christmas tree and asks a single question.
 
 ## Parsed problem
     There                   	are                     	6                       	pink christmas ornaments	and                     	8                       	blue christmas ornaments	on                      	the                     	christmas tree          	.                       
@@ -675,33 +693,34 @@ I think this problem is about pink christmas ornaments, blue christmas ornaments
 ## Question 1
 
 ### Question text
-How many christmas ornaments are on the christmas tree altogether?
+    How many christmas ornaments are on the christmas tree altogether?
 
 ### Answer interpretation
-The answer is the unknown value of christmas ornaments on the christmas tree added together.
+    The answer is the unknown value of christmas ornaments on the christmas tree added together.
 
 ## Data extraction
 
 ### Sentence 1
-christmas ornaments on the christmas tree = 8
-christmas ornaments on the christmas tree + 6
-blue ornaments on the christmas tree = 8
-blue christmas ornaments on the christmas tree = 8
-pink ornaments on the christmas tree = 6
-pink christmas ornaments on the christmas tree = 6
+    christmas ornaments on the christmas tree = 8
+    christmas ornaments on the christmas tree + 6
+    blue ornaments on the christmas tree = 8
+    blue christmas ornaments on the christmas tree = 8
+    pink ornaments on the christmas tree = 6
+    pink christmas ornaments on the christmas tree = 6
 
 ## Correct response
-14 christmas ornaments
+    14 christmas ornaments
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Sara has 8 pieces of chocolate.
-Her mother gives her 4 more pieces.
-How many pieces of chocolate does Sara have now?
-
+    Sara has 8 pieces of chocolate.
+    Her mother gives her 4 more pieces.
+    How many pieces of chocolate does Sara have now?
+    
 ## Digested problem
     Sara     	has      	8        	pieces   	of       	chocolate	.        
     NNP      	VBZ      	CD       	NNS      	IN       	JJ       	.        
@@ -713,7 +732,7 @@ How many pieces of chocolate does Sara have now?
     WRB      	JJ       	NNS      	IN       	JJ       	VBZ      	NNP      	VB       	RB       	.        
 
 ## Problem inference
-I think this problem is about Sara and Sara's mother pieces of chocolate and pieces and asks a single question.
+    I think this problem is about Sara and Sara's mother pieces of chocolate and pieces and asks a single question.
 
 ## Parsed problem
     Sara               	has                	8                  	pieces of chocolate	.                  
@@ -729,32 +748,32 @@ I think this problem is about Sara and Sara's mother pieces of chocolate and pie
 ## Question 1
 
 ### Question text
-How many pieces of chocolate does Sara have now?
+    How many pieces of chocolate does Sara have now?
 
 ### Answer interpretation
-The answer is the unknown value of pieces of chocolate owned by Sara at the end of the problem.
+    The answer is the unknown value of pieces of chocolate owned by Sara at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-pieces of chocolate owned by Sara = 8
+    pieces of chocolate owned by Sara = 8
 
 ### Sentence 2
-pieces of chocolate owned by Sara's mother - 4
-pieces of chocolate owned by Sara + 4
+    pieces of chocolate owned by Sara's mother - 4
+    pieces of chocolate owned by Sara + 4
 
 ## Correct response
-12 pieces of chocolate
+    12 pieces of chocolate
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Alex has 7 doughnuts.
-Bennett has 4 doughnuts more than him.
-How many doughnuts does Bennett have?
-
+    Alex has 7 doughnuts.
+    Bennett has 4 doughnuts more than him.
+    How many doughnuts does Bennett have?
+    
 ## Digested problem
     Alex     	has      	7        	doughnuts	.        
     NNP      	VBZ      	CD       	NNS      	.        
@@ -766,7 +785,7 @@ How many doughnuts does Bennett have?
     WRB      	JJ       	NNS      	VBZ      	NNP      	VB       	.        
 
 ## Problem inference
-I think this problem is about Alex and Bennett grouping doughnuts and asks a single question.
+    I think this problem is about Alex and Bennett grouping doughnuts and asks a single question.
 
 ## Parsed problem
     Alex              	has               	7                 	doughnuts         	.                 
@@ -782,34 +801,34 @@ I think this problem is about Alex and Bennett grouping doughnuts and asks a sin
 ## Question 1
 
 ### Question text
-How many doughnuts does Bennett have?
+    How many doughnuts does Bennett have?
 
 ### Answer interpretation
-The answer is the unknown value of doughnuts owned by Bennett.
+    The answer is the unknown value of doughnuts owned by Bennett.
 
 ## Data extraction
 
 ### Sentence 1
-doughnuts owned by Alex = 7
+    doughnuts owned by Alex = 7
 
 ### Sentence 2
-doughnuts owned by Bennett = 7
-doughnuts owned by Bennett + 4
+    doughnuts owned by Bennett = 7
+    doughnuts owned by Bennett + 4
 
 ## Correct response
-11 doughnuts
+    11 doughnuts
 
 ***
 
-'bool' object has no attribute 'is_Relational'
-'bool' object has no attribute 'is_Relational'
+time_ending
+time_starting
 # Zoidberg Solution
 
 ## The problem
-Charlie gave 4 bottles to Mac.
-He has 8 bottles left.
-How many bottles did Charlie have in the beginning?
-
+    Charlie gave 4 bottles to Mac.
+    He has 8 bottles left.
+    How many bottles did Charlie have in the beginning?
+    
 ## Digested problem
     Charlie  	gave     	4        	bottles  	to       	Mac      	.        
     NNP      	VBD      	CD       	NNS      	TO       	NNP      	.        
@@ -821,46 +840,48 @@ How many bottles did Charlie have in the beginning?
     WRB      	JJ       	NNS      	VBD      	NNP      	VB       	IN       	DT       	NN       	.        
 
 ## Problem inference
-I think this problem is about Charlie and Mac bottles and asks a single question.
+    I think this problem is about Charlie and Mac bottles and asks a single question.
 
 ## Parsed problem
-    Charlie             	gave                	4                   	bottles             	to                  	Mac                 	.                   
-    context             	operator            	constant            	unit                	conjunction         	context             	punctuation         
+    Charlie    	gave       	4          	bottles    	to         	Mac        	.          
+    context    	operator   	constant   	unit       	conjunction	context    	punctuation
 
-    Charlie             	has                 	8                   	bottles             	left                	.                   
-    context             	operator            	constant            	unit                	subordinate         	punctuation         
+    Charlie    	has        	8          	bottles    	left       	.          
+    context    	operator   	constant   	unit       	subordinate	punctuation
 
-    How many            	bottles             	did                 	Charlie             	have                	in                  	the                 	beginning           	?                   	left                
-    asking              	unit                	q_start             	context             	q_stop              	conjunction         	noise               	subordinate         	punctuation         	subordinate_inferred
+    How many   	bottles    	did        	Charlie    	have       	in         	the        	beginning  	?          
+    asking     	unit       	q_start    	context    	q_stop     	conjunction	noise      	subordinate	punctuation
 
 
 ## Question 1
 
 ### Question text
-How many bottles did Charlie have in the beginning?
+    How many bottles did Charlie have in the beginning?
 
 ### Answer interpretation
-The answer is the unknown value of bottles owned by Charlie at the beginning of the problem at the end of the problem.
+    The answer is the unknown value of bottles owned by Charlie at the beginning of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-bottles owned by Charlie - 4
-bottles owned by Mac + 4
+    bottles owned by Charlie - 4
+    bottles owned by Mac + 4
 
 ### Sentence 2
-bottles owned by Charlie = 8
-bottles owned by Charlie == 8
+    bottles owned by Charlie == 8
+
+## Correct response
+    12 bottles
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Meathead has 6 newspapers.
-Archie has 7 newspapers more than him.
-How many newspapers does Archie have?
-
+    Meathead has 6 newspapers.
+    Archie has 7 newspapers more than him.
+    How many newspapers does Archie have?
+    
 ## Digested problem
     Meathead  	has       	6         	newspapers	.         
     NNP       	VBZ       	CD        	NNS       	.         
@@ -872,7 +893,7 @@ How many newspapers does Archie have?
     WRB       	JJ        	NNS       	VBZ       	NNP       	VB        	.         
 
 ## Problem inference
-I think this problem is about Meathead and Archie grouping newspapers and asks a single question.
+    I think this problem is about Meathead and Archie grouping newspapers and asks a single question.
 
 ## Parsed problem
     Meathead          	has               	6                 	newspapers        	.                 
@@ -888,33 +909,34 @@ I think this problem is about Meathead and Archie grouping newspapers and asks a
 ## Question 1
 
 ### Question text
-How many newspapers does Archie have?
+    How many newspapers does Archie have?
 
 ### Answer interpretation
-The answer is the unknown value of newspapers owned by Archie.
+    The answer is the unknown value of newspapers owned by Archie.
 
 ## Data extraction
 
 ### Sentence 1
-newspapers owned by Meathead = 6
+    newspapers owned by Meathead = 6
 
 ### Sentence 2
-newspapers owned by Archie = 6
-newspapers owned by Archie + 7
+    newspapers owned by Archie = 6
+    newspapers owned by Archie + 7
 
 ## Correct response
-13 newspapers
+    13 newspapers
 
 ***
 
+context_grouping
 # Zoidberg Solution
 
 ## The problem
-Hellen has 2 dolls.
-Troy has 3 more dolls than her.
-How many dolls does Troy have?
-How many dolls do they have altogether?
-
+    Hellen has 2 dolls.
+    Troy has 3 more dolls than her.
+    How many dolls does Troy have?
+    How many dolls do they have altogether?
+    
 ## Digested problem
     Hellen    	has       	2         	dolls     	.         
     NNP       	VBZ       	CD        	NNS       	.         
@@ -929,7 +951,7 @@ How many dolls do they have altogether?
     WRB       	JJ        	NNS       	VBP       	PRP       	VBP       	RB        	.         
 
 ## Problem inference
-I think this problem is about Hellen and Troy grouping dolls and asks multiple questions.
+    I think this problem is about Hellen and Troy grouping dolls and asks multiple questions.
 
 ## Parsed problem
     Hellen            	has               	2                 	dolls             	.                 
@@ -948,46 +970,47 @@ I think this problem is about Hellen and Troy grouping dolls and asks multiple q
 ## Question 1
 
 ### Question text
-How many dolls does Troy have?
+    How many dolls does Troy have?
 
 ### Answer interpretation
-The answer is the unknown value of dolls owned by Troy.
+    The answer is the unknown value of dolls owned by Troy.
 
 ## Question 2
 
 ### Question text
-How many dolls do they have altogether?
+    How many dolls do they have altogether?
 
 ### Answer interpretation
-The answer is the unknown value of dolls owned by Troy and Hellen added together.
+    The answer is the unknown value of dolls owned by Troy and Hellen added together.
 
 ## Data extraction
 
 ### Sentence 1
-dolls owned by Hellen = 2
+    dolls owned by Hellen = 2
 
 ### Sentence 2
-dolls owned by Troy = 2
-dolls owned by Troy + 3
+    dolls owned by Troy = 2
+    dolls owned by Troy + 3
 
 ## Correct response
 
 ### Response 1
-5 dolls
+    5 dolls
 
 ### Response 2
-7 dolls
+    7 dolls
 
 ***
 
+context_grouping
 # Zoidberg Solution
 
 ## The problem
-Dad gives Richard 7 feathers.
-Dad gives William 4 feathers.
-How many feathers does Dad give to the two boys?
-How many more feathers does Richard have than William?
-
+    Dad gives Richard 7 feathers.
+    Dad gives William 4 feathers.
+    How many feathers does Dad give to the two boys?
+    How many more feathers does Richard have than William?
+    
 ## Digested problem
     Dad     	gives   	Richard 	7       	feathers	.       
     NNP     	VBZ     	NNP     	CD      	NNS     	.       
@@ -1002,7 +1025,7 @@ How many more feathers does Richard have than William?
     WRB     	JJ      	RBR     	NNS     	VBZ     	NNP     	VB      	IN      	NNP     	.       
 
 ## Problem inference
-I think this problem is about Dad, Richard, and William feathers and asks multiple questions.
+    I think this problem is about Dad, Richard, and William feathers and asks multiple questions.
 
 ## Parsed problem
     Dad               	gives             	Richard           	7                 	feathers          	.                 
@@ -1011,7 +1034,7 @@ I think this problem is about Dad, Richard, and William feathers and asks multip
     Dad               	gives             	William           	4                 	feathers          	.                 
     context           	operator          	context           	constant          	unit              	punctuation       
 
-    How many          	feathers          	does              	Dad               	give              	to                	the               	two               	boys              	?                 
+    How many          	feathers          	does              	Dad               	give              	to                	the               	2                 	boys              	?                 
     asking            	unit              	q_start           	context           	q_stop            	conjunction       	noise             	constant          	subordinate       	punctuation       
 
     How many          	more              	feathers          	does              	Richard           	have              	than              	William           	?                 
@@ -1021,46 +1044,46 @@ I think this problem is about Dad, Richard, and William feathers and asks multip
 ## Question 1
 
 ### Question text
-How many feathers does Dad give to the two boys?
+    How many feathers does Dad give to the two boys?
 
 ### Answer interpretation
-The answer is the unknown value of feathers given to William and Richard added together.
+    The answer is the unknown value of feathers given to William and Richard added together.
 
 ## Question 2
 
 ### Question text
-How many more feathers does Richard have than William?
+    How many more feathers does Richard have than William?
 
 ### Answer interpretation
-The answer is the increase in value of feathers owned by Richard with respect to William.
+    The answer is the increase in value of feathers owned by Richard with respect to William.
 
 ## Data extraction
 
 ### Sentence 1
-feathers owned by Dad - 7
-feathers owned by Richard + 7
+    feathers owned by Dad - 7
+    feathers owned by Richard + 7
 
 ### Sentence 2
-feathers owned by William + 4
-feathers owned by Dad - 4
+    feathers owned by William + 4
+    feathers owned by Dad - 4
 
 ## Correct response
 
 ### Response 1
-11 feathers
+    11 feathers
 
 ### Response 2
-3 feathers
+    3 feathers
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Tom is 6 years old. 
-Lee is 3 years younger than Tom. 
-How old is Lee?
-
+    Tom is 6 years old. 
+    Lee is 3 years younger than Tom. 
+    How old is Lee?
+    
 ## Digested problem
     Tom    	is     	6      	years  	old    	.      
     NNP    	VBZ    	CD     	NNS    	JJ     	.      
@@ -1072,7 +1095,7 @@ How old is Lee?
     WRB    	JJ     	VBZ    	NNP    	.      
 
 ## Problem inference
-I think this problem is about Tom and Lee grouping years and asks a single question.
+    I think this problem is about Tom and Lee grouping years and asks a single question.
 
 ## Parsed problem
     Tom               	is                	6                 	years             	old               	.                 
@@ -1081,39 +1104,39 @@ I think this problem is about Tom and Lee grouping years and asks a single quest
     Lee               	is                	3                 	years             	younger           	than              	Tom               	.                 
     context           	operator          	constant          	unit              	rel_less          	conjunction       	comparator_context	punctuation       
 
-    How old           	is                	Lee               	?                 
-    asking            	q_start           	context           	punctuation       
+    How old           	is                	Lee               	?                 	years             
+    asking            	q_start           	context           	punctuation       	unit_inferred     
 
 
 ## Question 1
 
 ### Question text
-How old is Lee?
+    How old is Lee?
 
 ### Answer interpretation
-The answer is the unknown value of years owned by Lee.
+    The answer is the unknown value of years owned by Lee.
 
 ## Data extraction
 
 ### Sentence 1
-years owned by Tom = 6
+    years owned by Tom = 6
 
 ### Sentence 2
-years owned by Lee = 6
-years owned by Lee - 3
+    years owned by Lee = 6
+    years owned by Lee - 3
 
 ## Correct response
-3 years
+    3 years
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Sam has 12 bags. 
-He buys 8 more bags. 
-How many bags does he have in all?
-
+    Sam has 12 bags. 
+    He buys 8 more bags. 
+    How many bags does he have in all?
+    
 ## Digested problem
     Sam 	has 	12  	bags	.   
     NNP 	VBZ 	CD  	NNS 	.   
@@ -1125,7 +1148,7 @@ How many bags does he have in all?
     WRB 	JJ  	NNS 	VBZ 	PRP 	VB  	IN  	DT  	.   
 
 ## Problem inference
-I think this problem is about Sam getting bags and asks a single question.
+    I think this problem is about Sam getting bags and asks a single question.
 
 ## Parsed problem
     Sam             	has             	12              	bags            	.               
@@ -1141,31 +1164,32 @@ I think this problem is about Sam getting bags and asks a single question.
 ## Question 1
 
 ### Question text
-How many bags does he have in all?
+    How many bags does he have in all?
 
 ### Answer interpretation
-The answer is the unknown value of bags owned by Sam.
+    The answer is the unknown value of bags owned by Sam.
 
 ## Data extraction
 
 ### Sentence 1
-bags owned by Sam = 12
+    bags owned by Sam = 12
 
 ### Sentence 2
-bags owned by Sam + 8
+    bags owned by Sam + 8
 
 ## Correct response
-20 bags
+    20 bags
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Paul has 10 books. 
-Paul gives his sister 7 books. 
-How many books does Paul have left?
-
+    Paul has 10 books. 
+    Paul gives his sister 7 books. 
+    How many books does Paul have left?
+    
 ## Digested problem
     Paul  	has   	10    	books 	.     
     NNP   	VBZ   	CD    	NNS   	.     
@@ -1177,7 +1201,7 @@ How many books does Paul have left?
     WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	VBN   	.     
 
 ## Problem inference
-I think this problem is about Paul and Paul's sister books and asks a single question.
+    I think this problem is about Paul and Paul's sister books and asks a single question.
 
 ## Parsed problem
     Paul           	has            	10             	books          	.              
@@ -1193,32 +1217,32 @@ I think this problem is about Paul and Paul's sister books and asks a single que
 ## Question 1
 
 ### Question text
-How many books does Paul have left?
+    How many books does Paul have left?
 
 ### Answer interpretation
-The answer is the unknown value of books owned by Paul at the end of the problem.
+    The answer is the unknown value of books owned by Paul at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-books owned by Paul = 10
+    books owned by Paul = 10
 
 ### Sentence 2
-books owned by Paul - 7
-books owned by Paul's sister + 7
+    books owned by Paul - 7
+    books owned by Paul's sister + 7
 
 ## Correct response
-3 books
+    3 books
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Paul has 6 cups. 
-He buys 11 more cups. 
-How many cups does he have in all?
-
+    Paul has 6 cups. 
+    He buys 11 more cups. 
+    How many cups does he have in all?
+    
 ## Digested problem
     Paul	has 	6   	cups	.   
     NNP 	VBZ 	CD  	NNS 	.   
@@ -1230,7 +1254,7 @@ How many cups does he have in all?
     WRB 	JJ  	NNS 	VBZ 	PRP 	VB  	IN  	DT  	.   
 
 ## Problem inference
-I think this problem is about Paul getting cups and asks a single question.
+    I think this problem is about Paul getting cups and asks a single question.
 
 ## Parsed problem
     Paul            	has             	6               	cups            	.               
@@ -1246,32 +1270,32 @@ I think this problem is about Paul getting cups and asks a single question.
 ## Question 1
 
 ### Question text
-How many cups does he have in all?
+    How many cups does he have in all?
 
 ### Answer interpretation
-The answer is the unknown value of cups owned by Paul.
+    The answer is the unknown value of cups owned by Paul.
 
 ## Data extraction
 
 ### Sentence 1
-cups owned by Paul = 6
+    cups owned by Paul = 6
 
 ### Sentence 2
-cups owned by Paul + 11
+    cups owned by Paul + 11
 
 ## Correct response
-17 cups
+    17 cups
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Sidd has 10 books. 
-He buys 11 more books. 
-How many books does he have in all?
-
-
+    Sidd has 10 books. 
+    He buys 11 more books. 
+    How many books does he have in all?
+    
+    
 ## Digested problem
     Sidd 	has  	10   	books	.    
     NNP  	VBZ  	CD   	NNS  	.    
@@ -1283,7 +1307,7 @@ How many books does he have in all?
     WRB  	JJ   	NNS  	VBZ  	PRP  	VB   	IN   	DT   	.    
 
 ## Problem inference
-I think this problem is about Sidd getting books and asks a single question.
+    I think this problem is about Sidd getting books and asks a single question.
 
 ## Parsed problem
     Sidd            	has             	10              	books           	.               
@@ -1299,31 +1323,31 @@ I think this problem is about Sidd getting books and asks a single question.
 ## Question 1
 
 ### Question text
-How many books does he have in all?
+    How many books does he have in all?
 
 ### Answer interpretation
-The answer is the unknown value of books owned by Sidd.
+    The answer is the unknown value of books owned by Sidd.
 
 ## Data extraction
 
 ### Sentence 1
-books owned by Sidd = 10
+    books owned by Sidd = 10
 
 ### Sentence 2
-books owned by Sidd + 11
+    books owned by Sidd + 11
 
 ## Correct response
-21 books
+    21 books
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-Lee has 10 blocks. 
-He buys 2 more blocks. 
-How many blocks does he have in all?
-
+    Lee has 10 blocks. 
+    He buys 2 more blocks. 
+    How many blocks does he have in all?
+    
 ## Digested problem
     Lee   	has   	10    	blocks	.     
     NNP   	VBZ   	CD    	NNS   	.     
@@ -1335,7 +1359,7 @@ How many blocks does he have in all?
     WRB   	JJ    	NNS   	VBZ   	PRP   	VB    	IN    	DT    	.     
 
 ## Problem inference
-I think this problem is about Lee getting blocks and asks a single question.
+    I think this problem is about Lee getting blocks and asks a single question.
 
 ## Parsed problem
     Lee             	has             	10              	blocks          	.               
@@ -1351,31 +1375,32 @@ I think this problem is about Lee getting blocks and asks a single question.
 ## Question 1
 
 ### Question text
-How many blocks does he have in all?
+    How many blocks does he have in all?
 
 ### Answer interpretation
-The answer is the unknown value of blocks owned by Lee.
+    The answer is the unknown value of blocks owned by Lee.
 
 ## Data extraction
 
 ### Sentence 1
-blocks owned by Lee = 10
+    blocks owned by Lee = 10
 
 ### Sentence 2
-blocks owned by Lee + 2
+    blocks owned by Lee + 2
 
 ## Correct response
-12 blocks
+    12 blocks
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-Tom has 5 bags. 
-Tom gives his sister 4 bags. 
-How many bags does Tom have left?
-
+    Tom has 5 bags. 
+    Tom gives his sister 4 bags. 
+    How many bags does Tom have left?
+    
 ## Digested problem
     Tom   	has   	5     	bags  	.     
     NNP   	VBZ   	CD    	NNS   	.     
@@ -1387,7 +1412,7 @@ How many bags does Tom have left?
     WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	VBN   	.     
 
 ## Problem inference
-I think this problem is about Tom and Tom's sister bags and asks a single question.
+    I think this problem is about Tom and Tom's sister bags and asks a single question.
 
 ## Parsed problem
     Tom            	has            	5              	bags           	.              
@@ -1403,32 +1428,33 @@ I think this problem is about Tom and Tom's sister bags and asks a single questi
 ## Question 1
 
 ### Question text
-How many bags does Tom have left?
+    How many bags does Tom have left?
 
 ### Answer interpretation
-The answer is the unknown value of bags owned by Tom at the end of the problem.
+    The answer is the unknown value of bags owned by Tom at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-bags owned by Tom = 5
+    bags owned by Tom = 5
 
 ### Sentence 2
-bags owned by Tom's sister + 4
-bags owned by Tom - 4
+    bags owned by Tom's sister + 4
+    bags owned by Tom - 4
 
 ## Correct response
-1 bags
+    1 bags
 
 ***
 
+context_grouping
 # Zoidberg Solution
 
 ## The problem
-Tom has 5 books. 
-Sidd has 8 books. 
-How many books do they have altogether?
-
+    Tom has 5 books. 
+    Sidd has 8 books. 
+    How many books do they have altogether?
+    
 ## Digested problem
     Tom       	has       	5         	books     	.         
     NNP       	VBZ       	CD        	NNS       	.         
@@ -1440,7 +1466,7 @@ How many books do they have altogether?
     WRB       	JJ        	NNS       	VBP       	PRP       	VBP       	RB        	.         
 
 ## Problem inference
-I think this problem is about Tom and Sidd grouping books and asks a single question.
+    I think this problem is about Tom and Sidd grouping books and asks a single question.
 
 ## Parsed problem
     Tom         	has         	5           	books       	.           
@@ -1456,30 +1482,30 @@ I think this problem is about Tom and Sidd grouping books and asks a single ques
 ## Question 1
 
 ### Question text
-How many books do they have altogether?
+    How many books do they have altogether?
 
 ### Answer interpretation
-The answer is the unknown value of books owned by Sidd and Tom added together.
+    The answer is the unknown value of books owned by Sidd and Tom added together.
 
 ## Data extraction
 
 ### Sentence 1
-books owned by Tom = 5
+    books owned by Tom = 5
 
 ### Sentence 2
-books owned by Sidd = 8
+    books owned by Sidd = 8
 
 ## Correct response
-13 books
+    13 books
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-You have 7 balloons and your friend has 5 balloons. 
-How many more balloons do you have than your friend? 
-
+    You have 7 balloons and your friend has 5 balloons. 
+    How many more balloons do you have than your friend? 
+    
 ## Digested problem
     You     	have    	7       	balloons	and     	your    	friend  	has     	5       	balloons	.       
     PRP     	VBP     	CD      	NNS     	CC      	PRP$    	NN      	VBZ     	CD      	NNS     	.       
@@ -1488,7 +1514,7 @@ How many more balloons do you have than your friend?
     WRB     	JJ      	RBR     	NNS     	VBP     	PRP     	VB      	IN      	PRP$    	NN      	.       
 
 ## Problem inference
-I think this problem is about me and my friend grouping balloons and asks a single question.
+    I think this problem is about me and my friend grouping balloons and asks a single question.
 
 ## Parsed problem
     I                       	have                    	7                       	balloons                	and                     	my friend               	has                     	5                       	balloons                	.                       
@@ -1501,29 +1527,32 @@ I think this problem is about me and my friend grouping balloons and asks a sing
 ## Question 1
 
 ### Question text
-How many more balloons do you have than your friend?
+    How many more balloons do you have than your friend?
 
 ### Answer interpretation
-The answer is the increase in value of balloons owned by me with respect to my friend.
+    The answer is the increase in value of balloons owned by me with respect to my friend.
 
 ## Data extraction
 
 ### Sentence 1
-balloons owned by me = 7
-balloons owned by my friend = 5
+    balloons owned by me = 7
+    balloons owned by my friend = 5
 
 ## Correct response
-2 balloons
+    2 balloons
 
 ***
 
+place_noun
+place_noun
+place_noun
 # Zoidberg Solution
 
 ## The problem
-2 birds were sitting on the fence. 
-4 more birds came to join them. 
-How many birds are sitting on the fence?
-
+    2 birds were sitting on the fence. 
+    4 more birds came to join them. 
+    How many birds are sitting on the fence?
+    
 ## Digested problem
     2      	birds  	were   	sitting	on     	the    	fence  	.      
     LS     	NNS    	VBD    	VBG    	IN     	DT     	NN     	.      
@@ -1535,7 +1564,7 @@ How many birds are sitting on the fence?
     WRB    	JJ     	NNS    	VBP    	VBG    	IN     	DT     	NN     	.      
 
 ## Problem inference
-I think this problem is about an increasing number of birds sitting on the fence and asks a single question.
+    I think this problem is about an increasing number of birds sitting on the fence and asks a single question.
 
 ## Parsed problem
     2                   	birds               	were                	sitting             	on                  	the                 	fence               	.                   
@@ -1551,31 +1580,32 @@ I think this problem is about an increasing number of birds sitting on the fence
 ## Question 1
 
 ### Question text
-How many birds are sitting on the fence?
+    How many birds are sitting on the fence?
 
 ### Answer interpretation
-The answer is the unknown value of birds sitting on the fence.
+    The answer is the unknown value of birds sitting on the fence.
 
 ## Data extraction
 
 ### Sentence 1
-sitting birds on the fence = 2
+    sitting birds on the fence = 2
 
 ### Sentence 2
-sitting birds on the fence + 4
+    sitting birds on the fence + 4
 
 ## Correct response
-6 birds
+    6 birds
 
 ***
 
+time_ending
 # Zoidberg Solution
 
 ## The problem
-You have 7 cookies and you ate 2 of them. 
-How many cookies do you have left? 
-
-
+    You have 7 cookies and you ate 2 of them. 
+    How many cookies do you have left? 
+    
+    
 ## Digested problem
     You    	have   	7      	cookies	and    	you    	ate    	2      	of     	them   	.      
     PRP    	VBP    	CD     	NNS    	CC     	PRP    	VBP    	CD     	IN     	PRP    	.      
@@ -1584,7 +1614,7 @@ How many cookies do you have left?
     WRB    	JJ     	NNS    	VBP    	PRP    	VB     	VBN    	.      
 
 ## Problem inference
-I think this problem is about me losing cookies and asks a single question.
+    I think this problem is about me losing cookies and asks a single question.
 
 ## Parsed problem
     I                       	have                    	7                       	cookies                 	and                     	I                       	ate                     	2                       	cookies                 	.                       
@@ -1597,28 +1627,29 @@ I think this problem is about me losing cookies and asks a single question.
 ## Question 1
 
 ### Question text
-How many cookies do you have left?
+    How many cookies do you have left?
 
 ### Answer interpretation
-The answer is the unknown value of cookies owned by me at the end of the problem.
+    The answer is the unknown value of cookies owned by me at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-cookies owned by me = 7
-cookies owned by me - 2
+    cookies owned by me = 7
+    cookies owned by me - 2
 
 ## Correct response
-5 cookies
+    5 cookies
 
 ***
 
+unit_requirement
 # Zoidberg Solution
 
 ## The problem
-You have collected 7 crickets. 
-How many more crickets do you need to collect to have 11 crickets? 
-
+    You have collected 7 crickets. 
+    How many more crickets do you need to collect to have 11 crickets? 
+    
 ## Digested problem
     You      	have     	collected	7        	crickets 	.        
     PRP      	VBP      	VBN      	CD       	NNS      	.        
@@ -1627,7 +1658,7 @@ How many more crickets do you need to collect to have 11 crickets?
     WRB      	JJ       	RBR      	NNS      	VBP      	PRP      	VBP      	TO       	VB       	TO       	VB       	CD       	NNS      	.        
 
 ## Problem inference
-I think this problem is about me getting crickets to collect to to have crickets and asks a single question.
+    I think this problem is about me getting crickets to collect to to have crickets and asks a single question.
 
 ## Parsed problem
     I          	have       	collected  	7          	crickets   	.          
@@ -1640,30 +1671,30 @@ I think this problem is about me getting crickets to collect to to have crickets
 ## Question 1
 
 ### Question text
-How many more crickets do you need to collect to have 11 crickets?
+    How many more crickets do you need to collect to have 11 crickets?
 
 ### Answer interpretation
-The answer is the increase in value of crickets owned by me needed to equal the specified value.
+    The answer is the increase in value of crickets owned by me needed to equal the specified value.
 
 ## Data extraction
 
 ### Sentence 1
-crickets owned by me = 7
+    crickets owned by me = 7
 
 ### Sentence 2
-crickets owned by me == 11
+    crickets owned by me == 11
 
 ## Correct response
-4 crickets
+    4 crickets
 
 ***
 
 # Zoidberg Solution
 
 ## The problem
-A bee has 6 legs. 
-How many legs do 5 bees have?
-
+    A bee has 6 legs. 
+    How many legs do 5 bees have?
+    
 ## Digested problem
     A   	bee 	has 	6   	legs	.   
     DT  	NN  	VBZ 	CD  	NNS 	.   
@@ -1672,7 +1703,7 @@ How many legs do 5 bees have?
     WRB 	JJ  	NNS 	VBP 	CD  	NNS 	VBP 	.   
 
 ## Problem inference
-I think this problem is about bees having legs and asks a single question.
+    I think this problem is about bees having legs and asks a single question.
 
 ## Parsed problem
     1          	bee        	has        	6          	legs       	.          
@@ -1685,28 +1716,31 @@ I think this problem is about bees having legs and asks a single question.
 ## Question 1
 
 ### Question text
-How many legs do 5 bees have?
+    How many legs do 5 bees have?
 
 ### Answer interpretation
-The answer is the unknown value of legs owned by 5 bees.
+    The answer is the unknown value of legs owned by 5 bees.
 
 ## Data extraction
 
 ### Sentence 1
-legs owned by 1 bee = 6
+    legs owned by 1 bee = 6
 
 ## Correct response
-30 legs
+    30 legs
 
 ***
 
+place_noun
+place_noun
+time_ending
 # Zoidberg Solution
 
 ## The problem
-4 birds are sitting on a branch. 
-1 flies away. 
-How many birds are left on the branch? 
-
+    4 birds are sitting on a branch. 
+    1 flies away. 
+    How many birds are left on the branch? 
+    
 ## Digested problem
     4      	birds  	are    	sitting	on     	a      	branch 	.      
     LS     	NNS    	VBP    	VBG    	IN     	DT     	NN     	.      
@@ -1718,7 +1752,7 @@ How many birds are left on the branch?
     WRB    	JJ     	NNS    	VBP    	VBN    	IN     	DT     	NN     	.      
 
 ## Problem inference
-I think this problem is about a decreasing number of birds sitting and flies on a branch and asks a single question.
+    I think this problem is about a decreasing number of birds sitting and flies on a branch and asks a single question.
 
 ## Parsed problem
     4                   	birds               	are                 	sitting             	on                  	1                   	branch              	.                   
@@ -1734,30 +1768,31 @@ I think this problem is about a decreasing number of birds sitting and flies on 
 ## Question 1
 
 ### Question text
-How many birds are left on the branch?
+    How many birds are left on the branch?
 
 ### Answer interpretation
-The answer is the unknown value of birds sitting at the end of the problem on a branch.
+    The answer is the unknown value of birds sitting at the end of the problem on a branch.
 
 ## Data extraction
 
 ### Sentence 1
-sitting birds on a branch = 4
+    sitting birds on a branch = 4
 
 ### Sentence 2
-sitting birds on a branch - 1
+    sitting birds on a branch - 1
 
 ## Correct response
-3 birds
+    3 birds
 
 ***
 
+comparator
 # Zoidberg Solution
 
 ## The problem
-There are 6 birds and 3 nests. 
-How many more birds are there than nests? 
-
+    There are 6 birds and 3 nests. 
+    How many more birds are there than nests? 
+    
 ## Digested problem
     There	are  	6    	birds	and  	3    	nests	.    
     EX   	VBP  	CD   	NNS  	CC   	CD   	NNS  	.    
@@ -1766,7 +1801,7 @@ How many more birds are there than nests?
     WRB  	JJ   	RBR  	NNS  	VBP  	RB   	IN   	NNS  	.    
 
 ## Problem inference
-I think this problem is about birds and nests than nests and asks a single question.
+    I think this problem is about birds and nests than nests and asks a single question.
 
 ## Parsed problem
     There                   	are                     	6                       	birds                   	and                     	3                       	nests                   	.                       
@@ -1779,28 +1814,33 @@ I think this problem is about birds and nests than nests and asks a single quest
 ## Question 1
 
 ### Question text
-How many more birds are there than nests?
+    How many more birds are there than nests?
 
 ### Answer interpretation
-The answer is the increase in value of birds.
+    The answer is the increase in value of birds with respect to nests.
 
 ## Data extraction
 
 ### Sentence 1
-nests = 3
-birds = 6
+    nests = 3
+    birds = 6
 
 ## Correct response
-3 birds
+    3 birds
 
 ***
 
+place_noun
+place_noun
+object
+place_noun
+time_ending
 # Zoidberg Solution
 
 ## The problem
-3 raccoons are playing in the woods. 
-2 go home to eat dinner. How many raccoons are left in the woods? 
-
+    3 raccoons are playing in the woods. 
+    2 go home to eat dinner. How many raccoons are left in the woods? 
+    
 ## Digested problem
     3       	raccoons	are     	playing 	in      	the     	woods   	.       
     LS      	NNS     	VBP     	VBG     	IN      	DT      	NNS     	.       
@@ -1812,7 +1852,7 @@ birds = 6
     WRB     	JJ      	NNS     	VBP     	VBN     	IN      	DT      	NNS     	.       
 
 ## Problem inference
-I think this problem is about a decreasing number of raccoons playing in the woods and home and asks a single question.
+    I think this problem is about a decreasing number of raccoons playing in the woods and home and asks a single question.
 
 ## Parsed problem
     3                   	raccoons            	are                 	playing             	in                  	the                 	woods               	.                   
@@ -1828,30 +1868,31 @@ I think this problem is about a decreasing number of raccoons playing in the woo
 ## Question 1
 
 ### Question text
-How many raccoons are left in the woods?
+    How many raccoons are left in the woods?
 
 ### Answer interpretation
-The answer is the unknown value of raccoons playing at the end of the problem in the woods.
+    The answer is the unknown value of raccoons playing at the end of the problem in the woods.
 
 ## Data extraction
 
 ### Sentence 1
-playing raccoons in the woods = 3
+    playing raccoons in the woods = 3
 
 ### Sentence 2
-playing raccoons in the woods - 2
+    playing raccoons in the woods - 2
 
 ## Correct response
-1 raccoons
+    1 raccoons
 
 ***
 
+comparator
 # Zoidberg Solution
 
 ## The problem
-There are 5 flowers and 3 bees. 
-How many less bees than flowers?
-
+    There are 5 flowers and 3 bees. 
+    How many less bees than flowers?
+    
 ## Digested problem
     There  	are    	5      	flowers	and    	3      	bees   	.      
     EX     	VBP    	CD     	NNS    	CC     	CD     	NNS    	.      
@@ -1860,7 +1901,7 @@ How many less bees than flowers?
     WRB    	JJ     	JJR    	NNS    	IN     	NNS    	.      
 
 ## Problem inference
-I think this problem is about flowers and bees than flowers and asks a single question.
+    I think this problem is about flowers and bees than flowers and asks a single question.
 
 ## Parsed problem
     There                   	are                     	5                       	flowers                 	and                     	3                       	bees                    	.                       
@@ -1873,29 +1914,31 @@ I think this problem is about flowers and bees than flowers and asks a single qu
 ## Question 1
 
 ### Question text
-How many less bees than flowers?
+    How many less bees than flowers?
 
 ### Answer interpretation
-The answer is the difference in value of bees.
+    The answer is the difference in value of bees with respect to flowers.
 
 ## Data extraction
 
 ### Sentence 1
-flowers = 5
-bees = 3
+    flowers = 5
+    bees = 3
 
 ## Correct response
-2 bees
+    2 bees
 
 ***
 
+refiner
+time_ending
 # Zoidberg Solution
 
 ## The problem
-1 lonely pigeons was eating breadcrumbs. 
-Another pigeon came to eat breadcrumbs, too. 
-How many pigeons are eating breadcrumbs now? 
-
+    1 lonely pigeons was eating breadcrumbs. 
+    Another pigeon came to eat breadcrumbs, too. 
+    How many pigeons are eating breadcrumbs now? 
+    
 ## Digested problem
     1          	lonely     	pigeons    	was        	eating     	breadcrumbs	.          
     LS         	RB         	NNS        	VBD        	VBG        	NNS        	.          
@@ -1907,7 +1950,7 @@ How many pigeons are eating breadcrumbs now?
     WRB        	JJ         	NNS        	VBP        	VBG        	NNS        	RB         	.          
 
 ## Problem inference
-I think this problem is about pigeons getting and losing eating breadcrumbs and pigeon lonely and asks a single question.
+    I think this problem is about pigeons getting and losing eating breadcrumbs and pigeon lonely and asks a single question.
 
 ## Parsed problem
     1                   	lonely              	pigeons             	was                 	eating              	breadcrumbs         	.                   
@@ -1923,32 +1966,36 @@ I think this problem is about pigeons getting and losing eating breadcrumbs and 
 ## Question 1
 
 ### Question text
-How many pigeons are eating breadcrumbs now?
+    How many pigeons are eating breadcrumbs now?
 
 ### Answer interpretation
-The answer is the unknown value of pigeons eating lonely at the end of the problem.
+    The answer is the unknown value of pigeons eating lonely at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-eating pigeons lonely = 1
+    eating pigeons lonely = 1
 
 ### Sentence 2
-eating pigeons lonely + 1
+    eating pigeons lonely + 1
 
 ## Correct response
-2 pigeons
+    2 pigeons
 
 ***
 
+place_noun
+place_noun
+time_ending
+place_noun
 # Zoidberg Solution
 
 ## The problem
-3 owls were sitting on the fence. 
-2 more owls joined them. 
-How many owls are on the fence now? 
-
-
+    3 owls were sitting on the fence. 
+    2 more owls joined them. 
+    How many owls are on the fence now? 
+    
+    
 ## Digested problem
     3      	owls   	were   	sitting	on     	the    	fence  	.      
     LS     	NNS    	VBD    	VBG    	IN     	DT     	NN     	.      
@@ -1960,7 +2007,7 @@ How many owls are on the fence now?
     WRB    	JJ     	NNS    	VBP    	IN     	DT     	NN     	RB     	.      
 
 ## Problem inference
-I think this problem is about an increasing number of owls sitting on the fence and asks a single question.
+    I think this problem is about an increasing number of owls sitting on the fence and asks a single question.
 
 ## Parsed problem
     3                   	owls                	were                	sitting             	on                  	the                 	fence               	.                   
@@ -1976,32 +2023,35 @@ I think this problem is about an increasing number of owls sitting on the fence 
 ## Question 1
 
 ### Question text
-How many owls are on the fence now?
+    How many owls are on the fence now?
 
 ### Answer interpretation
-The answer is the unknown value of owls sitting on the fence at the end of the problem.
+    The answer is the unknown value of owls sitting on the fence at the end of the problem.
 
 ## Data extraction
 
 ### Sentence 1
-sitting owls on the fence = 3
+    sitting owls on the fence = 3
 
 ### Sentence 2
-sitting owls on the fence + 2
+    sitting owls on the fence + 2
 
 ## Correct response
-5 owls
+    5 owls
 
 ***
 
+place_noun
+place_noun
+time_ending
 # Zoidberg Solution
 
 ## The problem
-2 beavers were working on their home. 
-1 went for a swim. 
-How many beavers are still working on their home? 
-
-
+    2 beavers were working on their home. 
+    1 went for a swim. 
+    How many beavers are still working on their home? 
+    
+    
 ## Digested problem
     2      	beavers	were   	working	on     	their  	home   	.      
     LS     	NNS    	VBD    	VBG    	IN     	PRP$   	NN     	.      
@@ -2013,7 +2063,7 @@ How many beavers are still working on their home?
     WRB    	JJ     	NNS    	VBP    	RB     	VBG    	IN     	PRP$   	NN     	.      
 
 ## Problem inference
-I think this problem is about a decreasing number of beavers, their home, and beavers' home working on their home and asks a single question.
+    I think this problem is about a decreasing number of beavers, their home, and beavers' home working on their home and asks a single question.
 
 ## Parsed problem
     2                   	beavers             	were                	working             	on                  	home                	.                   
@@ -2029,31 +2079,33 @@ I think this problem is about a decreasing number of beavers, their home, and be
 ## Question 1
 
 ### Question text
-How many beavers are still working on their home?
+    How many beavers are still working on their home?
 
 ### Answer interpretation
-The answer is the unknown value of beavers working at the end of the problem on their home.
+    The answer is the unknown value of beavers working at the end of the problem on their home.
 
 ## Data extraction
 
 ### Sentence 1
-working beavers on their home = 2
+    working beavers on their home = 2
 
 ### Sentence 2
-working beavers on their home - 1
+    working beavers on their home - 1
 
 ## Correct response
-1 beavers
+    1 beavers
 
 ***
 
+place_noun
+place_noun
 # Zoidberg Solution
 
 ## The problem
-2 toucans are sitting on a tree limb. 
-1 more toucan joins them. 
-How many toucans in all? 
-
+    2 toucans are sitting on a tree limb. 
+    1 more toucan joins them. 
+    How many toucans in all? 
+    
 ## Digested problem
     2      	toucans	are    	sitting	on     	a      	tree   	limb   	.      
     LS     	NNS    	VBP    	VBG    	IN     	DT     	NN     	NN     	.      
@@ -2065,7 +2117,7 @@ How many toucans in all?
     WRB    	JJ     	NNS    	IN     	DT     	.      
 
 ## Problem inference
-I think this problem is about an increasing number of toucans sitting on a tree limb and asks a single question.
+    I think this problem is about an increasing number of toucans sitting on a tree limb and asks a single question.
 
 ## Parsed problem
     2                   	toucans             	are                 	sitting             	on                  	1                   	tree limb           	.                   
@@ -2081,30 +2133,32 @@ I think this problem is about an increasing number of toucans sitting on a tree 
 ## Question 1
 
 ### Question text
-How many toucans in all?
+    How many toucans in all?
 
 ### Answer interpretation
-The answer is the unknown value of toucans sitting on a tree limb.
+    The answer is the unknown value of toucans sitting on a tree limb.
 
 ## Data extraction
 
 ### Sentence 1
-sitting toucans on a tree limb = 2
+    sitting toucans on a tree limb = 2
 
 ### Sentence 2
-sitting toucans on a tree limb + 1
+    sitting toucans on a tree limb + 1
 
 ## Correct response
-3 toucans
+    3 toucans
 
 ***
 
+place_noun
+comparator
 # Zoidberg Solution
 
 ## The problem
-There are 4 squirrels in a tree with 2 nuts. 
-How many more squirrels are there than nuts?
-
+    There are 4 squirrels in a tree with 2 nuts. 
+    How many more squirrels are there than nuts?
+    
 ## Digested problem
     There    	are      	4        	squirrels	in       	a        	tree     	with     	2        	nuts     	.        
     EX       	VBP      	CD       	NNS      	IN       	DT       	NN       	IN       	CD       	NNS      	.        
@@ -2113,7 +2167,7 @@ How many more squirrels are there than nuts?
     WRB      	JJ       	RBR      	NNS      	VBP      	RB       	IN       	NNS      	.        
 
 ## Problem inference
-I think this problem is about squirrels and nuts in a tree and than nuts and asks a single question.
+    I think this problem is about squirrels and nuts in a tree and than nuts and asks a single question.
 
 ## Parsed problem
     There               	are                 	4                   	squirrels           	in                  	1                   	tree                	with                	2                   	nuts                	.                   
@@ -2126,16 +2180,98 @@ I think this problem is about squirrels and nuts in a tree and than nuts and ask
 ## Question 1
 
 ### Question text
-How many more squirrels are there than nuts?
+    How many more squirrels are there than nuts?
 
 ### Answer interpretation
-The answer is the increase in value of squirrels in a tree.
+    The answer is the increase in value of squirrels with respect to nuts in a tree.
 
 ## Data extraction
 
 ### Sentence 1
-nuts in a tree = 2
-squirrels in a tree = 4
+    nuts in a tree = 2
+    squirrels in a tree = 4
 
 ## Correct response
-2 squirrels
+    2 squirrels
+
+***
+
+# Zoidberg Solution
+
+## The problem
+    Mrs. Hilt has two pennies, two dimes, and two nickels. 
+    Jacob has four pennies, one nickel, and one dime. 
+    Who has more money? 
+    How much more? 
+    
+## Digested problem
+    Mrs.   	Hilt   	has    	two    	pennies	,      	two    	dimes  	,      	and    	two    	nickels	.      
+    NNP    	NNP    	VBZ    	CD     	NNS    	,      	CD     	NNS    	,      	CC     	CD     	NNS    	.      
+
+    Jacob  	has    	four   	pennies	,      	one    	nickel 	,      	and    	one    	dime   	.      
+    NNP    	VBZ    	CD     	NNS    	,      	CD     	NN     	,      	CC     	CD     	NN     	.      
+
+    Who    	has    	more   	money  	?      
+    WP     	VBZ    	JJR    	NN     	.      
+
+    How    	much   	more   	?      
+    WRB    	JJ     	RBR    	.      
+
+## Problem inference
+    I think this problem is about Mrs. Hilt and Jacob grouping pennies, dimes, nickels, and money and asks multiple questions.
+
+## Parsed problem
+    Mrs. Hilt               	has                     	2                       	pennies                 	,                       	2                       	dimes                   	,                       	and                     	2                       	nickels                 	.                       
+    context                 	operator                	constant                	unit                    	punctuation             	constant                	unit                    	punctuation             	coordinating_conjunction	constant                	unit                    	punctuation             
+
+    Jacob                   	has                     	4                       	pennies                 	,                       	1                       	nickel                  	,                       	and                     	1                       	dime                    	.                       
+    context                 	operator                	constant                	unit                    	punctuation             	constant                	unit                    	punctuation             	coordinating_conjunction	constant                	unit                    	punctuation             
+
+    Who                     	has                     	more                    	money                   	?                       
+    asking                  	q_start                 	rel_more                	unit                    	punctuation             
+
+    How much                	more                    	?                       	money                   
+    asking                  	rel_more                	punctuation             	unit_inferred           
+
+
+## Question 1
+
+### Question text
+    Who has more money?
+
+### Answer interpretation
+    The answer is the unknown owner of more money.
+
+## Question 2
+
+### Question text
+    How much more?
+
+### Answer interpretation
+    The answer is the increase in value of money owned by Mrs. Hilt with respect to Jacob.
+
+## Data extraction
+
+### Sentence 1
+    money owned by Mrs. Hilt = 0.02
+    money owned by Mrs. Hilt + 0.1
+    money owned by Mrs. Hilt + 0.2
+    nickels owned by Mrs. Hilt = 2
+    dimes owned by Mrs. Hilt = 2
+    pennies owned by Mrs. Hilt = 2
+
+### Sentence 2
+    money owned by Jacob = 0.04
+    money owned by Jacob + 0.05
+    money owned by Jacob + 0.1
+    dime owned by Jacob = 1
+    nickel owned by Jacob = 1
+    pennies owned by Jacob = 4
+
+## Correct response
+
+### Response 1
+    Mrs. Hilt
+
+### Response 2
+    13 cents

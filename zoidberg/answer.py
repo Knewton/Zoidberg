@@ -39,6 +39,8 @@ class Answer(object):
 	def __init__(self, query):
 		self.query = query
 
+		self.solved_contexts = []
+
 		self.constant = None
 		self.syntax = None
 		self.relative = False
@@ -95,10 +97,14 @@ class Answer(object):
 				if asking:
 					self.relative = True
 					self.rel_mode = "su"
+				elif refining:
+					self.rel_mode = "su"
 
 			if part == "rel_more":
 				if asking:
 					self.relative = True
+					self.rel_mode = "ad"
+				elif refining:
 					self.rel_mode = "ad"
 
 			if part == "pre_ind_plu":
@@ -122,7 +128,10 @@ class Answer(object):
 						self.last_unrefined_context_subtype = None
 
 			# assume unit appearing during asking for answer
-			if part == "unit" and asking:
+			if part in ["unit", "unit_inferred"] and asking:
+				self.unit = val
+
+			if part in ["unit", "unit_inferred"] and refining and self.unit == None:
 				self.unit = val
 
 			if part == "comparator_context":
@@ -194,7 +203,7 @@ class Answer(object):
 		o = []
 
 		o.append("\n### Question text")
-		o.append(str(self.query))
+		o.append("    " + str(self.query))
 
 		o.append("\n### Answer interpretation")
 
@@ -211,7 +220,7 @@ class Answer(object):
 			elif self.syntax == "unit":
 				surprised = self.unit is not None
 			elif self.syntax == "context":
-				surprised = self.unit is not None
+				surprised = self.context is not None
 			syntax = ANSWER_SYNTAX[self.syntax]
 
 		if surprised:
@@ -237,6 +246,11 @@ class Answer(object):
 			i.append(self.value)
 
 		if self.unit and not self.actor:
+			if not self.relative and self.syntax == "context":
+				if self.rel_mode == "su":
+					i.append("less")
+				elif self.rel_mode == "ad":
+					i.append("more")
 			i.append(self.unit)
 
 		if self.context:
@@ -254,6 +268,8 @@ class Answer(object):
 		if self.relative:
 			if self.comparator is not None:
 				i.append("with respect to {0}".format(self.comparator))
+			elif self.comparator_unit is not None:
+				i.append("with respect to {0}".format(self.comparator_unit))
 
 		if len(self.subordinates) > 0:
 			for sub in self.subordinates:
@@ -263,7 +279,7 @@ class Answer(object):
 				else:
 					i.append(ANSWER_SUBORDINATE[s])
 
-		o.append(" ".join(i) + ".")
+		o.append("    " + " ".join(i) + ".")
 
 		return "\n".join(o)
 

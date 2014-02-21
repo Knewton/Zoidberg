@@ -23,6 +23,7 @@ def common_prefix(strings):
 
 DEFAULT_PATH = "~/.zoidberg.brain.json"
 DEFAULT_BRAIN = {
+	"money_formatting": {"whole": "dollar", "and": "and", "decimal": "cents"},
 	"operator_verbs": {},
 	"subordinates": {},
 	"exestential": {},
@@ -43,6 +44,16 @@ DEFAULT_BRAIN = {
 	"word_forms": {
 		"single": {},
 		"plural": {}
+	},
+	"monetary_words": {
+		"pennies": 0.01,
+		"penny": 0.01,
+		"nickel": 0.05,
+		"nickels": 0.05,
+		"dime": 0.1,
+		"dimes": 0.1,
+		"quarter": 0.25,
+		"quarters": 0.25
 	}
 }
 
@@ -588,10 +599,12 @@ class Brain(object):
 
 			return (item, comp)
 		elif not asked:
+			return self.is_plural_form(comp, item, True)
 			# Ignore complex checks (those using spaces in the name)
-			if not (" " in item or " " in comp):
-				if len(common_prefix([item, comp])) > 2:
-					raise Exception("ASK USER FOR MAPPING")
+			#if not (" " in item or " " in comp):
+			#	if len(common_prefix([item, comp])) > 2:
+			#		print common_prefix([item, comp]), len(common_prefix([item, comp]))
+			#		raise Exception("ASK USER FOR MAPPING FOR: " + item + " " + comp)
 		else:
 			isPlural = item in self.raw["word_forms"]["single"]
 			isSingle = item in self.raw["word_forms"]["plural"]

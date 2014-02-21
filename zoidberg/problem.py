@@ -29,6 +29,7 @@ class Problem(object):
 		self.context_actions = {}
 		self.descriptive_units = []
 		self.refined_units = {}
+		self.unit_subtypes = {}
 		self.units = []
 
 		self.exestential = False
@@ -85,6 +86,7 @@ class Problem(object):
 			},
 			"last": None
 		}
+		self.contexts = []
 		self.all_contexts = {
 			"plurality": {
 				"singular": {},
@@ -168,7 +170,7 @@ class Problem(object):
 			o.append("File: {0}".format(self.file_name))
 
 		o.append("\n## The problem")
-		o.append(self.text)
+		o.append("    " + "\n    ".join(self.text.split("\n")))
 
 		o.append("## Digested problem")
 		output_tuples(self.sentence_tags, o, self.longest_word, self.brain)

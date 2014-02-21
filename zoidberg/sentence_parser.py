@@ -8,6 +8,13 @@ ANSWER_SUBORDINATE = {
 	"time_ending": "at the end"
 }
 
+def is_number(s):
+	try:
+		float(s)
+		return True
+	except ValueError:
+		return False
+
 class SentenceParser(object):
 	def __init__(self, sentence, problem, text):
 		# Descriptive units are those which do not get parsed even if they
@@ -362,6 +369,7 @@ class SentenceParser(object):
 								self.problem.descriptive_units.append(unit)
 								self.problem.refined_units[self.last_unit] = unit
 								self.units.pop()
+								del p.unit_subtypes[self.last_unit]
 								self.parsed.pop()
 								self.parsed.pop()
 								self.last_unit = unit
@@ -369,6 +377,7 @@ class SentenceParser(object):
 								self.last_unit_index = len(self.parsed)
 								unit, uidx = self.fix_unit(unit)
 								self.units.append(unit)
+								p.unit_subtypes[unit] = self.subtype
 								self.unit_idx[unit] = self.last_unit_index
 								if self.new_units_as_context:
 									p.units_acting_as_context[unit] = True
@@ -387,6 +396,7 @@ class SentenceParser(object):
 									self.last_unit_index = len(self.parsed)
 									unit, uidx = self.fix_unit(unit)
 									self.units.append(unit)
+									p.unit_subtypes[unit] = self.subtype
 									self.unit_idx[unit] = self.last_unit_index
 									if self.new_units_as_context:
 										p.units_acting_as_context[unit] = True
@@ -420,6 +430,7 @@ class SentenceParser(object):
 									self.last_unit_tag = tag
 									self.last_unit_index = len(self.parsed)
 									self.units.append(unit)
+									p.unit_subtypes[unit] = self.subtype
 									self.unit_idx[unit] = self.last_unit_index
 									if self.new_units_as_context:
 										p.units_acting_as_context[unit] = True
@@ -479,6 +490,7 @@ class SentenceParser(object):
 									else:
 										unit = " ".join([self.last_unit, word])
 										self.units.pop()
+										del p.unit_subtypes[self.last_unit]
 
 									self.used_unit_adjectives.append(self.last_word)
 
@@ -503,6 +515,7 @@ class SentenceParser(object):
 										if len(self.operators) > 0 and self.last_unit and not self.main_context:
 											if self.last_unit != unit:
 												context = self.units.pop()
+												del p.unit_subtypes[context]
 												self.last_context = context
 												self.contexts.append(context)
 												if self.is_relative_quantity and not self.comparator_context and self.main_context:
@@ -516,6 +529,7 @@ class SentenceParser(object):
 										self.last_unit_tag = tag
 										self.last_unit_index = len(self.parsed)
 										self.units.append(unit)
+										p.unit_subtypes[unit] = self.subtype
 										self.unit_idx[unit] = self.last_unit_index
 										if self.new_units_as_context:
 											p.units_acting_as_context[unit] = True
@@ -597,6 +611,7 @@ class SentenceParser(object):
 							self.last_unit_tag = self.last_unit_tag
 							self.last_unit_index = len(self.parsed)
 							self.units.append(unit)
+							p.unit_subtypes[unit] = self.subtype
 							self.unit_idx[unit] = self.last_unit_index
 							if self.new_units_as_context:
 								p.units_acting_as_context[unit] = True
@@ -757,7 +772,10 @@ class SentenceParser(object):
 				if self.last_conjunction is not None:
 					self.conjunction_parts.pop()
 				did_something = True
-				self.track(word, "constant", self.subtype)
+				if is_number(word):
+					self.track(word, "constant", self.subtype)
+				else:
+					self.track(p.brain.number(word, self.sentence_text), "constant", self.subtype)
 
 			if tag == "DT": # A determiner (the)
 				did_something = True
@@ -806,6 +824,7 @@ class SentenceParser(object):
 					self.problem.descriptive_units.append(unit)
 					self.problem.refined_units[self.last_unit] = unit
 					self.units.pop()
+					del p.unit_subtypes[self.last_unit]
 					self.parsed.pop()
 					self.parsed.pop()
 					self.last_unit = unit
@@ -813,6 +832,7 @@ class SentenceParser(object):
 					self.last_unit_index = len(self.parsed)
 					unit, uidx = self.fix_unit(unit)
 					self.units.append(unit)
+					p.unit_subtypes[unit] = self.subtype
 					self.unit_idx[unit] = self.last_unit_index
 					if self.new_units_as_context:
 						p.units_acting_as_context[unit] = True
@@ -839,6 +859,7 @@ class SentenceParser(object):
 
 						# Remove the last unit and make it a context
 						context = self.units.pop()
+						del p.unit_subtypes[context]
 						self.last_context = context
 						self.contexts.append(context)
 						if self.is_relative_quantity and not self.comparator_context and self.main_context:
@@ -983,8 +1004,23 @@ class SentenceParser(object):
 					self.track(sub, "subordinate_inferred", self.subordinate_subtypes[subord])
 			elif len(self.subordinates) > 0:
 				subs, sub_strs, sub_subs, sub_look = self.problem.context_subordinates[self.main_context]
+				handeled_subtypes = []
+				for s in self.subordinate_lookup:
+					st = self.subordinate_lookup[s]
+					print st
+					if st is not None:
+						if st[0:4] == "time":
+							st = st[0:4]
+					handeled_subtypes.append(st)
+
 				for sub in subs:
 					subord, subt = sub
+					st = subt
+					if st is not None:
+						if st[0:4] == "time":
+							st = st[0:4]
+						if st in handeled_subtypes and st == "time":
+							continue
 					if subord in self.subordinate_lookup:
 						continue
 					self.subordinate_subtypes[subord] = sub_subs[subord]
@@ -996,6 +1032,13 @@ class SentenceParser(object):
 		if self.main_context in self.problem.context_actions and len(self.actions) == 0:
 			word, gtype, subtype = self.problem.context_actions[self.main_context]
 			self.track(word, gtype + "_inferred", subtype)
+
+		if len(self.units) == 0 and len(self.problem.units) > 0:
+			iu = self.problem.units[-1]
+			self.track(iu, "unit_inferred", self.problem.unit_subtypes[iu])
+
+		self.problem.contexts += self.contexts
+		self.problem.contexts = uniq(self.problem.contexts)
 
 	def __str__(self):
 		return self.sentence_text

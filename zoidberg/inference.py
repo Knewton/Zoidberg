@@ -182,9 +182,9 @@ class Inference(object):
 
 		o.append("## Problem inference")
 		if thought_any:
-			o.append(" ".join(i) + ".")
+			o.append("    " + " ".join(i) + ".")
 		else:
-			o.append("I have literally no idea what's going on here.")
+			o.append("    I have literally no idea what's going on here.")
 
 		o.append("\n## Parsed problem")
 		output_tuples(self.sentences, o, self.longest_phrase, self.problem.brain)

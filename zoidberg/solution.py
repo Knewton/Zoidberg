@@ -5,6 +5,8 @@ from sympy.core.power import Pow
 from sympy import Eq, Rational
 from sympy.solvers import solve
 from json import dumps
+from utilities import oxfordComma
+from math import floor
 
 OPERATOR_STR = {
 	"eq": "owned by",
@@ -131,6 +133,7 @@ class Solution(object):
 			self.symbols[context_constant][sym] = Symbol(sym)
 
 		symbol = self.symbols[context_constant][sym]
+
 		if first_time and operator != "eq":
 			# Make an assumption that if the first thing we're
 			# doing is an addition, that we started with 0 units
@@ -482,7 +485,8 @@ class Solution(object):
 				operator = "su"
 
 			#if not answer_out:
-			data.append((operator, constant, context_var))
+			if not (answer_out and operator == "eq"):
+				data.append((operator, constant, context_var))
 
 			if zeroes_out:
 				data.append(("ans", "0", None))
@@ -607,8 +611,21 @@ class Solution(object):
 			answer_out = False
 			self.coordinated = False
 			last_part = None
+			possibly_in_list = False
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
+
+				if part == "punctuation" and val == ",":
+					if self.has_any() and self.operator == "eq":
+						possibly_in_list = True
+						cb = self.context
+						cbs = self.context_subtype
+						op = self.operator
+
+						self.generate_expression(zeroes_out, answer_out)
+						self.context = cb
+						self.context_subtype = cbs
+						self.operator = op
 
 				if subtype and subtype[0] == "self":
 					val = self.problem.brain.self_reflexive(val, True)
@@ -721,6 +738,10 @@ class Solution(object):
 					open_conjunction = True
 
 				if part == "coordinating_conjunction":
+					if possibly_in_list:
+						# And is a noise word in a list
+						continue
+
 					if self.has_any():
 						self.coordinated_container = self.generate_expression(zeroes_out, answer_out)
 					else:
@@ -799,11 +820,14 @@ class Solution(object):
 							switch_context = False
 
 						new_units = {}
+						money_values = []
 						for unit in units:
 							# We increment at the start because of the bail-out nature
 							data_index = -1
 
 							new_values = []
+							is_money = unit in self.problem.brain.raw["monetary_words"]
+
 							for values in units[unit]:
 								data_index += 1
 								operator, constant, dc = values
@@ -832,6 +856,15 @@ class Solution(object):
 								#	rint "HERE THEN?", con, constant
 								#rint "DIS", new_values, unit, context_constant, context, container
 								new_values.append((operator, con, dc))
+								if is_money:
+									money_v = self.problem.brain.raw["monetary_words"][unit] * constant
+									if operator == "eq" and len(money_values) > 0:
+										operator = "ad"
+									minf, msymbol, mcon, msym = self.get_symbol(context, context_constant, "money", container, index, operator, money_v, False, symref)
+									money_values.append((operator, mcon, dc))
+
+							if is_money:
+								new_units["money"] = money_values
 							new_units[unit] = new_values
 						new_constant_wrapper[context_constant] = new_units
 						last_context = context
@@ -861,9 +894,24 @@ class Solution(object):
 
 		def add_response(val, unit, idx):
 			for v in val:
-				i = [format_response_value(v)]
-				if unit is not None:
-					i.append(unit)
+				i = None
+				if unit == "money":
+					i = []
+					dec = int((v % 1) * 100)
+					whol = floor(v)
+
+					if whol > 0:
+						i.append(str(whol))
+						i.append(p.brain.raw["money_formatting"]["whole"])
+					if dec > 0:
+						if whol > 0:
+							i.append(p.brain.raw["money_formatting"]["and"])
+						i.append(str(dec))
+						i.append(p.brain.raw["money_formatting"]["decimal"])
+				else:
+					i = [format_response_value(v)]
+					if unit is not None:
+						i.append(unit)
 				self.correct_responses.insert(idx, " ".join(i))
 
 		def safe_solve(*args):
@@ -909,7 +957,6 @@ class Solution(object):
 
 			#rint answer.subordinates, answer.unit, answer.context
 			#rint answer.actor, answer.action
-
 			if len(answer.subordinates) > 0:
 				working_answer = None
 				for s in answer.subordinates:
@@ -995,23 +1042,72 @@ class Solution(object):
 						dontSave = True
 						self.correct_responses.append("Not sure; unknown subordinate type {0} ({1})".format(sub, word))
 			else:
-				if needEqu:
-					inf, equ, con, sym = self.get_symbol(answer.context, answer.context_constant, answer.unit, None, index)
+				if answer.syntax == "context":
+					dontSave = True
+					# need to find the context which has something
+					if answer.rel_mode and answer.unit:
+						answer_contexts, answer_context, answer_value = None, None, None
 
-				if self.uses_context_constant is not None:
-					if answer.context_constant > 1:
-						singleForm = self.problem.brain.raw["word_forms"]["single"][answer.context]
-						if not singleForm:
-							raise Exception("FIX THIS")
+						# We want to know the context which has more of the unit
+						for c in self.problem.contexts:
+							c_inf, c_equ, c_con, c_sym = self.get_symbol(c, answer.context_constant, answer.unit, None, index)
+							track = False
+
+							if answer_context is None:
+								track = True
+							elif c_equ == answer_value:
+								answer_contexts.append(c)
+							elif answer.rel_mode == "ad" and c_equ > answer_value:
+								track = True
+							elif answer.rel_mode == "su" and c_equ < answer_value:
+								track = True
+
+							if track:
+								answer_value = c_equ
+								answer_context = c
+								answer_contexts = [c]
+
+						if answer_contexts == None:
+							self.correct_responses.append("I don't seem to have enough information to answer this question.")
 						else:
-							s_inf, s_equ, s_con, s_sym = self.get_symbol(singleForm, "1", answer.unit, None, index)
-							if s_inf and s_con is None:
-								raise Exception("FIX: No definition for single context constant")
+							answer.solved_contexts = answer_contexts
+							if len(answer_contexts) == 1:
+								self.correct_responses.append(answer_context)
+							elif len(answer_contexts) > 1:
+								self.correct_responses.append(oxfordComma(answer_context))
+					else:
+						self.correct_responses.append("Not sure; I don't know how to handle this type of context determiner question.")
+					index += 1
+					continue
+				else:
+					if answer.context == None:
+						if index > 0:
+							last_ans = q.answers[index - 1]
+							if len(last_ans.solved_contexts) == 1:
+								answer.context = last_ans.solved_contexts[0]
+								if answer.relative and not answer.comparator:
+									for c in self.problem.contexts:
+										if c != answer.context:
+											answer.comparator = c
+											break
+
+					if needEqu:
+						inf, equ, con, sym = self.get_symbol(answer.context, answer.context_constant, answer.unit, None, index)
+
+					if self.uses_context_constant is not None:
+						if answer.context_constant > 1:
+							singleForm = self.problem.brain.raw["word_forms"]["single"][answer.context]
+							if not singleForm:
+								raise Exception("FIX THIS")
 							else:
-								# We have the definition for a single context
-								# so we can simply apply it
-								equ = (s_equ * number(answer.context_constant))
-				resp = (simple_solve(equ, answer.context_constant), answer.unit)
+								s_inf, s_equ, s_con, s_sym = self.get_symbol(singleForm, "1", answer.unit, None, index)
+								if s_inf and s_con is None:
+									raise Exception("FIX: No definition for single context constant")
+								else:
+									# We have the definition for a single context
+									# so we can simply apply it
+									equ = (s_equ * number(answer.context_constant))
+					resp = (simple_solve(equ, answer.context_constant), answer.unit)
 
 			if answer.relative:
 				inf, equ, con, sym = self.get_symbol(answer.context, answer.context_constant, answer.unit, None, index)
@@ -1060,7 +1156,7 @@ class Solution(object):
 					#resp = (simple_solve(v), " ".join(unt))
 					resp = (simple_solve(v, answer.context_constant), answer.unit)
 
-			if resp[0] is None:
+			if resp and resp[0] is None:
 				dontSave = True
 
 			if not dontSave:
@@ -1070,7 +1166,7 @@ class Solution(object):
 					self.work[sym].append("= 0")
 				add_response(r, u, index)
 
-			index += 1
+				index += 1
 
 	def __str__(self):
 		o = []
@@ -1181,7 +1277,7 @@ class Solution(object):
 									did_something = False
 									i.append("I don't know how to format this!")
 
-								s.append(" ".join(i))
+								s.append("    " + " ".join(i))
 
 				if len(s) > 0:
 					o.append("\n### Sentence {0}".format(index))
@@ -1208,7 +1304,7 @@ class Solution(object):
 			for response in self.correct_responses:
 				if len(self.correct_responses) > 1:
 					o.append("\n### Response {0}".format(index))
-				o.append(response)
+				o.append("    " + response)
 				index += 1
 		#rint self.symbols
 
