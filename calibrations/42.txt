@@ -2,3 +2,5 @@ Mrs. Hilt has two pennies, two dimes, and two nickels.
 Jacob has four pennies, one nickel, and one dime. 
 Who has more money? 
 How much more? 
+Who has more pennies?
+How many more?

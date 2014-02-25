@@ -1,5 +1,4 @@
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -50,7 +49,6 @@ time_ending
 
 ***
 
-time_starting
 # Zoidberg Solution
 
 ## The problem
@@ -112,7 +110,6 @@ time_starting
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -267,7 +264,6 @@ time_ending
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -342,10 +338,6 @@ time_ending
 
 ***
 
-place_noun
-place_noun
-place_noun
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -397,7 +389,6 @@ time_ending
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -448,7 +439,6 @@ time_ending
 
 ***
 
-time_starting
 # Zoidberg Solution
 
 ## The problem
@@ -503,9 +493,6 @@ time_starting
 
 ***
 
-None
-None
-None
 # Zoidberg Solution
 
 ## The problem
@@ -556,7 +543,6 @@ None
 
 ***
 
-context_grouping
 # Zoidberg Solution
 
 ## The problem
@@ -609,7 +595,6 @@ context_grouping
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -663,9 +648,6 @@ time_ending
 
 ***
 
-place_noun
-place_noun
-context_grouping
 # Zoidberg Solution
 
 ## The problem
@@ -713,7 +695,6 @@ context_grouping
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -820,8 +801,6 @@ time_ending
 
 ***
 
-time_ending
-time_starting
 # Zoidberg Solution
 
 ## The problem
@@ -928,7 +907,6 @@ time_starting
 
 ***
 
-context_grouping
 # Zoidberg Solution
 
 ## The problem
@@ -1002,7 +980,6 @@ context_grouping
 
 ***
 
-context_grouping
 # Zoidberg Solution
 
 ## The problem
@@ -1182,7 +1159,6 @@ context_grouping
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -1393,7 +1369,6 @@ time_ending
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -1447,7 +1422,6 @@ time_ending
 
 ***
 
-context_grouping
 # Zoidberg Solution
 
 ## The problem
@@ -1543,9 +1517,6 @@ context_grouping
 
 ***
 
-place_noun
-place_noun
-place_noun
 # Zoidberg Solution
 
 ## The problem
@@ -1598,7 +1569,6 @@ place_noun
 
 ***
 
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -1643,7 +1613,6 @@ time_ending
 
 ***
 
-unit_requirement
 # Zoidberg Solution
 
 ## The problem
@@ -1731,9 +1700,6 @@ unit_requirement
 
 ***
 
-place_noun
-place_noun
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -1786,7 +1752,6 @@ time_ending
 
 ***
 
-comparator
 # Zoidberg Solution
 
 ## The problem
@@ -1830,11 +1795,6 @@ comparator
 
 ***
 
-place_noun
-place_noun
-object
-place_noun
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -1886,7 +1846,6 @@ time_ending
 
 ***
 
-comparator
 # Zoidberg Solution
 
 ## The problem
@@ -1930,8 +1889,6 @@ comparator
 
 ***
 
-refiner
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -1984,10 +1941,6 @@ time_ending
 
 ***
 
-place_noun
-place_noun
-time_ending
-place_noun
 # Zoidberg Solution
 
 ## The problem
@@ -2041,9 +1994,6 @@ place_noun
 
 ***
 
-place_noun
-place_noun
-time_ending
 # Zoidberg Solution
 
 ## The problem
@@ -2097,8 +2047,6 @@ time_ending
 
 ***
 
-place_noun
-place_noun
 # Zoidberg Solution
 
 ## The problem
@@ -2151,8 +2099,6 @@ place_noun
 
 ***
 
-place_noun
-comparator
 # Zoidberg Solution
 
 ## The problem
@@ -2203,6 +2149,8 @@ comparator
     Jacob has four pennies, one nickel, and one dime. 
     Who has more money? 
     How much more? 
+    Who has more pennies?
+    How many more?
     
 ## Digested problem
     Mrs.   	Hilt   	has    	two    	pennies	,      	two    	dimes  	,      	and    	two    	nickels	.      
@@ -2215,6 +2163,12 @@ comparator
     WP     	VBZ    	JJR    	NN     	.      
 
     How    	much   	more   	?      
+    WRB    	JJ     	RBR    	.      
+
+    Who    	has    	more   	pennies	?      
+    WP     	VBZ    	JJR    	NNS    	.      
+
+    How    	many   	more   	?      
     WRB    	JJ     	RBR    	.      
 
 ## Problem inference
@@ -2233,6 +2187,12 @@ comparator
     How much                	more                    	?                       	money                   
     asking                  	rel_more                	punctuation             	unit_inferred           
 
+    Who                     	has                     	more                    	pennies                 	?                       
+    asking                  	q_start                 	rel_more                	unit                    	punctuation             
+
+    How many                	more                    	?                       	pennies                 
+    asking                  	rel_more                	punctuation             	unit_inferred           
+
 
 ## Question 1
 
@@ -2249,6 +2209,22 @@ comparator
 
 ### Answer interpretation
     The answer is the increase in value of money owned by Mrs. Hilt with respect to Jacob.
+
+## Question 3
+
+### Question text
+    Who has more pennies?
+
+### Answer interpretation
+    The answer is the unknown owner of more pennies.
+
+## Question 4
+
+### Question text
+    How many more?
+
+### Answer interpretation
+    The answer is the increase in value of pennies owned by Jacob with respect to Mrs. Hilt.
 
 ## Data extraction
 
@@ -2275,3 +2251,9 @@ comparator
 
 ### Response 2
     13 cents
+
+### Response 3
+    Jacob
+
+### Response 4
+    2 pennies

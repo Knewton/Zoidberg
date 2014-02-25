@@ -31,6 +31,7 @@ class Problem(object):
 		self.refined_units = {}
 		self.unit_subtypes = {}
 		self.units = []
+		self.running_units = []
 
 		self.exestential = False
 		self.adaptive_context = {}

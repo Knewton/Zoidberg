@@ -974,6 +974,7 @@ class SentenceParser(object):
 					if c:
 						self.problem.subordinate_adaptive_contexts.append(c[0])
 		self.subordinates = uniq(self.subordinates)
+		self.problem.running_units += self.units
 		self.problem.units += self.units
 		self.problem.units = uniq(self.problem.units)
 
@@ -1007,7 +1008,6 @@ class SentenceParser(object):
 				handeled_subtypes = []
 				for s in self.subordinate_lookup:
 					st = self.subordinate_lookup[s]
-					print st
 					if st is not None:
 						if st[0:4] == "time":
 							st = st[0:4]
@@ -1033,8 +1033,8 @@ class SentenceParser(object):
 			word, gtype, subtype = self.problem.context_actions[self.main_context]
 			self.track(word, gtype + "_inferred", subtype)
 
-		if len(self.units) == 0 and len(self.problem.units) > 0:
-			iu = self.problem.units[-1]
+		if len(self.units) == 0 and len(self.problem.running_units) > 0:
+			iu = self.problem.running_units[-1]
 			self.track(iu, "unit_inferred", self.problem.unit_subtypes[iu])
 
 		self.problem.contexts += self.contexts
