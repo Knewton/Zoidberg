@@ -316,6 +316,7 @@ class Solution(object):
 		var_r = self.variable_relationship
 		data = None
 		sym = None
+		#rint actor, action, context, context_constant, target, target_constant, operator, constant, context_var, container, unit, context_unit, var_r
 
 		if constant is None and operator is None and self.asking:
 			self.reset_extractor()
@@ -575,6 +576,16 @@ class Solution(object):
 										if nu in self.containers[rmc][k1][context_constant]:
 											del self.containers[rmc][k1][context_constant][nu]
 
+	def has_enough(self):
+		b = self.unit is not None or self.context_unit is not None
+		a = self.context is not None and self.operator is not None and self.constant is not None and b
+
+		if self.relative:
+			if not self.comparator_context:
+				return False
+
+		return a
+
 	def has_any(self):
 		return self.container is not None or self.context is not None or self.operator is not None or self.constant is not None or self.unit is not None or self.context_unit is not None
 
@@ -612,11 +623,12 @@ class Solution(object):
 			self.coordinated = False
 			last_part = None
 			possibly_in_list = False
+			index = 0
 			for v_part in parser.parsed:
 				val, part, subtype = v_part
 
 				if part == "punctuation" and val == ",":
-					if self.has_any() and self.operator == "eq":
+					if self.has_enough() and self.operator in ["eq", "ad"]:
 						possibly_in_list = True
 						cb = self.context
 						cbs = self.context_subtype
@@ -680,7 +692,14 @@ class Solution(object):
 							self.context_subtype = last_context_subtype
 							self.container = last_container
 							did_set_context = False
-					self.unit = val
+					if not val in self.problem.inference.units:
+						if val in self.problem.brain.raw["word_forms"]["single"]:
+							val = self.problem.brain.raw["word_forms"]["single"][val]
+						if val in self.problem.brain.raw["word_forms"]["plural"]:
+							val = self.problem.brain.raw["word_forms"]["plural"][val]
+						if not val in self.problem.inference.units:
+							raise Exception("Unit plurality mismatch distress")
+					self.unit = str(val)
 
 				if part == "context_unit":
 					self.context_unit = val
@@ -758,6 +777,7 @@ class Solution(object):
 					#rint "Here and", zeroes_out
 					self.generate_expression(zeroes_out, answer_out)
 				last_part = part
+				index += 1
 
 				# @TODO: DEBUG
 				#rint val
@@ -897,17 +917,20 @@ class Solution(object):
 				i = None
 				if unit == "money":
 					i = []
-					dec = int((v % 1) * 100)
-					whol = floor(v)
+					try:
+						dec = int(round((v % 1) * 100, 2))
+						whol = floor(v)
 
-					if whol > 0:
-						i.append(str(whol))
-						i.append(p.brain.raw["money_formatting"]["whole"])
-					if dec > 0:
 						if whol > 0:
-							i.append(p.brain.raw["money_formatting"]["and"])
-						i.append(str(dec))
-						i.append(p.brain.raw["money_formatting"]["decimal"])
+							i.append(str(whol))
+							i.append(p.brain.raw["money_formatting"]["whole"])
+						if dec > 0:
+							if whol > 0:
+								i.append(p.brain.raw["money_formatting"]["and"])
+							i.append(str(dec))
+							i.append(p.brain.raw["money_formatting"]["decimal"])
+					except:
+						i.append("MONEY FORMATTING ERROR")
 				else:
 					i = [format_response_value(v)]
 					if unit is not None:
@@ -1174,6 +1197,7 @@ class Solution(object):
 		o.append("\n## Data extraction")
 		index = 1
 		#rint dumps(self.sentence_data, indent=4, sort_keys=True)
+		#rint self.symbols
 		for sd in self.sentence_data:
 			b = []
 			for container in sd:

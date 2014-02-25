@@ -1907,7 +1907,7 @@
     WRB        	JJ         	NNS        	VBP        	VBG        	NNS        	RB         	.          
 
 ## Problem inference
-    I think this problem is about pigeons getting and losing eating breadcrumbs and pigeon lonely and asks a single question.
+    I think this problem is about pigeons getting and losing eating breadcrumbs and pigeons lonely and asks a single question.
 
 ## Parsed problem
     1                   	lonely              	pigeons             	was                 	eating              	breadcrumbs         	.                   
@@ -2240,8 +2240,8 @@
     money owned by Jacob = 0.04
     money owned by Jacob + 0.05
     money owned by Jacob + 0.1
-    dime owned by Jacob = 1
-    nickel owned by Jacob = 1
+    nickels owned by Jacob = 1
+    dimes owned by Jacob = 1
     pennies owned by Jacob = 4
 
 ## Correct response
@@ -2257,3 +2257,70 @@
 
 ### Response 4
     2 pennies
+
+***
+
+# Zoidberg Solution
+
+## The problem
+    Mrs. Hilt found a quarter, 1 dime, and 2 nickels. 
+    How much money did she find? 
+    How many more nickels than dimes did she find?
+    
+## Digested problem
+    Mrs.   	Hilt   	found  	a      	quarter	,      	1      	dime   	,      	and    	2      	nickels	.      
+    NNP    	NNP    	VBD    	DT     	NN     	,      	CD     	NN     	,      	CC     	CD     	NNS    	.      
+
+    How    	much   	money  	did    	she    	find   	?      
+    WRB    	JJ     	NN     	VBD    	PRP    	VBP    	.      
+
+    How    	many   	more   	nickels	than   	dimes  	did    	she    	find   	?      
+    WRB    	JJ     	RBR    	NNS    	IN     	NNS    	VBD    	PRP    	VBP    	.      
+
+## Problem inference
+    I think this problem is about Mrs. Hilt getting quarter, dimes, nickels, and money than dimes and asks multiple questions.
+
+## Parsed problem
+    Mrs. Hilt               	found                   	1                       	quarter                 	,                       	1                       	dime                    	,                       	and                     	2                       	nickels                 	.                       
+    context                 	operator                	constant                	unit                    	punctuation             	constant                	unit                    	punctuation             	coordinating_conjunction	constant                	unit                    	punctuation             
+
+    How much                	money                   	did                     	Mrs. Hilt               	find                    	?                       
+    asking                  	unit                    	q_start                 	context                 	q_stop                  	punctuation             
+
+    How many                	more                    	nickels                 	than                    	dimes                   	did                     	Mrs. Hilt               	find                    	?                       
+    asking                  	rel_more                	unit                    	conjunction             	subordinate             	q_start                 	context                 	q_stop                  	punctuation             
+
+
+## Question 1
+
+### Question text
+    How much money did she find?
+
+### Answer interpretation
+    The answer is the unknown value of money gained by Mrs. Hilt.
+
+## Question 2
+
+### Question text
+    How many more nickels than dimes did she find?
+
+### Answer interpretation
+    The answer is the increase in value of nickels gained by Mrs. Hilt with respect to dimes.
+
+## Data extraction
+
+### Sentence 1
+    money owned by Mrs. Hilt + 0.1
+    money owned by Mrs. Hilt + 0.25
+    money owned by Mrs. Hilt + 0.1
+    nickels owned by Mrs. Hilt + 2
+    quarter owned by Mrs. Hilt + 1
+    dimes owned by Mrs. Hilt + 1
+
+## Correct response
+
+### Response 1
+    45 cents
+
+### Response 2
+    1 nickels
