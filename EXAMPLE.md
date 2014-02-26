@@ -44,6 +44,9 @@
 ### Sentence 2
     balloons owned by Jane + 6
 
+### Sentence 3
+    No data
+
 ## Correct response
     20 balloons
 
@@ -77,11 +80,11 @@
     Mrs. Jones' family 	ate                	5                  	bananas            	.                  
     context            	operator           	constant           	unit               	punctuation        
 
-    Mrs. Jones         	gave               	the                	remaining          	4                  	bananas            	to                 	Mrs. Jones' friends	.                  
-    context            	operator           	noise              	solution_zero      	constant           	unit               	conjunction        	context            	punctuation        
+    Mrs. Jones         	gave               	remaining          	4                  	bananas            	to                 	Mrs. Jones' friends	.                  
+    context            	operator           	solution_zero      	constant           	unit               	conjunction        	context            	punctuation        
 
-    How many           	bananas            	did                	Mrs. Jones         	buy                	in                 	the                	beginning          	?                  
-    asking             	unit               	q_start            	context            	q_stop             	conjunction        	noise              	subordinate        	punctuation        
+    How many           	bananas            	did                	Mrs. Jones         	buy                	in                 	beginning          	?                  
+    asking             	unit               	q_start            	context            	q_stop             	conjunction        	subordinate        	punctuation        
 
 
 ## Question 1
@@ -104,6 +107,9 @@
     bananas owned by Mrs. Jones - 4
     bananas owned by Mrs. Jones == 0
     bananas owned by Mrs. Jones' friends + 4
+
+### Sentence 4
+    No data
 
 ## Correct response
     9 bananas
@@ -156,6 +162,9 @@
     jars owned by Tony - 16
     jars owned by Tony's sister + 16
 
+### Sentence 3
+    No data
+
 ## Correct response
     3 jars
 
@@ -206,6 +215,9 @@
 ### Sentence 2
     dolls owned by Ethelle = 8
     dolls owned by Ethelle + 4
+
+### Sentence 3
+    No data
 
 ## Correct response
     12 dolls
@@ -258,6 +270,9 @@
 ### Sentence 2
     toy cars owned by Chandler = 6
     toy cars owned by Chandler + 6
+
+### Sentence 3
+    No data
 
 ## Correct response
     14 toy cars
@@ -333,6 +348,9 @@
     apples owned by Julia + 3
     apples owned by Marc - 3
 
+### Sentence 5
+    No data
+
 ## Correct response
     3 apples
 
@@ -364,8 +382,8 @@
     4                   	more                	fish                	join                	fish                	.                   	pond                	swimming            
     constant            	rel_more            	context             	operator            	context             	punctuation         	subordinate_inferred	acting_inferred     
 
-    How many            	fish                	are                 	swimming            	in                  	the                 	pond                	now                 	?                   
-    asking              	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	subordinate         	punctuation         
+    How many            	fish                	are                 	swimming            	in                  	pond                	now                 	?                   
+    asking              	context             	pre_ind_plu         	acting              	conjunction         	subordinate         	subordinate         	punctuation         
 
 
 ## Question 1
@@ -383,6 +401,9 @@
 
 ### Sentence 2
     swimming fish in a pond + 4
+
+### Sentence 3
+    No data
 
 ## Correct response
     12 fish
@@ -434,6 +455,9 @@
 ### Sentence 2
     pieces of pizza owned by Michael - 2
 
+### Sentence 3
+    No data
+
 ## Correct response
     6 pieces of pizza
 
@@ -463,11 +487,11 @@
     Pigpen                  	had                     	some                    	rocks                   	.                       
     context                 	operator                	dynamic_variable        	unit                    	punctuation             
 
-    Pigpen                  	kept                    	3                       	rocks                   	for                     	Pigpen                  	and                     	gave                    	the                     	remaining               	8                       	rocks                   	to                      	Pigpen's friends        	.                       
-    context                 	operator                	constant                	unit                    	conjunction             	context                 	coordinating_conjunction	operator                	noise                   	solution_zero           	constant                	unit                    	conjunction             	context                 	punctuation             
+    Pigpen                  	kept                    	3                       	rocks                   	for                     	Pigpen                  	and                     	gave                    	remaining               	8                       	rocks                   	to                      	Pigpen's friends        	.                       
+    context                 	operator                	constant                	unit                    	conjunction             	context                 	coordinating_conjunction	operator                	solution_zero           	constant                	unit                    	conjunction             	context                 	punctuation             
 
-    How many                	rocks                   	did                     	Pigpen                  	have                    	in                      	the                     	beginning               	?                       
-    asking                  	unit                    	q_start                 	context                 	q_stop                  	conjunction             	noise                   	subordinate             	punctuation             
+    How many                	rocks                   	did                     	Pigpen                  	have                    	in                      	beginning               	?                       
+    asking                  	unit                    	q_start                 	context                 	q_stop                  	conjunction             	subordinate             	punctuation             
 
 
 ## Question 1
@@ -487,6 +511,9 @@
     rocks owned by Pigpen - 3
     rocks owned by Pigpen's friends - 8
     rocks owned by Pigpen's friends == 0
+
+### Sentence 3
+    No data
 
 ## Correct response
     3 rocks
@@ -515,11 +542,11 @@
     Mr. Lupis           	needs               	4                   	eggs                	to                  	bake                	13                  	muffins             	.                   
     context             	operator            	constant            	unit                	conjunction         	operator            	constant            	subordinate         	punctuation         
 
-    Mr. Lupis           	has                 	only                	2                   	eggs                	.                   	muffins             
-    context             	operator            	noise               	constant            	unit                	punctuation         	subordinate_inferred
+    Mr. Lupis           	has                 	2                   	eggs                	.                   	muffins             
+    context             	operator            	constant            	unit                	punctuation         	subordinate_inferred
 
-    How many            	more                	eggs                	does                	Mr. Lupis           	need                	to                  	bake                	the                 	muffins             	?                   
-    asking              	rel_more            	unit                	q_start             	context             	q_stop              	conjunction         	operator            	noise               	subordinate         	punctuation         
+    How many            	more                	eggs                	does                	Mr. Lupis           	need                	to                  	bake                	muffins             	?                   
+    asking              	rel_more            	unit                	q_start             	context             	q_stop              	conjunction         	operator            	subordinate         	punctuation         
 
 
 ## Question 1
@@ -537,6 +564,9 @@
 
 ### Sentence 2
     eggs owned by Mr. Lupis = 2
+
+### Sentence 3
+    No data
 
 ## Correct response
     2 eggs
@@ -590,6 +620,9 @@
 ### Sentence 2
     cobs of corn owned by Lisa = 2
 
+### Sentence 3
+    No data
+
 ## Correct response
     5 cobs of corn
 
@@ -619,8 +652,8 @@
     Mickey               	has                  	12                   	apples               	.                    
     context              	operator             	constant             	unit                 	punctuation          
 
-    Eric                 	takes                	away                 	0.5                  	of                   	the                  	apples owned by Mickey	.                    
-    context              	operator             	operator             	variable_relationship	conjunction          	noise                	context_unit         	punctuation          
+    Eric                 	takes                	away                 	0.5                  	of                   	apples owned by Mickey	.                    
+    context              	operator             	operator             	variable_relationship	conjunction          	context_unit         	punctuation          
 
     How many             	apples               	does                 	Mickey               	have                 	now                  	?                    
     asking               	unit                 	q_start              	context              	q_stop               	subordinate          	punctuation          
@@ -642,6 +675,9 @@
 ### Sentence 2
     apples owned by Mickey - Eric apples
     apples owned by Eric = Mickey apples * 0.5
+
+### Sentence 3
+    No data
 
 ## Correct response
     6 apples
@@ -665,11 +701,11 @@
     I think this problem is about pink christmas ornaments, blue christmas ornaments, pink ornaments, christmas ornaments, and blue ornaments on the christmas tree and asks a single question.
 
 ## Parsed problem
-    There                   	are                     	6                       	pink christmas ornaments	and                     	8                       	blue christmas ornaments	on                      	the                     	christmas tree          	.                       
-    exestential             	pre_ind_plu             	constant                	unit                    	coordinating_conjunction	constant                	unit                    	conjunction             	noise                   	subordinate             	punctuation             
+    There                   	are                     	6                       	pink christmas ornaments	and                     	8                       	blue christmas ornaments	on                      	christmas tree          	.                       
+    exestential             	pre_ind_plu             	constant                	unit                    	coordinating_conjunction	constant                	unit                    	conjunction             	subordinate             	punctuation             
 
-    How many                	christmas ornaments     	are                     	on                      	the                     	christmas tree          	altogether              	?                       
-    asking                  	unit                    	pre_ind_plu             	conjunction             	noise                   	subordinate             	subordinate             	punctuation             
+    How many                	christmas ornaments     	are                     	on                      	christmas tree          	altogether              	?                       
+    asking                  	unit                    	pre_ind_plu             	conjunction             	subordinate             	subordinate             	punctuation             
 
 
 ## Question 1
@@ -743,6 +779,9 @@
     pieces of chocolate owned by Sara's mother - 4
     pieces of chocolate owned by Sara + 4
 
+### Sentence 3
+    No data
+
 ## Correct response
     12 pieces of chocolate
 
@@ -796,6 +835,9 @@
     doughnuts owned by Bennett = 7
     doughnuts owned by Bennett + 4
 
+### Sentence 3
+    No data
+
 ## Correct response
     11 doughnuts
 
@@ -828,8 +870,8 @@
     Charlie    	has        	8          	bottles    	left       	.          
     context    	operator   	constant   	unit       	subordinate	punctuation
 
-    How many   	bottles    	did        	Charlie    	have       	in         	the        	beginning  	?          
-    asking     	unit       	q_start    	context    	q_stop     	conjunction	noise      	subordinate	punctuation
+    How many   	bottles    	did        	Charlie    	have       	in         	beginning  	?          
+    asking     	unit       	q_start    	context    	q_stop     	conjunction	subordinate	punctuation
 
 
 ## Question 1
@@ -848,6 +890,9 @@
 
 ### Sentence 2
     bottles owned by Charlie == 8
+
+### Sentence 3
+    No data
 
 ## Correct response
     12 bottles
@@ -901,6 +946,9 @@
 ### Sentence 2
     newspapers owned by Archie = 6
     newspapers owned by Archie + 7
+
+### Sentence 3
+    No data
 
 ## Correct response
     13 newspapers
@@ -970,6 +1018,12 @@
     dolls owned by Troy = 2
     dolls owned by Troy + 3
 
+### Sentence 3
+    No data
+
+### Sentence 4
+    No data
+
 ## Correct response
 
 ### Response 1
@@ -1011,8 +1065,8 @@
     Dad               	gives             	William           	4                 	feathers          	.                 
     context           	operator          	context           	constant          	unit              	punctuation       
 
-    How many          	feathers          	does              	Dad               	give              	to                	the               	2                 	boys              	?                 
-    asking            	unit              	q_start           	context           	q_stop            	conjunction       	noise             	constant          	subordinate       	punctuation       
+    How many          	feathers          	does              	Dad               	give              	to                	2                 	boys              	?                 
+    asking            	unit              	q_start           	context           	q_stop            	conjunction       	constant          	subordinate       	punctuation       
 
     How many          	more              	feathers          	does              	Richard           	have              	than              	William           	?                 
     asking            	rel_more          	unit              	q_start           	context           	q_stop            	conjunction       	comparator_context	punctuation       
@@ -1043,6 +1097,9 @@
 ### Sentence 2
     feathers owned by William + 4
     feathers owned by Dad - 4
+
+### Sentence 4
+    No data
 
 ## Correct response
 
@@ -1102,6 +1159,9 @@
     years owned by Lee = 6
     years owned by Lee - 3
 
+### Sentence 3
+    No data
+
 ## Correct response
     3 years
 
@@ -1128,14 +1188,14 @@
     I think this problem is about Sam getting bags and asks a single question.
 
 ## Parsed problem
-    Sam             	has             	12              	bags            	.               
-    context         	operator        	constant        	unit            	punctuation     
+    Sam        	has        	12         	bags       	.          
+    context    	operator   	constant   	unit       	punctuation
 
-    Sam             	buys            	8               	more            	bags            	.               
-    context         	operator        	constant        	rel_more        	unit            	punctuation     
+    Sam        	buys       	8          	more       	bags       	.          
+    context    	operator   	constant   	rel_more   	unit       	punctuation
 
-    How many        	bags            	does            	Sam             	have            	in              	all             	?               
-    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+    How many   	bags       	does       	Sam        	have       	in         	all        	?          
+    asking     	unit       	q_start    	context    	q_stop     	conjunction	subordinate	punctuation
 
 
 ## Question 1
@@ -1144,7 +1204,7 @@
     How many bags does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of bags owned by Sam.
+    The answer is the unknown value of bags owned by Sam total up.
 
 ## Data extraction
 
@@ -1153,6 +1213,9 @@
 
 ### Sentence 2
     bags owned by Sam + 8
+
+### Sentence 3
+    No data
 
 ## Correct response
     20 bags
@@ -1207,6 +1270,9 @@
     books owned by Paul - 7
     books owned by Paul's sister + 7
 
+### Sentence 3
+    No data
+
 ## Correct response
     3 books
 
@@ -1233,14 +1299,14 @@
     I think this problem is about Paul getting cups and asks a single question.
 
 ## Parsed problem
-    Paul            	has             	6               	cups            	.               
-    context         	operator        	constant        	unit            	punctuation     
+    Paul       	has        	6          	cups       	.          
+    context    	operator   	constant   	unit       	punctuation
 
-    Paul            	buys            	11              	more            	cups            	.               
-    context         	operator        	constant        	rel_more        	unit            	punctuation     
+    Paul       	buys       	11         	more       	cups       	.          
+    context    	operator   	constant   	rel_more   	unit       	punctuation
 
-    How many        	cups            	does            	Paul            	have            	in              	all             	?               
-    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+    How many   	cups       	does       	Paul       	have       	in         	all        	?          
+    asking     	unit       	q_start    	context    	q_stop     	conjunction	subordinate	punctuation
 
 
 ## Question 1
@@ -1249,7 +1315,7 @@
     How many cups does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of cups owned by Paul.
+    The answer is the unknown value of cups owned by Paul total up.
 
 ## Data extraction
 
@@ -1258,6 +1324,9 @@
 
 ### Sentence 2
     cups owned by Paul + 11
+
+### Sentence 3
+    No data
 
 ## Correct response
     17 cups
@@ -1286,14 +1355,14 @@
     I think this problem is about Sidd getting books and asks a single question.
 
 ## Parsed problem
-    Sidd            	has             	10              	books           	.               
-    context         	operator        	constant        	unit            	punctuation     
+    Sidd       	has        	10         	books      	.          
+    context    	operator   	constant   	unit       	punctuation
 
-    Sidd            	buys            	11              	more            	books           	.               
-    context         	operator        	constant        	rel_more        	unit            	punctuation     
+    Sidd       	buys       	11         	more       	books      	.          
+    context    	operator   	constant   	rel_more   	unit       	punctuation
 
-    How many        	books           	does            	Sidd            	have            	in              	all             	?               
-    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+    How many   	books      	does       	Sidd       	have       	in         	all        	?          
+    asking     	unit       	q_start    	context    	q_stop     	conjunction	subordinate	punctuation
 
 
 ## Question 1
@@ -1302,7 +1371,7 @@
     How many books does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of books owned by Sidd.
+    The answer is the unknown value of books owned by Sidd total up.
 
 ## Data extraction
 
@@ -1311,6 +1380,9 @@
 
 ### Sentence 2
     books owned by Sidd + 11
+
+### Sentence 3
+    No data
 
 ## Correct response
     21 books
@@ -1338,14 +1410,14 @@
     I think this problem is about Lee getting blocks and asks a single question.
 
 ## Parsed problem
-    Lee             	has             	10              	blocks          	.               
-    context         	operator        	constant        	unit            	punctuation     
+    Lee        	has        	10         	blocks     	.          
+    context    	operator   	constant   	unit       	punctuation
 
-    Lee             	buys            	2               	more            	blocks          	.               
-    context         	operator        	constant        	rel_more        	unit            	punctuation     
+    Lee        	buys       	2          	more       	blocks     	.          
+    context    	operator   	constant   	rel_more   	unit       	punctuation
 
-    How many        	blocks          	does            	Lee             	have            	in              	all             	?               
-    asking          	unit            	q_start         	context         	q_stop          	conjunction     	dynamic_variable	punctuation     
+    How many   	blocks     	does       	Lee        	have       	in         	all        	?          
+    asking     	unit       	q_start    	context    	q_stop     	conjunction	subordinate	punctuation
 
 
 ## Question 1
@@ -1354,7 +1426,7 @@
     How many blocks does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of blocks owned by Lee.
+    The answer is the unknown value of blocks owned by Lee total up.
 
 ## Data extraction
 
@@ -1363,6 +1435,9 @@
 
 ### Sentence 2
     blocks owned by Lee + 2
+
+### Sentence 3
+    No data
 
 ## Correct response
     12 blocks
@@ -1417,6 +1492,9 @@
     bags owned by Tom's sister + 4
     bags owned by Tom - 4
 
+### Sentence 3
+    No data
+
 ## Correct response
     1 bags
 
@@ -1469,6 +1547,9 @@
 ### Sentence 2
     books owned by Sidd = 8
 
+### Sentence 3
+    No data
+
 ## Correct response
     13 books
 
@@ -1512,6 +1593,9 @@
     balloons owned by me = 7
     balloons owned by my friend = 5
 
+### Sentence 2
+    No data
+
 ## Correct response
     2 balloons
 
@@ -1538,14 +1622,14 @@
     I think this problem is about an increasing number of birds sitting on the fence and asks a single question.
 
 ## Parsed problem
-    2                   	birds               	were                	sitting             	on                  	the                 	fence               	.                   
-    constant            	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
+    2                   	birds               	were                	sitting             	on                  	fence               	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	subordinate         	punctuation         
 
     4                   	more                	birds               	came                	to                  	join                	birds               	.                   	fence               	sitting             
     constant            	rel_more            	context             	operator            	conjunction         	operator            	context             	punctuation         	subordinate_inferred	acting_inferred     
 
-    How many            	birds               	are                 	sitting             	on                  	the                 	fence               	?                   
-    asking              	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
+    How many            	birds               	are                 	sitting             	on                  	fence               	?                   
+    asking              	context             	pre_ind_plu         	acting              	conjunction         	subordinate         	punctuation         
 
 
 ## Question 1
@@ -1563,6 +1647,9 @@
 
 ### Sentence 2
     sitting birds on the fence + 4
+
+### Sentence 3
+    No data
 
 ## Correct response
     6 birds
@@ -1607,6 +1694,9 @@
 ### Sentence 1
     cookies owned by me = 7
     cookies owned by me - 2
+
+### Sentence 2
+    No data
 
 ## Correct response
     5 cookies
@@ -1695,6 +1785,9 @@
 ### Sentence 1
     legs owned by 1 bee = 6
 
+### Sentence 2
+    No data
+
 ## Correct response
     30 legs
 
@@ -1727,8 +1820,8 @@
     1                   	flies               	away                	.                   	birds               	branch              
     constant            	acting              	operator            	punctuation         	context_inferred    	subordinate_inferred
 
-    How many            	birds               	are                 	left                	on                  	the                 	branch              	?                   	sitting             
-    asking              	context             	pre_ind_plu         	subordinate         	conjunction         	noise               	subordinate         	punctuation         	acting_inferred     
+    How many            	birds               	are                 	left                	on                  	branch              	?                   	sitting             
+    asking              	context             	pre_ind_plu         	subordinate         	conjunction         	subordinate         	punctuation         	acting_inferred     
 
 
 ## Question 1
@@ -1746,6 +1839,9 @@
 
 ### Sentence 2
     sitting birds on a branch - 1
+
+### Sentence 3
+    No data
 
 ## Correct response
     3 birds
@@ -1815,14 +1911,14 @@
     I think this problem is about a decreasing number of raccoons playing in the woods and home and asks a single question.
 
 ## Parsed problem
-    3                   	raccoons            	are                 	playing             	in                  	the                 	woods               	.                   
-    constant            	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
+    3                   	raccoons            	are                 	playing             	in                  	woods               	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	subordinate         	punctuation         
 
     2                   	go                  	home                	to                  	eat                 	dinner              	.                   	raccoons            	woods               	playing             
     constant            	operator            	subordinate         	conjunction         	operator            	subordinate         	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
 
-    How many            	raccoons            	are                 	left                	in                  	the                 	woods               	?                   	playing             
-    asking              	context             	pre_ind_plu         	subordinate         	conjunction         	noise               	subordinate         	punctuation         	acting_inferred     
+    How many            	raccoons            	are                 	left                	in                  	woods               	?                   	playing             
+    asking              	context             	pre_ind_plu         	subordinate         	conjunction         	subordinate         	punctuation         	acting_inferred     
 
 
 ## Question 1
@@ -1840,6 +1936,9 @@
 
 ### Sentence 2
     playing raccoons in the woods - 2
+
+### Sentence 3
+    No data
 
 ## Correct response
     1 raccoons
@@ -1913,8 +2012,8 @@
     1                   	lonely              	pigeons             	was                 	eating              	breadcrumbs         	.                   
     constant            	subordinate         	context             	pre_ind_plu         	acting              	unit                	punctuation         
 
-    1                   	pigeon              	came                	to                  	eat                 	breadcrumbs         	,                   	too                 	.                   	pigeons             	lonely              	eating              
-    constant            	unit                	operator            	conjunction         	operator            	subordinate         	punctuation         	noise               	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
+    1                   	pigeon              	came                	to                  	eat                 	breadcrumbs         	,                   	.                   	pigeons             	lonely              	eating              
+    constant            	unit                	operator            	conjunction         	operator            	subordinate         	punctuation         	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
 
     How many            	pigeons             	are                 	eating              	breadcrumbs         	now                 	?                   	lonely              
     asking              	context             	pre_ind_plu         	acting              	unit                	subordinate         	punctuation         	subordinate_inferred
@@ -1935,6 +2034,9 @@
 
 ### Sentence 2
     eating pigeons lonely + 1
+
+### Sentence 3
+    No data
 
 ## Correct response
     2 pigeons
@@ -1963,14 +2065,14 @@
     I think this problem is about an increasing number of owls sitting on the fence and asks a single question.
 
 ## Parsed problem
-    3                   	owls                	were                	sitting             	on                  	the                 	fence               	.                   
-    constant            	context             	pre_ind_plu         	acting              	conjunction         	noise               	subordinate         	punctuation         
+    3                   	owls                	were                	sitting             	on                  	fence               	.                   
+    constant            	context             	pre_ind_plu         	acting              	conjunction         	subordinate         	punctuation         
 
     2                   	more                	owls                	joined              	owls                	.                   	fence               	sitting             
     constant            	rel_more            	context             	operator            	context             	punctuation         	subordinate_inferred	acting_inferred     
 
-    How many            	owls                	are                 	on                  	the                 	fence               	now                 	?                   	sitting             
-    asking              	context             	pre_ind_plu         	conjunction         	noise               	subordinate         	subordinate         	punctuation         	acting_inferred     
+    How many            	owls                	are                 	on                  	fence               	now                 	?                   	sitting             
+    asking              	context             	pre_ind_plu         	conjunction         	subordinate         	subordinate         	punctuation         	acting_inferred     
 
 
 ## Question 1
@@ -1988,6 +2090,9 @@
 
 ### Sentence 2
     sitting owls on the fence + 2
+
+### Sentence 3
+    No data
 
 ## Correct response
     5 owls
@@ -2019,8 +2124,8 @@
     2                   	beavers             	were                	working             	on                  	home                	.                   
     constant            	context             	pre_ind_plu         	acting              	conjunction         	subordinate         	punctuation         
 
-    1                   	went                	for                 	1                   	swim                	.                   	beavers             	home                	working             
-    constant            	operator            	conjunction         	constant            	noise               	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
+    1                   	went                	for                 	1                   	.                   	beavers             	home                	working             
+    constant            	operator            	conjunction         	constant            	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
 
     How many            	beavers             	are                 	still               	working             	on                  	home                	?                   
     asking              	context             	pre_ind_plu         	subordinate         	acting              	conjunction         	subordinate         	punctuation         
@@ -2041,6 +2146,9 @@
 
 ### Sentence 2
     working beavers on their home - 1
+
+### Sentence 3
+    No data
 
 ## Correct response
     1 beavers
@@ -2075,7 +2183,7 @@
     constant            	rel_more            	adjective           	operator            	punctuation         	context_inferred    	subordinate_inferred	acting_inferred     
 
     How many            	toucans             	in                  	all                 	?                   	tree limb           	sitting             
-    asking              	context             	conjunction         	dynamic_variable    	punctuation         	subordinate_inferred	acting_inferred     
+    asking              	context             	conjunction         	subordinate         	punctuation         	subordinate_inferred	acting_inferred     
 
 
 ## Question 1
@@ -2093,6 +2201,9 @@
 
 ### Sentence 2
     sitting toucans on a tree limb + 1
+
+### Sentence 3
+    No data
 
 ## Correct response
     3 toucans
@@ -2244,6 +2355,18 @@
     dimes owned by Jacob = 1
     pennies owned by Jacob = 4
 
+### Sentence 3
+    No data
+
+### Sentence 4
+    No data
+
+### Sentence 5
+    No data
+
+### Sentence 6
+    No data
+
 ## Correct response
 
 ### Response 1
@@ -2317,6 +2440,12 @@
     quarter owned by Mrs. Hilt + 1
     dimes owned by Mrs. Hilt + 1
 
+### Sentence 2
+    No data
+
+### Sentence 3
+    No data
+
 ## Correct response
 
 ### Response 1
@@ -2324,3 +2453,80 @@
 
 ### Response 2
     1 nickels
+
+***
+
+# Zoidberg Solution
+
+## The problem
+    Mrs. Hilt's favorite first grade classes are baking muffins. 
+    Mrs. Brier's class bakes 18 muffins, Mrs. MacAdams's class bakes 20 muffins, and Mrs. Flannery's class bakes 17 muffins. 
+    How many muffins does first grade bake in all? 
+    Is this an even number or an odd number? 
+    
+## Digested problem
+    Mrs.    	Hilt    	's      	favorite	first   	grade   	classes 	are     	baking  	muffins 	.       
+    NNP     	NNP     	POS     	JJ      	JJ      	NN      	NNS     	VBP     	VBG     	NNS     	.       
+
+    Mrs.    	Brier   	's      	class   	bakes   	18      	muffins 	,       	Mrs.    	MacAdams	's      	class   	bakes   	20      	muffins 	,       	and     	Mrs.    	Flannery	's      	class   	bakes   	17      	muffins 	.       
+    NNP     	NNP     	POS     	NN      	VBZ     	CD      	NNS     	,       	NNP     	NNP     	POS     	NN      	VBZ     	CD      	NNS     	,       	CC      	NNP     	NNP     	POS     	NN      	VBZ     	CD      	NNS     	.       
+
+    How     	many    	muffins 	does    	first   	grade   	bake    	in      	all     	?       
+    WRB     	JJ      	NNS     	VBZ     	JJ      	NN      	NN      	IN      	DT      	.       
+
+    Is      	this    	an      	even    	number  	or      	an      	odd     	number  	?       
+    VBZ     	DT      	DT      	RB      	NN      	CC      	DT      	JJ      	NN      	.       
+
+## Problem inference
+    I think this problem is about Mrs. Hilt's favorite first grade classes, Mrs. Brier's class, Mrs. Macadams's class, Mrs. Flannery's class, and first grade exchanging baking muffins and number and asks multiple questions.
+
+## Parsed problem
+    Mrs. Hilt's favorite first grade classes	are                         	baking                      	muffins                     	.                           
+    context                     	pre_ind_plu                 	acting                      	unit                        	punctuation                 
+
+    Mrs. Brier's class          	bakes                       	18                          	muffins                     	,                           	Mrs. Macadams's class       	bakes                       	20                          	muffins                     	,                           	and                         	Mrs. Flannery's class       	bakes                       	17                          	muffins                     	.                           
+    context                     	operator                    	constant                    	unit                        	punctuation                 	context                     	operator                    	constant                    	unit                        	punctuation                 	coordinating_conjunction    	context                     	operator                    	constant                    	unit                        	punctuation                 
+
+    How many                    	muffins                     	does                        	first grade                 	bake                        	in                          	all                         	?                           
+    asking                      	unit                        	q_start                     	context                     	q_stop                      	conjunction                 	subordinate                 	punctuation                 
+
+    Is this                     	1                           	even                        	number                      	or                          	1                           	odd                         	number                      	?                           
+    asking                      	constant                    	adjective                   	unit                        	eval_option_sep             	constant                    	adjective                   	unit                        	punctuation                 
+
+
+## Question 1
+
+### Question text
+    How many muffins does first grade bake in all?
+
+### Answer interpretation
+    The answer is the unknown value of muffins converted by first grade total up.
+
+## Question 2
+
+### Question text
+    Is this an even number or an odd number?
+
+### Answer interpretation
+    The answer is the evaluation of number.
+
+## Data extraction
+
+### Sentence 1
+    No data
+
+### Sentence 2
+    muffins owned by Mrs. Brier's class + 18
+    muffins owned by Mrs. Macadams's class + 20
+    muffins owned by Mrs. Flannery's class + 17
+
+### Sentence 3
+    No data
+
+## Correct response
+
+### Response 1
+    55 muffins
+
+### Response 2
+    odd number

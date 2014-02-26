@@ -7,7 +7,8 @@ OPERATOR_STR = {
 	"ex": "given to",
 	"su": "lost by",
 	"di": "lost by",
-	"re": "required by"
+	"re": "required by",
+	"co": "converted by"
 }
 
 ANSWER_SYNTAX = {
@@ -15,7 +16,8 @@ ANSWER_SYNTAX = {
 	"expression": "value",
 	"unit": "unit",
 	"context": "owner",
-	"expression_connotation": "value"
+	"expression_connotation": "value",
+	"eval_enum": "evaluation"
 }
 
 ANSWER_SUBORDINATE = {
@@ -63,6 +65,9 @@ class Answer(object):
 		self.actor = None
 		self.actor_subtype = None
 		self.action = None
+
+		self.last_adj = None
+		self.unit_adjectives = {}
 
 		self.connotation_tag = None
 
@@ -129,6 +134,10 @@ class Answer(object):
 
 			# assume unit appearing during asking for answer
 			if part in ["unit", "unit_inferred"] and asking:
+				if self.last_adj is not None:
+					if not val in self.unit_adjectives:
+						self.unit_adjectives[val] = []
+					self.unit_adjectives[val].append(self.last_adj)
 				self.unit = val
 
 			if part in ["unit", "unit_inferred"] and refining and self.unit == None:
@@ -195,6 +204,11 @@ class Answer(object):
 
 				#rint "Here", stype, val, self.subordinates
 
+			if part == "adjective":
+				self.last_adj = val
+			else:
+				self.last_adj = None
+
 	def __str__(self):
 
 		if self.context_subtype and self.context_subtype[0] == "self":
@@ -232,7 +246,11 @@ class Answer(object):
 				mode = "increase in"
 		else:
 			mode = "unknown"
-		i.append("the {0} {1} of".format(mode, syntax))
+		if self.syntax is not None:
+			if self.syntax == "eval_enum":
+				i.append("the {0} of".format(syntax))
+			else:
+				i.append("the {0} {1} of".format(mode, syntax))
 
 		if self.actor:
 			if self.action is not None:

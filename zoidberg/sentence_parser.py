@@ -61,7 +61,9 @@ class SentenceParser(object):
 		self.sentence = sentence
 		self.problem = problem
 		self.sentence_text = text
+		self.is_question = False
 		self.question = False
+		self.verb_question = False
 		self.longest_phrase = None
 
 		# Track any units/adjectives used to refine units to attempt to relate
@@ -101,7 +103,7 @@ class SentenceParser(object):
 		self.execute()
 
 	def fix_unit(self, u):
-		if self.last_adjective is not None:
+		if self.last_adjective is not None and not self.verb_question:
 			u = " ".join([self.last_adjective, u])
 			o = (u, self.last_adj_index)
 			self.last_adj_index = -1
@@ -116,6 +118,8 @@ class SentenceParser(object):
 			self.longest_phrase = l
 
 	def track(self, val, attr, subtype=None, index=None, conv=False):
+		if val == "even number":
+			raise Exception
 		if subtype:
 			self.word_subtypes[val] = subtype
 
@@ -497,7 +501,7 @@ class SentenceParser(object):
 							if do_std_unit:
 								unit, uidx = self.fix_unit(unit)
 								if not unit in p.units_acting_as_context or not p.units_acting_as_context[unit]:
-									if self.last_unit and self.framing_question and len(self.operators) == 0:
+									if self.last_unit and self.framing_question and len(self.operators) == 0 and self.last_unit != unit:
 										context = unit
 										if self.subtype[0] == "self":
 											context = self.problem.brain.self_reflexive(context, True)
@@ -703,7 +707,14 @@ class SentenceParser(object):
 						self.did_frame_question = True
 						self.track(word, "q_stop", self.subtype)
 					else:
-						if self.question and not self.did_frame_question:
+						if not self.question and self.is_question and not self.did_frame_question:
+							self.verb_question = True
+							self.question = True
+							self.phrasing_question = True
+							self.framing_question = True
+							did_something = True
+							self.track(word, "asking", self.subtype)
+						elif self.question and not self.did_frame_question:
 							# We are asking a question and likely don't
 							# need to invoke all the operator logic; this is
 							# likely a "start the question" verb
@@ -753,6 +764,10 @@ class SentenceParser(object):
 				did_something = True
 				self.track(word, "conjunction", self.subtype)
 
+			if tag in ["POS"]:
+				did_something = True
+				self.track(word, "possessive", self.subtype)
+
 			if tag in [".", ","]:
 				did_something = True
 				self.track(word, "punctuation", self.subtype)
@@ -783,29 +798,43 @@ class SentenceParser(object):
 				self.last_determiner = dtype
 				if dtype == "variable":
 					vtype = p.brain.variable(word, self.sentence_text)
-					self.last_variable =  word
-					self.last_variable_type = vtype
 					if vtype == "dynamic_variable":
-						self.track(word, vtype, self.subtype)
+						do_dyn_var_trk = True
+						if self.last_tag == "IN":
+							do_dyn_var_trk = False
+							process(word, "RB")
+							return
+						if do_dyn_var_trk:
+							self.track(word, vtype, self.subtype)
 					else:
 						self.track(vtype, "variable_relationship", self.subtype)
+					self.last_variable =  word
+					self.last_variable_type = vtype
 				elif dtype == "constant":
 					self.track(p.brain.number(word, self.sentence_text), dtype, self.subtype)
+				elif dtype == "noise":
+					if self.is_question and self.phrasing_question:
+						self.parsed.pop()
+						did_something = True
+						self.track(" ".join([self.last_word, word]), "asking", self.subtype)
 				else:
 					self.track(word, dtype, self.subtype)
 
 			if tag == "RB": # An adverb, probably a subordinate?
-				if self.last_conjunction is not None:
-					conjunction = ((word, tag), self.last_conjunction)
-					self.last_conjunction = None
-					self.subordinate_strings[word] = " ".join(self.conjunction_parts)
-					self.conjunction_parts = []
+				if self.verb_question and self.framing_question:
+					tag = "JJ" # This is almost certainly not an adverb at this point
 				else:
-					conjunction = ((word, tag), None)
-					self.subordinate_strings[word] = word
-				self.conjunctions.append(conjunction)
-				did_something = True
-				self.track(conjunction[0], "subordinate", self.subtype)
+					if self.last_conjunction is not None:
+						conjunction = ((word, tag), self.last_conjunction)
+						self.last_conjunction = None
+						self.subordinate_strings[word] = " ".join(self.conjunction_parts)
+						self.conjunction_parts = []
+					else:
+						conjunction = ((word, tag), None)
+						self.subordinate_strings[word] = word
+					self.conjunctions.append(conjunction)
+					did_something = True
+					self.track(conjunction[0], "subordinate", self.subtype)
 
 			# Anything about phrasing must come before the wh-determiner block
 			if tag == "JJ": # Adjective
@@ -817,7 +846,7 @@ class SentenceParser(object):
 					self.used_unit_adjectives.append(word)
 					did_something = True
 					self.last_adjective = " ".join([self.last_adjective, word])
-					self.track(self.last_adjective, "adjective", self.subtype, self.last_adjective_index)
+					self.track(self.last_adjective, "adjective", self.subtype, self.last_adj_index)
 				elif self.last_tag in ["IN"]:
 					did_something = True
 					unit = " ".join([self.last_unit, self.last_word, word])
@@ -882,12 +911,15 @@ class SentenceParser(object):
 				self.phrasing_question = True
 				did_something = True
 				self.track(word, "asking", self.subtype)
-			elif self.phrasing_question:
+			elif self.phrasing_question and not (tag[:2] == "VB" and self.is_question):
 				self.phrasing_question = False
 
 			if tag == "CC":
 				did_something = True
-				self.track(word, "coordinating_conjunction")
+				if self.verb_question and self.framing_question:
+					self.track(word, "eval_option_sep")
+				else:
+					self.track(word, "coordinating_conjunction")
 
 			if self.subtype is not None:
 				did_something = True
@@ -900,6 +932,12 @@ class SentenceParser(object):
 			self.last_word = word
 			self.last_tag = tag
 			self.last_subtype = self.subtype
+
+		# Look before you leap
+		for s_tag in self.sentence:
+			word, tag = s_tag
+			if tag == "." and word == "?":
+				self.is_question = True
 
 		for s_tag in self.sentence:
 			process(*s_tag)
@@ -917,6 +955,48 @@ class SentenceParser(object):
 			if self.is_relative_quantity and not self.comparator_context and self.main_context:
 				self.comparator_context = context
 				self.track(context, "comparator_context", stype, idx, True)
+
+		last_context = None
+		last_possessive = None
+		is_possessive = False
+		was_possessive = False
+		did_swap_context_for_unit = False
+		reparsed = []
+		# Walk this to combine context with their unit possessives
+		for part in self.parsed:
+			word, role, subtype = part
+			if role == "context":
+				if word in self.problem.units:
+					self.contexts.remove(word)
+					role = "unit"
+					self.units.append(word)
+					did_swap_context_for_unit = True
+				else:
+					last_context = part
+			elif last_context is not None and role == "possessive":
+				last_possessive = word
+				is_possessive = True
+			elif role == "unit":
+				if is_possessive:
+					was_possessive = True
+					cidx = self.contexts.index(last_context[0])
+					self.units.remove(word)
+					word = " ".join([last_context[0] + last_possessive, word])
+					subtype = last_context[2]
+					role = "context"
+					self.contexts[cidx] = word
+					last_context = None
+					last_possessive = None
+					is_possessive = False
+					reparsed.pop()
+					reparsed.pop()
+				elif did_swap_context_for_unit:
+					did_swap_context_for_unit = False
+					self.units.remove(word)
+					role = "context"
+					self.contexts.append(word)
+			reparsed.append((word, role, subtype))
+		self.parsed = reparsed
 
 		# Make all the inferred items unique
 		self.raw_operators = uniq(self.raw_operators)

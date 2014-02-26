@@ -89,6 +89,8 @@ class Solution(object):
 		self.symbols = {}
 		self.work = {}
 		self.correct_responses = []
+		self.correct_vals = []
+		self.correct_units = []
 
 		self.container = None
 		self.containers = None
@@ -127,18 +129,25 @@ class Solution(object):
 
 		sym = " ".join(s)
 		first_time = sym not in self.symbols[context_constant]
+		u_first_time = unit not in self.symbols[context_constant]
 		hindsight_inference = False
 
 		if first_time:
 			self.symbols[context_constant][sym] = Symbol(sym)
+		if u_first_time:
+			self.symbols[context_constant][unit] = Symbol(unit)
 
 		symbol = self.symbols[context_constant][sym]
+		u_symbol = self.symbols[context_constant][unit]
 
 		if first_time and operator != "eq":
 			# Make an assumption that if the first thing we're
 			# doing is an addition, that we started with 0 units
 			symbol = 0
 			hindsight_inference = True
+
+		if u_first_time and operator != "eq":
+			u_symbol = 0
 
 		#rint symbol, operator, readonly, constant, conref
 
@@ -181,6 +190,10 @@ class Solution(object):
 				if self.relational_var is None:
 #					rint "HERE"
 					symbol = constant
+					if u_first_time:
+						u_symbol = constant
+					else:
+						u_symbol += constant
 				else:
 					if conref:
 						self.symbols[context_constant][conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
@@ -196,6 +209,7 @@ class Solution(object):
 			elif operator == "ad":
 				if self.relational_var is None:
 					symbol += constant
+					u_symbol += constant
 				else:
 					if conref:
 						self.symbols[context_constant][conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
@@ -210,6 +224,7 @@ class Solution(object):
 			elif operator == "su":
 				if self.relational_var is None:
 					symbol -= constant
+					u_symbol -= constant
 				else:
 					if conref:
 						self.symbols[context_constant][conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
@@ -234,6 +249,7 @@ class Solution(object):
 			elif operator == "mu":
 				if self.relational_var is None:
 					symbol *= constant
+					u_symbol *= constant
 				else:
 					if conref:
 						self.symbols[context_constant][conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
@@ -248,6 +264,7 @@ class Solution(object):
 			elif operator == "di":
 				if self.relational_var is None:
 					symbol /= constant
+					u_symbol /= constant
 				else:
 					if conref:
 						self.symbols[context_constant][conref] = constant.subs(Symbol(self.relational_var), symbol).evalf()
@@ -262,6 +279,7 @@ class Solution(object):
 			else:
 				return (hindsight_inference, symbol, var, sym)
 			self.symbols[context_constant][sym] = symbol
+			self.symbols[context_constant][unit] = u_symbol
 			#rint self.symbols
 
 		return (hindsight_inference, symbol, var, sym)
@@ -643,7 +661,7 @@ class Solution(object):
 					val = self.problem.brain.self_reflexive(val, True)
 
 				if part in ["context", "context_inferred"]:
-					if not did_set_context:
+					if not did_set_context or possibly_in_list:
 						did_set_context = True
 						self.context = val
 						self.context_subtype = subtype
@@ -698,7 +716,7 @@ class Solution(object):
 						if val in self.problem.brain.raw["word_forms"]["plural"]:
 							val = self.problem.brain.raw["word_forms"]["plural"][val]
 						if not val in self.problem.inference.units:
-							raise Exception("Unit plurality mismatch distress")
+							raise Exception("Unit plurality mismatch distress: " + val)
 					self.unit = str(val)
 
 				if part == "context_unit":
@@ -797,6 +815,8 @@ class Solution(object):
 				self.data = None
 				self.actor_data = None
 				self.containers = None
+			else:
+				self.sentence_data.append(None)
 
 	def newvar(self, context_constant):
 		sym = self.varpool.pop(0)
@@ -812,6 +832,10 @@ class Solution(object):
 		new_sentence_data = []
 		for sd in self.sentence_data:
 			new_container = {}
+			if sd is None:
+				new_sentence_data.append(None)
+				index += 1
+				continue
 			for container in sd:
 				data = sd[container]
 #				rint "==="
@@ -920,6 +944,8 @@ class Solution(object):
 					try:
 						dec = int(round((v % 1) * 100, 2))
 						whol = floor(v)
+						self.correct_vals.append(v)
+						self.correct_units.append(unit)
 
 						if whol > 0:
 							i.append(str(whol))
@@ -933,8 +959,10 @@ class Solution(object):
 						i.append("MONEY FORMATTING ERROR")
 				else:
 					i = [format_response_value(v)]
+					self.correct_vals.append(simplify(v))
 					if unit is not None:
 						i.append(unit)
+					self.correct_units.append(unit)
 				self.correct_responses.insert(idx, " ".join(i))
 
 		def safe_solve(*args):
@@ -1026,7 +1054,13 @@ class Solution(object):
 							self.correct_responses.append(
 								"Not sure; too many starting variables!")
 					elif sub == "unit_grouping":
-						if not self.did_combine_units:
+						if resp is None and answer.unit:
+							con_con = answer.context_constant
+							if con_con is None:
+								con_con = "_unknown_"
+							if needEqu and answer.unit in self.symbols[con_con]:
+								resp = ([self.symbols[con_con][answer.unit]], answer.unit)
+						elif not self.did_combine_units:
 							self.correct_responses.append("Not sure; don't know how to handle grouped units that aren't combined")
 						# As of now, units are grouped ahead of time, so this
 						# should be a virtual solution having already compiled
@@ -1065,7 +1099,26 @@ class Solution(object):
 						dontSave = True
 						self.correct_responses.append("Not sure; unknown subordinate type {0} ({1})".format(sub, word))
 			else:
-				if answer.syntax == "context":
+				if answer.syntax == "eval_enum":
+					dontSave = True
+					if index > 0:
+						last_response_val = self.correct_vals[index - 1]
+						last_response_unit = self.correct_units[index - 1]
+						if answer.unit and answer.unit in answer.unit_adjectives:
+							for adj in answer.unit_adjectives[answer.unit]:
+								conno_ref = "{0} {1}".format(adj, answer.unit)
+								conno_tag = self.problem.brain.connotation(adj, conno_ref)
+								if conno_tag == "test_is_even":
+									if (last_response_val % 2) == 0:
+										self.correct_responses.append(conno_ref)
+										break
+								elif conno_tag == "test_is_odd":
+									if (last_response_val % 2) != 0:
+										self.correct_responses.append(conno_ref)
+										break
+					else:
+						raise Exception("I don't know how to do eval_enum on single questions")
+				elif answer.syntax == "context":
 					dontSave = True
 					# need to find the context which has something
 					if answer.rel_mode and answer.unit:
@@ -1117,7 +1170,7 @@ class Solution(object):
 					if needEqu:
 						inf, equ, con, sym = self.get_symbol(answer.context, answer.context_constant, answer.unit, None, index)
 
-					if self.uses_context_constant is not None:
+					if answer.context is not None and self.uses_context_constant is not None:
 						if answer.context_constant > 1:
 							singleForm = self.problem.brain.raw["word_forms"]["single"][answer.context]
 							if not singleForm:
@@ -1179,7 +1232,7 @@ class Solution(object):
 					#resp = (simple_solve(v), " ".join(unt))
 					resp = (simple_solve(v, answer.context_constant), answer.unit)
 
-			if resp and resp[0] is None:
+			if resp is None or resp[0] is None:
 				dontSave = True
 
 			if not dontSave:
@@ -1200,6 +1253,11 @@ class Solution(object):
 		#rint self.symbols
 		for sd in self.sentence_data:
 			b = []
+			if sd is None:
+				o.append("\n### Sentence {0}".format(index))
+				o.append("    No data")
+				index += 1
+				continue
 			for container in sd:
 				data = sd[container]
 				s = []

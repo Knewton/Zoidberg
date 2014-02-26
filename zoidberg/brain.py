@@ -95,7 +95,8 @@ SUBORDINATES = [
 	("unit_requirement", "Unit Requirement (Specifies the total in a missing number problem)"),
 	("comparator", "Comparator (Specifies the unit to be compared with)"),
 	("object", "Object (Specifies the object of some action [eating >dinner<]"),
-	("refiner", "Refiner (Specifies a type of something [>lonley< pidgeons]")
+	("refiner", "Refiner (Specifies a type of something [>lonley< pidgeons]"),
+	("option", "Option (Specifies a possible answer option")
 ]
 
 RELATIVE = [
@@ -133,7 +134,8 @@ ANSWERS = [
 	("expression", "Answer is the solution to an expression (4 cars)"),
 	("unit", "Answer is the unit of the solution to an expression (cars)"),
 	("context", "Answer is the owner of the solution to an expression (Joe)"),
-	("expression_connotation", "Answer is the solution to an expression AND connotes the unit (how old = X years)")
+	("expression_connotation", "Answer is the solution to an expression AND connotes the unit (how old = X years)"),
+	("eval_enum", "Answer requires evaluating a direct question or picking from a set of options (is this... do these...)")
 ]
 
 PLURALITY = [
@@ -177,7 +179,7 @@ RETAGS = [
 ]
 
 INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
-TAG_STR = "What tag does {0}'{1}' connote?"
+TAG_STR = "What tag does {0}'{1}' connote{2}?"
 
 def get_tag(x, brain):
 	msg = "\t{0}. {1}"
@@ -190,7 +192,7 @@ def get_tag(x, brain):
 	print "\t0. Enter a new tag."
 	for k in data:
 		i += 1
-		print msg.format(i, k[1])
+		print msg.format(i, k)
 
 	r = int(raw_input("The tag: "))
 
@@ -303,7 +305,7 @@ def input_answer_syntax(x, ref, brain):
 	return get_input(ANSWERS, "'{0}' indicates: ".format(x), x, ref, brain)
 
 def input_connotation_tag(x, ref, brain):
-	print TAG_STR.format("", x)
+	print TAG_STR.format("", x, " in '{0}'".format(ref))
 	return get_tag(x, brain)
 
 def input_plurality(p, ref, brain):
