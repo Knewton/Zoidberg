@@ -24,9 +24,10 @@ ANSWER_SUBORDINATE = {
 	"time_starting": "at the beginning of the problem",
 	"time_ending": "at the end of the problem",
 	"context_grouping": "added together",
-	"unit_grouping": "total up",
+	"unit_grouping": "totaled up",
 	"unit_requirement": "needed to equal the specified value",
-	"comparator": "quantities"
+	"comparator": "quantities",
+	"costpay": "costing"
 }
 
 # A Zoidberg answer refers to the structure and syntax of what the correct
@@ -96,7 +97,10 @@ class Answer(object):
 				if self.syntax == "expression_connotation":
 					tag = p.brain.connotation(val, str(self.query))
 					self.connotation_tag = tag
-					self.unit = p.brain.connotation_unit(tag, p.units)
+					if self.connotation_tag == "money":
+						self.unit = "money"
+					else:
+						self.unit = p.brain.connotation_unit(tag, p.units)
 
 			if part == "rel_less":
 				if asking:
@@ -290,8 +294,13 @@ class Answer(object):
 				i.append("with respect to {0}".format(self.comparator_unit))
 
 		if len(self.subordinates) > 0:
+			did_subs = []
 			for sub in self.subordinates:
 				w, s = sub
+				if s in did_subs:
+					continue
+
+				did_subs.append(s)
 				if s is None or s == "place_noun":
 					i.append(self.query.problem.inference.subordinate_strings[w])
 				else:

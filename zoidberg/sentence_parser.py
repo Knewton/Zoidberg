@@ -448,7 +448,6 @@ class SentenceParser(object):
 									do_unset_conj = False
 									do_reg_unit = True
 								else:
-									self.used_unit_adjectives.append(word)
 									conjunction = ((unit, tag), self.last_conjunction)
 									self.subordinate_strings[unit] = " ".join(self.conjunction_parts)
 									self.conjunction_parts = []
@@ -1076,6 +1075,7 @@ class SentenceParser(object):
 
 		#rint self.subordinates, self.main_context, self.problem.context_subordinates
 
+		has_unit_proxy = False
 		if self.main_context in self.problem.context_subordinates:
 			if len(self.subordinates) == 0:
 				# This is an inferred context
@@ -1092,11 +1092,14 @@ class SentenceParser(object):
 						if st[0:4] == "time":
 							st = st[0:4]
 					handeled_subtypes.append(st)
+				has_unit_proxy = "unit_grouping" in handeled_subtypes
 
 				for sub in subs:
 					subord, subt = sub
 					st = subt
 					if st is not None:
+						if st == "costpay":
+							continue
 						if st[0:4] == "time":
 							st = st[0:4]
 						if st in handeled_subtypes and st == "time":
@@ -1113,7 +1116,7 @@ class SentenceParser(object):
 			word, gtype, subtype = self.problem.context_actions[self.main_context]
 			self.track(word, gtype + "_inferred", subtype)
 
-		if len(self.units) == 0 and len(self.problem.running_units) > 0:
+		if len(self.units) == 0 and len(self.problem.running_units) > 0 and not has_unit_proxy:
 			iu = self.problem.running_units[-1]
 			self.track(iu, "unit_inferred", self.problem.unit_subtypes[iu])
 

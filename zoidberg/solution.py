@@ -42,6 +42,8 @@ class Solution(object):
 		self.last_index = 0
 		self.sig_figs = -1 # Don't need to use significant figures
 
+		self.factor_constant = None
+		self.factor_type = None
 		self.uses_context_constant = True
 		self.answer_out = False
 		self.asking = True
@@ -94,6 +96,7 @@ class Solution(object):
 
 		self.container = None
 		self.containers = None
+		self.factors = None
 		self.actor = None
 		self.action = None
 
@@ -295,6 +298,8 @@ class Solution(object):
 			self.last_container = self.container
 
 		self.asking = False
+		self.factor_constant = None
+		self.factor_type = None
 		self.container = None
 		self.actor = None
 		self.action = None
@@ -319,6 +324,8 @@ class Solution(object):
 		if self.actor_data is None:
 			self.actor_data = {}
 
+		factor_constant = self.factor_constant
+		factor_type = self.factor_type
 		actor = "@{0}".format(self.actor)
 		action = self.action
 		context = self.context
@@ -537,9 +544,24 @@ class Solution(object):
 			#rint self.containers
 			self.digest_unit_groups(container, k1, context_constant, k2)
 
+		if self.factor_constant:
+			if self.factors is None:
+				self.factors = {}
+			if not k2 in self.factors:
+				self.factors[k2] = {}
+			if not factor_type in self.factors[k2]:
+				self.factors[k2][factor_type] = {}
+			n_con = float(constant)
+			n_fac = float(self.factor_constant)
+			if n_con > 1:
+				self.factors[k2][factor_type][n_con] = n_fac
+				self.factors[k2][factor_type][1] = (n_fac/n_con)
+			else:
+				self.factors[k2][factor_type][1] = n_fac
+
 		if self.coordinated:
 #			rint self.coordinated_container, container
-			if self.coordinated_container[0] != container:
+			if self.coordinated_container is not None and self.coordinated_container[0] != container:
 				cc = self.coordinated_container
 				if not cc[1] in self.containers[container]:
 					self.containers[container][cc[1]] = {}
@@ -682,7 +704,7 @@ class Solution(object):
 					self.ex_op = True
 					self.operator = "eq"
 
-				if part == "operator" and not self.operator:
+				if part == "operator" and (not self.operator or self.coordinated):
 					self.operator = parser.operator[val]
 					if self.operator == "co":
 						self.operator = None
@@ -757,6 +779,8 @@ class Solution(object):
 						self.action = val
 
 				if part in ["subordinate", "subordinate_inferred"]:
+					pen_con = pending_constant
+
 					open_conjunction = False
 					pending_constant = None
 					if val[1] is not None:
@@ -768,8 +792,12 @@ class Solution(object):
 							self.answer_out = True
 						else:
 							# If we have a conjunction we have an container
-							self.container = val[0]
-							last_container = self.container
+							if stype != "costpay":
+								self.container = val[0]
+								last_container = self.container
+							if last_part == "constant" and pen_con is not None:
+								self.factor_constant = pen_con
+								self.factor_type = val[0]
 
 				if part == "conjunction":
 					open_conjunction = True
@@ -779,6 +807,7 @@ class Solution(object):
 						# And is a noise word in a list
 						continue
 
+					last_op = self.operator
 					if self.has_any():
 						self.coordinated_container = self.generate_expression(zeroes_out, answer_out)
 					else:
@@ -788,11 +817,11 @@ class Solution(object):
 					self.coordinated = True
 					self.context = last_context
 					self.context_subtype = last_context_subtype
+					self.operator = last_op
 					self.container = last_container
 					did_set_context = False
 
 				if self.has_all():
-					#rint "Here and", zeroes_out
 					self.generate_expression(zeroes_out, answer_out)
 				last_part = part
 				index += 1
@@ -943,7 +972,7 @@ class Solution(object):
 					i = []
 					try:
 						dec = int(round((v % 1) * 100, 2))
-						whol = floor(v)
+						whol = int(floor(v))
 						self.correct_vals.append(v)
 						self.correct_units.append(unit)
 
@@ -1054,14 +1083,38 @@ class Solution(object):
 							self.correct_responses.append(
 								"Not sure; too many starting variables!")
 					elif sub == "unit_grouping":
+						do_orig = False
 						if resp is None and answer.unit:
 							con_con = answer.context_constant
 							if con_con is None:
 								con_con = "_unknown_"
 							if needEqu and answer.unit in self.symbols[con_con]:
 								resp = ([self.symbols[con_con][answer.unit]], answer.unit)
+							else:
+								do_orig = True
 						elif not self.did_combine_units:
-							self.correct_responses.append("Not sure; don't know how to handle grouped units that aren't combined")
+							do_orig = True
+
+						if do_orig:
+							did_proc = False
+							aval = 0
+							if len(self.problem.units) > 0:
+								for u in self.problem.units:
+									if u in self.factors:
+										inf, count, con, sym = self.get_symbol(answer.context, answer.context_constant, u, None)
+										for un in self.factors[u]:
+											fac_val = self.factors[u][un][1] * count
+											if answer.unit == "money":
+												if un in self.problem.brain.raw["monetary_words"]:
+													fac_val *= self.problem.brain.raw["monetary_words"][un]
+											aval += fac_val
+										did_proc = True
+
+							if not did_proc:
+								self.correct_responses.append("Not sure; don't know how to handle grouped units that aren't combined")
+							else:
+								resp = ([aval], answer.unit)
+
 						# As of now, units are grouped ahead of time, so this
 						# should be a virtual solution having already compiled
 						# the units ahead of time
@@ -1389,5 +1442,6 @@ class Solution(object):
 				o.append("    " + response)
 				index += 1
 		#rint self.symbols
+		#rint self.factors
 
 		return "\n".join(o)

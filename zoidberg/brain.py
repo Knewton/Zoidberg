@@ -53,7 +53,9 @@ DEFAULT_BRAIN = {
 		"dime": 0.1,
 		"dimes": 0.1,
 		"quarter": 0.25,
-		"quarters": 0.25
+		"quarters": 0.25,
+		"cents": 0.01,
+		"cent": 0.01
 	}
 }
 
@@ -96,7 +98,8 @@ SUBORDINATES = [
 	("comparator", "Comparator (Specifies the unit to be compared with)"),
 	("object", "Object (Specifies the object of some action [eating >dinner<]"),
 	("refiner", "Refiner (Specifies a type of something [>lonley< pidgeons]"),
-	("option", "Option (Specifies a possible answer option")
+	("option", "Option (Specifies a possible answer option)"),
+	("costpay", "Cost or Payment (Specifies an amount required for something)")
 ]
 
 RELATIVE = [
@@ -176,6 +179,13 @@ RETAGS = [
 
 	("wh_pro", "Wh-pronoun"),
 	("pos_wh_pro", "Possessive Wh-pronoun"),
+
+	("vb", "Verb, base form"),
+	("vbd", "Verb, past tense"),
+	("vbg", "Verb, gerund/present participle"),
+	("vbn", "Verb, past participle"),
+	("vbp", "Verb, singular present non-3d"),
+	("vbz", "Verb, 3rd person singular present")
 ]
 
 INPUT_STR = "What {0} does {1}'{2}' indicate in the sentence: '{3}'"
@@ -444,6 +454,8 @@ class Brain(object):
 				val = str(self.raw["numbers"][val])
 			elif item == "pre_ind_plu":
 				tag = "PIP"
+			elif item[:2] == "vb":
+				tag = item.upper()
 			else:
 				print item
 				tag = "!!!"

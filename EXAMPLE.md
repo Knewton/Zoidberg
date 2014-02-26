@@ -1204,7 +1204,7 @@
     How many bags does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of bags owned by Sam total up.
+    The answer is the unknown value of bags owned by Sam totaled up.
 
 ## Data extraction
 
@@ -1315,7 +1315,7 @@
     How many cups does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of cups owned by Paul total up.
+    The answer is the unknown value of cups owned by Paul totaled up.
 
 ## Data extraction
 
@@ -1371,7 +1371,7 @@
     How many books does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of books owned by Sidd total up.
+    The answer is the unknown value of books owned by Sidd totaled up.
 
 ## Data extraction
 
@@ -1426,7 +1426,7 @@
     How many blocks does he have in all?
 
 ### Answer interpretation
-    The answer is the unknown value of blocks owned by Lee total up.
+    The answer is the unknown value of blocks owned by Lee totaled up.
 
 ## Data extraction
 
@@ -2500,7 +2500,7 @@
     How many muffins does first grade bake in all?
 
 ### Answer interpretation
-    The answer is the unknown value of muffins converted by first grade total up.
+    The answer is the unknown value of muffins converted by first grade totaled up.
 
 ## Question 2
 
@@ -2530,3 +2530,47 @@
 
 ### Response 2
     odd number
+
+***
+
+# Zoidberg Solution
+
+## The problem
+    Mrs. Hilt bought a yoyo for 24 cents and a whistle for 14 cents. 
+    How much did she spend in all for the two toys? 
+    
+    
+## Digested problem
+    Mrs.   	Hilt   	bought 	a      	yoyo   	for    	24     	cents  	and    	a      	whistle	for    	14     	cents  	.      
+    NNP    	NNP    	VBD    	DT     	NN     	IN     	CD     	NNS    	CC     	DT     	NN     	IN     	CD     	NNS    	.      
+
+    How    	much   	did    	she    	spend  	in     	all    	for    	the    	two    	toys   	?      
+    WRB    	JJ     	NN     	PRP    	VBP    	IN     	DT     	IN     	DT     	CD     	NNS    	.      
+
+## Problem inference
+    I think this problem is about Mrs. Hilt getting yoyo and whistle for cents and asks a single question.
+
+## Parsed problem
+    Mrs. Hilt               	bought                  	1                       	yoyo                    	for                     	24                      	cents                   	and                     	1                       	whistle                 	for                     	14                      	cents                   	.                       
+    context                 	operator                	constant                	unit                    	conjunction             	constant                	subordinate             	coordinating_conjunction	constant                	unit                    	conjunction             	constant                	subordinate             	punctuation             
+
+    How much                	did                     	Mrs. Hilt               	spend                   	in                      	all                     	for                     	2                       	toys                    	?                       
+    asking                  	q_start                 	context                 	q_stop                  	conjunction             	subordinate             	conjunction             	constant                	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+    How much did she spend in all for the two toys?
+
+### Answer interpretation
+    The answer is the unknown value of money converted by Mrs. Hilt totaled up.
+
+## Data extraction
+
+### Sentence 1
+    whistle owned by Mrs. Hilt + 1
+    yoyo owned by Mrs. Hilt + 1
+
+## Correct response
+    38 cents
