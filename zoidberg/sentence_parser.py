@@ -657,8 +657,10 @@ class SentenceParser(object):
 					self.last_context = None
 					lc = self.contexts.pop()
 					self.parsed.pop()
+					if self.main_context == lc:
+						self.main_context = None
 
-					context = " ".join([self.last_word, word])
+					context = " ".join([lc, word])
 					if self.is_relative_quantity and self.comparator_context == lc:
 						self.comparator_context = context
 					if self.subtype is not None and self.subtype[1] == "ambiguous":
@@ -675,7 +677,8 @@ class SentenceParser(object):
 					self.comparator_context = context
 					self.track(context, "comparator_context", self.subtype)
 				else:
-					self.main_context = context
+					if not self.main_context:
+						self.main_context = context
 					self.track(context, "context", self.subtype)
 				self.context_subtypes[context] = self.subtype
 
@@ -965,7 +968,7 @@ class SentenceParser(object):
 		for part in self.parsed:
 			word, role, subtype = part
 			if role == "context":
-				if word in self.problem.units:
+				if word in self.problem.units or (word != self.main_context and len(self.units) == 0):
 					self.contexts.remove(word)
 					role = "unit"
 					self.units.append(word)
@@ -995,6 +998,7 @@ class SentenceParser(object):
 					role = "context"
 					self.contexts.append(word)
 			reparsed.append((word, role, subtype))
+		#rint self.sentence_text, "::::", self.main_context
 		self.parsed = reparsed
 
 		# Make all the inferred items unique

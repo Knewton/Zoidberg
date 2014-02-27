@@ -8,12 +8,27 @@ from json import dumps
 from utilities import oxfordComma
 from math import floor
 
+OPERATOR_F_STR = {
+	"eq": "owned by",
+	"ad": "owned by",
+	"mu": "owned by",
+	"su": "owned by",
+	"di": "owned by",
+	"eqx": "owned by",
+	"cr": "created by",
+	"cn": "used by",
+	"re": "needed by",
+	"ans": "owned by"
+}
+
 OPERATOR_STR = {
 	"eq": "owned by",
 	"ad": "gained by",
 	"mu": "gained by",
 	"su": "lost by",
 	"di": "lost by",
+	"cr": "created by",
+	"cn": "used by",
 	"ans": "finally owned by"
 }
 
@@ -27,7 +42,9 @@ OP_DISPLAY = {
 	"di": "/",
 	"re": "==",
 	"co": "=>",
-	"ex": "->"
+	"ex": "->",
+	"cn": "<-",
+	"cr": "+>"
 }
 
 def number(s):
@@ -209,7 +226,8 @@ class Solution(object):
 				#raise Exception
 				if operator != "eqx":
 					self.work[dsym].append("= " + str(constant))
-			elif operator == "ad":
+			elif operator in ["ad", "cr", "cn"]:
+				#rint symbol, constant, sym
 				if self.relational_var is None:
 					symbol += constant
 					u_symbol += constant
@@ -595,6 +613,8 @@ class Solution(object):
 					item = parts.pop()
 					for part in parts:
 						nu = " ".join([part, item])
+						if nu == k2:
+							nu = item
 
 						if nu in self.containers[container][k1][context_constant]:
 							ndata = []
@@ -1042,6 +1062,10 @@ class Solution(object):
 				for s in answer.subordinates:
 					word, sub = s
 
+					if sub == "context_grouping" and (answer.context is not None and not self.problem.exestential):
+						# we don't want to consider a context group if there aren't a composite context
+						if not "and" in answer.context:
+							sub = "unit_grouping"
 					if sub == "context_grouping" and answer.context is None and self.problem.exestential:
 						# Exestential problems may not have contexts for things
 						# wonder about alltogetherness. This is a tough case
@@ -1083,6 +1107,7 @@ class Solution(object):
 							self.correct_responses.append(
 								"Not sure; too many starting variables!")
 					elif sub == "unit_grouping":
+						#rint "do unit groupin", answer.unit, answer.context
 						do_orig = False
 						if resp is None and answer.unit:
 							con_con = answer.context_constant
@@ -1376,11 +1401,10 @@ class Solution(object):
 								elif context is not None and unit is not None:
 
 									i.append(unit)
-									if operator is not None and operator == "re":
-										i.append("needed by")
-									else:
-									#	i.append(OPERATOR_STR[operator])
+									if operator is None:
 										i.append("owned by")
+									else:
+										i.append(OPERATOR_F_STR[operator])
 
 #									if self.problem.inference.is_requirement_problem:
 

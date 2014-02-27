@@ -8,7 +8,9 @@ OPERATOR_STR = {
 	"su": "lost by",
 	"di": "lost by",
 	"re": "required by",
-	"co": "converted by"
+	"co": "converted by",
+	"cr": "created by",
+	"cn": "used by",
 }
 
 ANSWER_SYNTAX = {

@@ -264,18 +264,18 @@
 ## Data extraction
 
 ### Sentence 1
+    cars owned by Joey = 13
     toy cars owned by Joey = 13
-    toy cars owned by Joey + 13
 
 ### Sentence 2
+    cars owned by Chandler = 6
     toy cars owned by Chandler = 6
-    toy cars owned by Chandler + 6
 
 ### Sentence 3
     No data
 
 ## Correct response
-    14 toy cars
+    7 toy cars
 
 ***
 
@@ -2574,3 +2574,64 @@
 
 ## Correct response
     38 cents
+
+***
+
+# Zoidberg Solution
+
+## The problem
+    Mrs. Hilt made 5 Rice Krispie Treats. 
+    She used 8 large marshmallows and 10 mini marshmallows.
+    How many marshmallows did she use altogether? 
+    
+    
+## Digested problem
+    Mrs.        	Hilt        	made        	5           	Rice        	Krispie     	Treats      	.           
+    NNP         	NNP         	VBD         	CD          	NNP         	NNP         	NNPS        	.           
+
+    She         	used        	8           	large       	marshmallows	and         	10          	mini        	marshmallows	.           
+    PRP         	VBD         	CD          	JJ          	NNS         	CC          	CD          	NN          	VBZ         	.           
+
+    How         	many        	marshmallows	did         	she         	use         	altogether  	?           
+    WRB         	JJ          	NNS         	VBD         	PRP         	VBP         	RB          	.           
+
+## Problem inference
+    I think this problem is about Mrs. Hilt Rice Krispie Treats, Rice Treats, Krispie Treats, large marshmallows, mini marshmallows, and marshmallows and asks a single question.
+
+## Parsed problem
+    Mrs. Hilt               	made                    	5                       	Rice Krispie Treats     	.                       
+    context                 	operator                	constant                	unit                    	punctuation             
+
+    Mrs. Hilt               	used                    	8                       	large marshmallows      	and                     	10                      	mini marshmallows       	.                       
+    context                 	operator                	constant                	unit                    	coordinating_conjunction	constant                	unit                    	punctuation             
+
+    How many                	marshmallows            	did                     	Mrs. Hilt               	use                     	altogether              	?                       
+    asking                  	unit                    	q_start                 	context                 	q_stop                  	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+    How many marshmallows did she use altogether?
+
+### Answer interpretation
+    The answer is the unknown value of marshmallows used by Mrs. Hilt added together.
+
+## Data extraction
+
+### Sentence 1
+    Krispie Treats created by Mrs. Hilt +> 5
+    Rice Treats created by Mrs. Hilt +> 5
+    Rice Krispie Treats created by Mrs. Hilt +> 5
+
+### Sentence 2
+    marshmallows used by Mrs. Hilt <- 8
+    marshmallows used by Mrs. Hilt <- 10
+    large marshmallows used by Mrs. Hilt <- 8
+    mini marshmallows used by Mrs. Hilt <- 10
+
+### Sentence 3
+    No data
+
+## Correct response
+    18 marshmallows

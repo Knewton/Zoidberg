@@ -84,7 +84,9 @@ OPERATORS = [
 	("di", "Division"),
 	("re", "Requires (the total we need to answer)"),
 	("co", "Convert (change one unit into another)"),
-	("ex", "Exchange (give units from one context to another)")
+	("ex", "Exchange (give units from one context to another)"),
+	("cr", "Creates (makes something)"),
+	("cn", "Consume (something used to make something)")
 ]
 
 # Various types of supported subordinace
@@ -179,6 +181,10 @@ RETAGS = [
 
 	("wh_pro", "Wh-pronoun"),
 	("pos_wh_pro", "Possessive Wh-pronoun"),
+
+	("jj", "Adjective"),
+	("jjr", "Adjective, comparative"),
+	("jjs", "Adjective, superlative"),
 
 	("vb", "Verb, base form"),
 	("vbd", "Verb, past tense"),
@@ -454,7 +460,7 @@ class Brain(object):
 				val = str(self.raw["numbers"][val])
 			elif item == "pre_ind_plu":
 				tag = "PIP"
-			elif item[:2] == "vb":
+			elif item[:2] in ["vb", "jj"]:
 				tag = item.upper()
 			else:
 				print item
