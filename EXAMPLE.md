@@ -71,7 +71,7 @@
     WRB      	JJ       	NNS      	VBD      	PRP      	VB       	IN       	DT       	NN       	.        
 
 ## Problem inference
-    I think this problem is about Mrs. Jones, Mrs. Jones' family, and Mrs. Jones' friends exchanging bananas and asks a single question.
+    I think this problem is about Mrs. Jones, Mrs. Jones' family, and Mrs. Jones' friends comparing or exchanging bananas and asks a single question.
 
 ## Parsed problem
     Mrs. Jones         	bought             	some               	bananas            	.                  
@@ -305,7 +305,7 @@
     WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	RB    	.     
 
 ## Problem inference
-    I think this problem is about Marc, Jim, and Julia exchanging apples and asks a single question.
+    I think this problem is about Marc, Jim, and Julia comparing or exchanging apples and asks a single question.
 
 ## Parsed problem
     Marc       	has        	10         	apples     	.          
@@ -481,7 +481,7 @@
     WRB      	JJ       	NNS      	VBD      	PRP      	VBP      	IN       	DT       	NN       	.        
 
 ## Problem inference
-    I think this problem is about Pigpen and Pigpen's friends exchanging rocks and asks a single question.
+    I think this problem is about Pigpen and Pigpen's friends comparing or exchanging rocks and asks a single question.
 
 ## Parsed problem
     Pigpen                  	had                     	some                    	rocks                   	.                       
@@ -646,7 +646,7 @@
     WRB   	JJ    	NNS   	VBZ   	NNP   	VB    	RB    	.     
 
 ## Problem inference
-    I think this problem is about Mickey and Eric exchanging apples and asks a single question.
+    I think this problem is about Mickey and Eric comparing or exchanging apples and asks a single question.
 
 ## Parsed problem
     Mickey               	has                  	12                   	apples               	.                    
@@ -2478,7 +2478,7 @@
     VBZ     	DT      	DT      	RB      	NN      	CC      	DT      	JJ      	NN      	.       
 
 ## Problem inference
-    I think this problem is about Mrs. Hilt's favorite first grade classes, Mrs. Brier's class, Mrs. Macadams's class, Mrs. Flannery's class, and first grade exchanging baking muffins and number and asks multiple questions.
+    I think this problem is about Mrs. Hilt's favorite first grade classes, Mrs. Brier's class, Mrs. Macadams's class, Mrs. Flannery's class, and first grade comparing or exchanging baking muffins and number and asks multiple questions.
 
 ## Parsed problem
     Mrs. Hilt's favorite first grade classes	are                         	baking                      	muffins                     	.                           
@@ -2635,3 +2635,48 @@
 
 ## Correct response
     18 marshmallows
+
+***
+
+# Zoidberg Solution
+
+## The problem
+    At Mrs. Hilt's house, there was 29 inches of snow, and Brecknock 
+    Elementary School received 17 inches of snow. 
+    How much more snow did Mrs. Hilt's house have? 
+    
+    
+## Digested problem
+    At        	Mrs.      	Hilt      	's        	house     	,         	there     	was       	29        	inches    	of        	snow      	,         	and       	Brecknock 	Elementary	School    	received  	17        	inches    	of        	snow      	.         
+    IN        	NNP       	NNP       	POS       	NN        	,         	EX        	VBD       	CD        	NNS       	IN        	NN        	,         	CC        	NNP       	NNP       	NNP       	VBD       	CD        	NNS       	IN        	NN        	.         
+
+    How       	much      	more      	snow      	did       	Mrs.      	Hilt      	's        	house     	have      	?         
+    WRB       	JJ        	RBR       	JJ        	VBD       	NNP       	NNP       	POS       	NN        	VBP       	.         
+
+## Problem inference
+    I think this problem is about Mrs. Hilt's house and Brecknock Elementary School comparing or exchanging inches of snow and asks a single question.
+
+## Parsed problem
+    At                         	Mrs. Hilt's house          	,                          	there                      	was                        	29                         	inches of snow             	,                          	and                        	Brecknock Elementary School	received                   	17                         	inches of snow             	.                          
+    conjunction                	context                    	punctuation                	exestential                	pre_ind_plu                	constant                   	unit                       	punctuation                	coordinating_conjunction   	context                    	operator                   	constant                   	unit                       	punctuation                
+
+    How much                   	more                       	inches of snow             	did                        	Mrs. Hilt's house          	have                       	?                          	Brecknock Elementary School
+    asking                     	rel_more                   	unit                       	q_start                    	context                    	q_stop                     	punctuation                	comparator_context_inferred
+
+
+## Question 1
+
+### Question text
+    How much more snow did Mrs. Hilt's house have?
+
+### Answer interpretation
+    The answer is the increase in value of inches of snow owned by Mrs. Hilt's house with respect to Brecknock Elementary School.
+
+## Data extraction
+
+### Sentence 1
+    inches of snow owned by Mrs. Hilt's house = 29
+    inches of snow owned by Brecknock Elementary School = 17
+
+## Correct response
+    12 inches of snow

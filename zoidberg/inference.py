@@ -12,10 +12,10 @@ OPERATOR_STR = {
 	},
 	"multiple_contexts": {
 		"eq": "grouping",
-		"ad": "exchanging",
-		"mu": "exchanging",
-		"su": "exchanging",
-		"di": "exchanging"
+		"ad": "comparing or exchanging",
+		"mu": "comparing or exchanging",
+		"su": "comparing or exchanging",
+		"di": "comparing or exchanging"
 	},
 	"no_context": {
 		"eq": "some",

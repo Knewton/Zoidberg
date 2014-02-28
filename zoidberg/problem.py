@@ -30,6 +30,7 @@ class Problem(object):
 		self.descriptive_units = []
 		self.refined_units = {}
 		self.unit_subtypes = {}
+		self.context_subtypes = {}
 		self.units = []
 		self.running_units = []
 

@@ -779,14 +779,17 @@ class Solution(object):
 				if part in "asking":
 					self.asking = True
 
-				if part == "comparator_context":
+				if part in ["comparator_context", "comparator_context_inferred"]:
 					if self.can_target:
 						self.target = val[0]
 						self.target_subtype = subtype
 						last_target = val[0]
 						last_target_subtype = subtype
 					else:
-						self.comparator_context = val[0]
+						if isinstance(val, basestring):
+							self.comparator_context = val
+						else:
+							self.comparator_context = val[0]
 
 				if part == "pre_ind_plu":
 					if last_context and not self.actor:
@@ -979,10 +982,13 @@ class Solution(object):
 		def format_response_value(val):
 			val = str(simplify(val))
 			if self.sig_figs == -1:
-				if "." in val:
-					val = str(float(val))
-					if val[-2:] == ".0":
-						val = val[:-2]
+				try:
+					if "." in val:
+						val = str(float(val))
+						if val[-2:] == ".0":
+							val = val[:-2]
+				except Exception:
+					pass
 			return val
 
 		def add_response(val, unit, idx):
@@ -1331,6 +1337,7 @@ class Solution(object):
 		#rint self.symbols
 		for sd in self.sentence_data:
 			b = []
+			did_something = True
 			if sd is None:
 				o.append("\n### Sentence {0}".format(index))
 				o.append("    No data")
@@ -1384,6 +1391,7 @@ class Solution(object):
 									display_constant = "<an unknown number>"
 
 								if operator is None or operator == "co":
+									did_something = False
 									continue # Probably the question
 
 								if actor is not None and action is not None:
@@ -1438,9 +1446,11 @@ class Solution(object):
 
 								s.append("    " + " ".join(i))
 
+				o.append("\n### Sentence {0}".format(index))
 				if len(s) > 0:
-					o.append("\n### Sentence {0}".format(index))
 					o.append("\n".join(s))
+				else:
+					o.append("    No data")
 			index += 1
 
 #		if len(self.work) > 0:

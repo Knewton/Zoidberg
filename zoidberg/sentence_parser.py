@@ -21,7 +21,6 @@ class SentenceParser(object):
 		# contain spaces. These are things like "pieces of chocolate" as
 		# opposed to "blue christmas ornaments"
 		self.subordinate_lookup = {}
-		self.context_subtypes = {}
 		self.is_exchange = False
 		self.unit_idx = {}
 		self.index = 0
@@ -104,6 +103,28 @@ class SentenceParser(object):
 
 	def fix_unit(self, u):
 		if self.last_adjective is not None and not self.verb_question:
+			might_be = None
+			might_be_prob = False
+			for un in self.problem.units:
+				if self.last_adjective in un:
+					might_be = un
+					might_be_prob = True
+					break
+			for un in self.units:
+				if self.last_adjective in un:
+					might_be = un
+					might_be_prob = False
+					break
+			if might_be is not None:
+				self.used_unit_adjectives.remove(self.last_adjective)
+				subtype = None
+				subtype = self.problem.unit_subtypes[might_be]
+				self.track(might_be, "unit", subtype, self.last_adj_index)
+				self.units.append(might_be)
+
+				self.last_adj_index = -1
+				self.last_adjective = None
+				return (u, len(self.parsed))
 			u = " ".join([self.last_adjective, u])
 			o = (u, self.last_adj_index)
 			self.last_adj_index = -1
@@ -358,7 +379,7 @@ class SentenceParser(object):
 							else:
 								self.main_context = context
 								self.track(context, "context", self.subtype)
-							self.context_subtypes[context] = self.subtype
+							p.context_subtypes[context] = self.subtype
 				else:
 					do_reg_unit = True
 					if self.last_conjunction is not None:
@@ -370,6 +391,7 @@ class SentenceParser(object):
 							did_something = True
 							if track:
 								unit = " ".join([self.last_unit, self.last_word, word])
+								#rint unit, "a"
 								self.problem.descriptive_units.append(unit)
 								self.problem.refined_units[self.last_unit] = unit
 								self.units.pop()
@@ -436,6 +458,7 @@ class SentenceParser(object):
 									self.units.append(unit)
 									p.unit_subtypes[unit] = self.subtype
 									self.unit_idx[unit] = self.last_unit_index
+									#rint unit, "b"
 									if self.new_units_as_context:
 										p.units_acting_as_context[unit] = True
 									self.track(unit, "unit", self.subtype, uidx)
@@ -498,7 +521,9 @@ class SentenceParser(object):
 									self.used_unit_adjectives.append(self.last_word)
 
 							if do_std_unit:
+								#rint "prec", unit
 								unit, uidx = self.fix_unit(unit)
+								#rint "postc", unit
 								if not unit in p.units_acting_as_context or not p.units_acting_as_context[unit]:
 									if self.last_unit and self.framing_question and len(self.operators) == 0 and self.last_unit != unit:
 										context = unit
@@ -513,7 +538,7 @@ class SentenceParser(object):
 										else:
 											self.main_context = context
 											self.track(context, "context", self.subtype)
-										self.context_subtypes[context] = self.subtype
+										p.context_subtypes[context] = self.subtype
 									else:
 										if len(self.operators) > 0 and self.last_unit and not self.main_context:
 											if self.last_unit != unit:
@@ -527,12 +552,13 @@ class SentenceParser(object):
 												else:
 													self.main_context = context
 													self.track(context, "context", self.subtype, self.last_unit_index)
-												self.context_subtypes[context] = self.subtype
+												p.context_subtypes[context] = self.subtype
 										self.last_unit = unit
 										self.last_unit_tag = tag
 										self.last_unit_index = len(self.parsed)
 										self.units.append(unit)
 										p.unit_subtypes[unit] = self.subtype
+										#rint unit, "c"
 										self.unit_idx[unit] = self.last_unit_index
 										if self.new_units_as_context:
 											p.units_acting_as_context[unit] = True
@@ -550,7 +576,7 @@ class SentenceParser(object):
 									else:
 										self.main_context = context
 										self.track(context, "context", self.subtype, uidx)
-									self.context_subtypes[context] = self.subtype
+									p.context_subtypes[context] = self.subtype
 
 			if not did_something and self.subtype == None:
 				self.subtype = self.get_subtype(word, tag)
@@ -577,7 +603,7 @@ class SentenceParser(object):
 					else:
 						self.main_context = context
 						self.track(context, "context", self.subtype)
-					self.context_subtypes[context] = self.subtype
+					p.context_subtypes[context] = self.subtype
 				else:
 					c = self.resolve_context(self.subtype)
 					if c is None:
@@ -600,7 +626,7 @@ class SentenceParser(object):
 						else:
 							self.main_context = c[0]
 							self.track(c[0], "context", self.subtype)
-						self.context_subtypes[c[0]] = self.subtype
+						p.context_subtypes[c[0]] = self.subtype
 						# Unset hanging conjunctions when we set a context
 						self.last_conjunction = None
 					else:
@@ -615,6 +641,7 @@ class SentenceParser(object):
 							self.last_unit_index = len(self.parsed)
 							self.units.append(unit)
 							p.unit_subtypes[unit] = self.subtype
+							#rint unit, "d"
 							self.unit_idx[unit] = self.last_unit_index
 							if self.new_units_as_context:
 								p.units_acting_as_context[unit] = True
@@ -624,7 +651,7 @@ class SentenceParser(object):
 				if self.last_conjunction is not None:
 					if self.is_relative_quantity and not self.comparator_context and self.main_context:
 						c = self.resolve_context(self.subtype)
-						ms = self.context_subtypes[self.main_context]
+						ms = p.context_subtypes[self.main_context]
 						if (not c or self.main_context != c[0]) and (not ms or self.subtype[0] != ms[0]):
 							context = word
 							if self.subtype[0] == "self":
@@ -634,7 +661,7 @@ class SentenceParser(object):
 							self.track(word, "comparator_context", self.subtype, conv=True)
 							self.last_conjunction = None
 							self.conjunction_parts = []
-							self.context_subtypes[word] = self.subtype
+							p.context_subtypes[word] = self.subtype
 
 				if not did_something:
 					did_something = True
@@ -680,7 +707,7 @@ class SentenceParser(object):
 					if not self.main_context:
 						self.main_context = context
 					self.track(context, "context", self.subtype)
-				self.context_subtypes[context] = self.subtype
+				p.context_subtypes[context] = self.subtype
 
 			if tag[:2] == "VB":
 				if tag == "VB" and self.question:
@@ -865,6 +892,7 @@ class SentenceParser(object):
 					self.units.append(unit)
 					p.unit_subtypes[unit] = self.subtype
 					self.unit_idx[unit] = self.last_unit_index
+					#rint unit, "e"
 					if self.new_units_as_context:
 						p.units_acting_as_context[unit] = True
 					self.track(unit, "unit", self.subtype, uidx)
@@ -899,7 +927,7 @@ class SentenceParser(object):
 						else:
 							self.main_context = context
 							self.track(context, "context", self.subtype, self.last_unit_index)
-						self.context_subtypes[context] = self.subtype
+						p.context_subtypes[context] = self.subtype
 
 						# @TODO: This needs a much better tracking system
 						self.last_unit = None
@@ -978,6 +1006,28 @@ class SentenceParser(object):
 			elif last_context is not None and role == "possessive":
 				last_possessive = word
 				is_possessive = True
+			elif role == "subordinate":
+				if is_possessive and word[1][:2] == "NN":
+					was_possessive = True
+					cidx = self.contexts.index(last_context[0])
+					con_to_rem = None
+					for c in self.conjunctions:
+						if c[0] == word:
+							con_to_rem = c
+							break
+					if con_to_rem is not None:
+						self.conjunctions.remove(con_to_rem)
+					word = " ".join([last_context[0] + last_possessive, word[0]])
+					subtype = last_context[2]
+					role = "context"
+					self.contexts[cidx] = word
+					if self.main_context == last_context[0]:
+						self.main_context = word
+					last_context = None
+					last_possessive = None
+					is_possessive = False
+					reparsed.pop()
+					reparsed.pop()
 			elif role == "unit":
 				if is_possessive:
 					was_possessive = True
@@ -987,6 +1037,8 @@ class SentenceParser(object):
 					subtype = last_context[2]
 					role = "context"
 					self.contexts[cidx] = word
+					if self.main_context == last_context[0]:
+						self.main_context = word
 					last_context = None
 					last_possessive = None
 					is_possessive = False
@@ -1123,6 +1175,15 @@ class SentenceParser(object):
 		if len(self.units) == 0 and len(self.problem.running_units) > 0 and not has_unit_proxy:
 			iu = self.problem.running_units[-1]
 			self.track(iu, "unit_inferred", self.problem.unit_subtypes[iu])
+
+		if self.is_relative_quantity and self.comparator_context is None and self.main_context is not None:
+			possible_comp = None
+			for comp in self.problem.contexts:
+				if comp != self.main_context:
+					possible_comp = comp
+					break
+			if possible_comp is not None:
+				self.track(possible_comp, "comparator_context_inferred", self.problem.context_subtypes[possible_comp], conv=True)
 
 		self.problem.contexts += self.contexts
 		self.problem.contexts = uniq(self.problem.contexts)

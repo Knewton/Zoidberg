@@ -149,8 +149,11 @@ class Answer(object):
 			if part in ["unit", "unit_inferred"] and refining and self.unit == None:
 				self.unit = val
 
-			if part == "comparator_context":
-				self.comparator = val[0]
+			if part in ["comparator_context", "comparator_context_inferred"]:
+				if isinstance(val, basestring):
+					self.comparator = val
+				else:
+					self.comparator = val[0]
 
 			if part == "constant":
 				self.constant = val
