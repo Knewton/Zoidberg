@@ -726,6 +726,12 @@
     pink ornaments on the christmas tree = 6
     pink christmas ornaments on the christmas tree = 6
 
+### Sentence 1
+    No data
+
+### Sentence 2
+    No data
+
 ## Correct response
     14 christmas ornaments
 
@@ -1097,6 +1103,9 @@
 ### Sentence 2
     feathers owned by William + 4
     feathers owned by Dad - 4
+
+### Sentence 3
+    No data
 
 ### Sentence 4
     No data
@@ -1886,6 +1895,9 @@
     nests = 3
     birds = 6
 
+### Sentence 2
+    No data
+
 ## Correct response
     3 birds
 
@@ -1982,6 +1994,9 @@
 ### Sentence 1
     flowers = 5
     bees = 3
+
+### Sentence 2
+    No data
 
 ## Correct response
     2 bees
@@ -2247,6 +2262,9 @@
 ### Sentence 1
     nuts in a tree = 2
     squirrels in a tree = 4
+
+### Sentence 2
+    No data
 
 ## Correct response
     2 squirrels
@@ -2523,6 +2541,9 @@
 ### Sentence 3
     No data
 
+### Sentence 4
+    No data
+
 ## Correct response
 
 ### Response 1
@@ -2533,47 +2554,6 @@
 
 ***
 
-# Zoidberg Solution
-
-## The problem
-    Mrs. Hilt bought a yoyo for 24 cents and a whistle for 14 cents. 
-    How much did she spend in all for the two toys? 
-    
-    
-## Digested problem
-    Mrs.   	Hilt   	bought 	a      	yoyo   	for    	24     	cents  	and    	a      	whistle	for    	14     	cents  	.      
-    NNP    	NNP    	VBD    	DT     	NN     	IN     	CD     	NNS    	CC     	DT     	NN     	IN     	CD     	NNS    	.      
-
-    How    	much   	did    	she    	spend  	in     	all    	for    	the    	two    	toys   	?      
-    WRB    	JJ     	NN     	PRP    	VBP    	IN     	DT     	IN     	DT     	CD     	NNS    	.      
-
-## Problem inference
-    I think this problem is about Mrs. Hilt getting yoyo and whistle for cents and asks a single question.
-
-## Parsed problem
-    Mrs. Hilt               	bought                  	1                       	yoyo                    	for                     	24                      	cents                   	and                     	1                       	whistle                 	for                     	14                      	cents                   	.                       
-    context                 	operator                	constant                	unit                    	conjunction             	constant                	subordinate             	coordinating_conjunction	constant                	unit                    	conjunction             	constant                	subordinate             	punctuation             
-
-    How much                	did                     	Mrs. Hilt               	spend                   	in                      	all                     	for                     	2                       	toys                    	?                       
-    asking                  	q_start                 	context                 	q_stop                  	conjunction             	subordinate             	conjunction             	constant                	subordinate             	punctuation             
-
-
-## Question 1
-
-### Question text
-    How much did she spend in all for the two toys?
-
-### Answer interpretation
-    The answer is the unknown value of money converted by Mrs. Hilt totaled up.
-
-## Data extraction
-
-### Sentence 1
-    whistle owned by Mrs. Hilt + 1
-    yoyo owned by Mrs. Hilt + 1
-
-## Correct response
-    38 cents
 
 ***
 
@@ -2620,15 +2600,15 @@
 ## Data extraction
 
 ### Sentence 1
-    Krispie Treats created by Mrs. Hilt +> 5
-    Rice Treats created by Mrs. Hilt +> 5
-    Rice Krispie Treats created by Mrs. Hilt +> 5
+    Krispie Treats created by Mrs. Hilt = 5
+    Rice Treats created by Mrs. Hilt = 5
+    Rice Krispie Treats created by Mrs. Hilt = 5
 
 ### Sentence 2
-    marshmallows used by Mrs. Hilt <- 8
-    marshmallows used by Mrs. Hilt <- 10
-    large marshmallows used by Mrs. Hilt <- 8
-    mini marshmallows used by Mrs. Hilt <- 10
+    marshmallows used by Mrs. Hilt = 8
+    marshmallows used by Mrs. Hilt = 10
+    large marshmallows used by Mrs. Hilt = 8
+    mini marshmallows used by Mrs. Hilt = 10
 
 ### Sentence 3
     No data
@@ -2678,5 +2658,66 @@
     inches of snow owned by Mrs. Hilt's house = 29
     inches of snow owned by Brecknock Elementary School = 17
 
+### Sentence 2
+    No data
+
 ## Correct response
     12 inches of snow
+
+***
+
+# Zoidberg Solution
+
+## The problem
+    Mrs. Hilt has $10. 
+    She spends $3 on a toy truck and $2 on a pencil case. 
+    How much money does she have left?
+    
+## Digested problem
+    Mrs.  	Hilt  	has   	$     	10    	.     
+    NNP   	NNP   	VBZ   	$     	CD    	.     
+
+    She   	spends	$     	3     	on    	a     	toy   	truck 	and   	$     	2     	on    	a     	pencil	case  	.     
+    PRP   	VBZ   	$     	CD    	IN    	DT    	NN    	NN    	CC    	$     	CD    	IN    	DT    	NN    	NN    	.     
+
+    How   	much  	money 	does  	she   	have  	left  	?     
+    WRB   	JJ    	NN    	VBZ   	PRP   	VB    	VBN   	.     
+
+## Problem inference
+    I think this problem is about Mrs. Hilt money and asks a single question.
+
+## Parsed problem
+    Mrs. Hilt               	has                     	$                       	10                      	.                       
+    context                 	operator                	money                   	constant                	punctuation             
+
+    Mrs. Hilt               	spends                  	$                       	3                       	on                      	1                       	toy truck               	and                     	$                       	2                       	on                      	1                       	pencil case             	.                       
+    context                 	operator                	money                   	constant                	conjunction             	constant                	subordinate             	coordinating_conjunction	money                   	constant                	conjunction             	constant                	subordinate             	punctuation             
+
+    How much                	money                   	does                    	Mrs. Hilt               	have                    	left                    	?                       
+    asking                  	unit                    	q_start                 	context                 	q_stop                  	subordinate             	punctuation             
+
+
+## Question 1
+
+### Question text
+    How much money does she have left?
+
+### Answer interpretation
+    The answer is the unknown value of money owned by Mrs. Hilt at the end of the problem.
+
+## Data extraction
+
+### Sentence 1
+    money owned by Mrs. Hilt = 10
+
+### Sentence 2
+    money spent by Mrs. Hilt on a toy truck = 3
+
+### Sentence 2
+    money spent by Mrs. Hilt on a pencil case = 3
+
+### Sentence 3
+    No data
+
+## Correct response
+    4 dollars

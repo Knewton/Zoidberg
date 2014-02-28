@@ -18,6 +18,7 @@ OPERATOR_F_STR = {
 	"cr": "created by",
 	"cn": "used by",
 	"re": "needed by",
+	"pu": "spent by",
 	"ans": "owned by"
 }
 
@@ -29,6 +30,7 @@ OPERATOR_STR = {
 	"di": "lost by",
 	"cr": "created by",
 	"cn": "used by",
+	"pu": "purchased by",
 	"ans": "finally owned by"
 }
 
@@ -43,8 +45,9 @@ OP_DISPLAY = {
 	"re": "==",
 	"co": "=>",
 	"ex": "->",
-	"cn": "<-",
-	"cr": "+>"
+	"cn": "=",
+	"cr": "=",
+	"pu": "="
 }
 
 def number(s):
@@ -137,9 +140,16 @@ class Solution(object):
 		s = [context, unit]
 		dcontainer = None
 		if container is not None and container != "_unknown_":
-			s.append(container)
-			if container in self.problem.inference.subordinate_strings:
-				dcontainer = self.problem.inference.subordinate_strings[container]
+			do_set = True
+
+			if operator is not None and operator == "pu":
+				if unit == "money":
+					do_set = False
+
+			if do_set:
+				s.append(container)
+				if container in self.problem.inference.subordinate_strings:
+					dcontainer = self.problem.inference.subordinate_strings[container]
 
 		if context_constant is None:
 			context_constant = "_unknown_"
@@ -242,7 +252,7 @@ class Solution(object):
 					self.work[dsym].append("= " + str(constant))
 				else:
 					self.work[dsym].append("+ " + str(constant))
-			elif operator == "su":
+			elif operator in ["su", "pu"]:
 				if self.relational_var is None:
 					symbol -= constant
 					u_symbol -= constant
@@ -739,6 +749,10 @@ class Solution(object):
 
 				if part == "variable_relationship":
 					self.variable_relationship = val
+
+				if part == "money":
+					val = "money"
+					part = "unit"
 
 				if part == "unit":
 					if open_conjunction and pending_constant:

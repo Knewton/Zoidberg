@@ -801,6 +801,10 @@ class SentenceParser(object):
 				did_something = True
 				self.track(word, "punctuation", self.subtype)
 
+			if tag in ["$"]:
+				did_something = True
+				self.track(word, "money", "whole")
+
 			if tag == "EX":
 				did_something = True
 				self.track(word, "exestential", self.subtype)

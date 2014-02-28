@@ -23,7 +23,7 @@ def common_prefix(strings):
 
 DEFAULT_PATH = "~/.zoidberg.brain.json"
 DEFAULT_BRAIN = {
-	"money_formatting": {"whole": "dollar", "and": "and", "decimal": "cents"},
+	"money_formatting": {"whole": "dollars", "and": "and", "decimal": "cents"},
 	"operator_verbs": {},
 	"subordinates": {},
 	"exestential": {},
@@ -86,7 +86,8 @@ OPERATORS = [
 	("co", "Convert (change one unit into another)"),
 	("ex", "Exchange (give units from one context to another)"),
 	("cr", "Creates (makes something)"),
-	("cn", "Consume (something used to make something)")
+	("cn", "Consume (something used to make something)"),
+	("pu", "Purchase (exchange money for something)"),
 ]
 
 # Various types of supported subordinace

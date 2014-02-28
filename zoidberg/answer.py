@@ -137,6 +137,9 @@ class Answer(object):
 						self.actor_subtype = self.last_unrefined_context_subtype
 						self.last_unrefined_context = None
 						self.last_unrefined_context_subtype = None
+			if part == "money":
+				val = "money"
+				part = "unit"
 
 			# assume unit appearing during asking for answer
 			if part in ["unit", "unit_inferred"] and asking:
